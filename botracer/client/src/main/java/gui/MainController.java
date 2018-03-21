@@ -62,14 +62,14 @@ public class MainController {
 		if (gameService == null) {
 			return;
 		}
-		gameService.startGame();
+		// TODO: start GameService
 	}
 
 	public void stop() {
 		if (gameService == null) {
 			return;
 		}
-		gameService.stopGame();
+		// TODO: stop GameService
 	}
 
 	public void close() {
