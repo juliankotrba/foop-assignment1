@@ -13,8 +13,6 @@ import java.io.OutputStream;
  */
 public interface StreamWriter {
     void write(Message message) throws WriterException;
-
     void openStream(OutputStream out) throws IOException;
-
     void close();
 }
