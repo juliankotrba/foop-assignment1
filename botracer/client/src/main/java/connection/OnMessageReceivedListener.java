@@ -7,6 +7,6 @@ import dto.Message;
  *
  * @author  Julian Kotrba
  */
-public interface OnMessageReceivedListener {
-    void onMessageReceived(Message message);
+public interface OnMessageReceivedListener<T extends Message> {
+    void onMessageReceived(T message);
 }

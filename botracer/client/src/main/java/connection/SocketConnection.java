@@ -42,7 +42,6 @@ public class SocketConnection implements Connection {
         this.streamWriter = streamWriter;
         this.properties = properties;
         this.streamReader = streamReader;
-
         this.isConnected = false;
         this.onMessageReceivedListeners = Collections.synchronizedList(new ArrayList<>());
     }
