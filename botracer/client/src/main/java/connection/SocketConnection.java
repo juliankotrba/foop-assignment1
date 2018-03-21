@@ -21,8 +21,6 @@ public class SocketConnection implements Connection {
     private StreamWriter streamWriter;
     private StreamReader streamReader;
 
-    private ObjectOutputStream objectOutputStream;
-    private ObjectInputStream objectInputStream;
     private List<OnMessageReceivedListener> onMessageReceivedListeners;
     private Thread messageListenerThread;
     private Properties properties;
@@ -72,8 +70,8 @@ public class SocketConnection implements Connection {
 
     @Override
     public void disconnect() {
-        this.closeObjectOutputStream();
-        this.closeObjectInputStream();
+        this.closeStreamWriter();
+        this.closeStreamReader();
         this.closeSocket();
 
         this.onMessageReceivedListeners.clear();
@@ -88,7 +86,6 @@ public class SocketConnection implements Connection {
 
         try {
             this.streamWriter.write(message);
-            //this.objectOutputStream.writeObject(message);
         } catch (WriterException e) {
             throw new MessageException("Sending message failed.", e);
         }
@@ -111,9 +108,6 @@ public class SocketConnection implements Connection {
 
         this.streamWriter.openStream(socket.getOutputStream());
         this.streamReader.openStream(socket.getInputStream());
-
-        //this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-        //this.objectInputStream = new ObjectInputStream(socket.getInputStream());
     }
 
     private void startListenerThread() {
@@ -124,30 +118,12 @@ public class SocketConnection implements Connection {
         this.messageListenerThread.start();
     }
 
-    private void closeObjectOutputStream() {
-
+    private void closeStreamWriter() {
         this.streamWriter.close();
-        /*if (this.objectOutputStream != null) {
-            try {
-                this.objectOutputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
     }
 
-    private void closeObjectInputStream() {
-
+    private void closeStreamReader() {
         this.streamReader.close();
-
-        /* if (this.objectInputStream != null) {
-            try {
-                this.objectInputStream.close();
-                this.messageListenerThread.join();
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        } */
     }
 
     private void closeSocket() {
