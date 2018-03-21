@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="800" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
+	<MenuBar>
+		<Menu mnemonicParsing="false" text="Game">
+			<MenuItem mnemonicParsing="false" onAction="#start" text="Start game" />
+			<MenuItem mnemonicParsing="false" onAction="#stop" text="Stop game" />
+			<MenuItem mnemonicParsing="false" onAction="#close" text="Exit" />
+		</Menu>
+		<Menu mnemonicParsing="false" text="Help">
+			<MenuItem mnemonicParsing="false" text="About" />
+		</Menu>
+	</MenuBar>
+	<BorderPane fx:id="mainWindow" style="-fx-background-color: gray;" VBox.vgrow="ALWAYS">
+		<right>
+			<AnchorPane style="-fx-background-color: lightgray" maxWidth="200.0" minWidth="200.0" BorderPane.alignment="CENTER" />
+		</right>
+	</BorderPane>
+</VBox>

@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.SimpleDTO;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
