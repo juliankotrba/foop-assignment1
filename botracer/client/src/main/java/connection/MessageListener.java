@@ -1,9 +1,10 @@
 package connection;
 
+import connection.OnMessageReceivedListener;
+import connection.StreamReader;
 import dto.Message;
+import exception.ReaderException;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,11 +15,11 @@ import java.util.Objects;
  */
 public class MessageListener implements Runnable {
 
-    private ObjectInputStream objectInputStream;
+    private StreamReader streamReader;
     private List<OnMessageReceivedListener> onMessageReceivedListeners;
 
-    public MessageListener(ObjectInputStream objectInputStream, List<OnMessageReceivedListener> onMessageReceivedListeners) {
-        this.objectInputStream= objectInputStream;
+    public MessageListener(StreamReader streamReader, List<OnMessageReceivedListener> onMessageReceivedListeners) {
+        this.streamReader = streamReader;
         this.onMessageReceivedListeners = onMessageReceivedListeners;
     }
 
@@ -27,14 +28,14 @@ public class MessageListener implements Runnable {
 
         while (!Thread.currentThread().isInterrupted()) {
             try {
-
-                Message message = (Message) objectInputStream.readObject();
-
+                Message message = this.streamReader.read();
                 this.notifyListeners(message);
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (ReaderException e) {
                 // TODO: Proper thread killing
                 Thread.currentThread().interrupt();
-                System.out.println("Shutting down message listener thread.");
+
+                //e.printStackTrace();
+                System.out.println("Shutting down message listener thread: \n" + e.getLocalizedMessage());
             }
         }
     }

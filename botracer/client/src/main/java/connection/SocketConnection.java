@@ -3,6 +3,7 @@ package connection;
 import dto.Message;
 import exception.ConnectionException;
 import exception.MessageException;
+import exception.WriterException;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -17,6 +18,9 @@ import java.util.*;
 public class SocketConnection implements Connection {
 
     private Socket socket;
+    private StreamWriter streamWriter;
+    private StreamReader streamReader;
+
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
     private List<OnMessageReceivedListener> onMessageReceivedListeners;
@@ -28,14 +32,19 @@ public class SocketConnection implements Connection {
      * SocketConnection constructor
      *
      * @param socket an unconnected socket instance
-     * @param properties a properties instance with the loaded client config file
+     * @param streamWriter implementation of a {@link StreamWriter}. Must not be null.
+     * @param streamReader implementation of a {@link StreamReader}. Must not be null.
+     * @param properties a properties instance with the loaded client config file. Must not be null.
      */
-    SocketConnection(Socket socket, Properties properties) {
+    SocketConnection(Socket socket, StreamWriter streamWriter, StreamReader streamReader, Properties properties) {
 
         this.socket = socket;
+        this.streamWriter = streamWriter;
         this.properties = properties;
+        this.streamReader = streamReader;
+
         this.isConnected = false;
-        this.onMessageReceivedListeners = new ArrayList<>();
+        this.onMessageReceivedListeners = Collections.synchronizedList(new ArrayList<>());
     }
 
     @Override
@@ -44,8 +53,8 @@ public class SocketConnection implements Connection {
 
             final String host = this.properties.getProperty("host");
             final int port = Integer.parseInt(this.properties.getProperty("port"));
-
             try {
+
                 this.setupSocket(new InetSocketAddress(host, port));
                 this.startListenerThread();
 
@@ -79,8 +88,9 @@ public class SocketConnection implements Connection {
         }
 
         try {
-            this.objectOutputStream.writeObject(message);
-        } catch (IOException e) {
+            this.streamWriter.write(message);
+            //this.objectOutputStream.writeObject(message);
+        } catch (WriterException e) {
             throw new MessageException("Sending message failed.", e);
         }
     }
@@ -99,37 +109,46 @@ public class SocketConnection implements Connection {
 
     private void setupSocket(InetSocketAddress address) throws IOException {
         this.socket.connect(address);
-        this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-        this.objectInputStream = new ObjectInputStream(socket.getInputStream());
+
+        this.streamWriter.openStream(socket.getOutputStream());
+        this.streamReader.openStream(socket.getInputStream());
+
+        //this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+        //this.objectInputStream = new ObjectInputStream(socket.getInputStream());
     }
 
     private void startListenerThread() {
         this.messageListenerThread = new Thread(
-                new MessageListener(this.objectInputStream, this.onMessageReceivedListeners)
+                new MessageListener(this.streamReader, this.onMessageReceivedListeners)
         );
 
         this.messageListenerThread.start();
     }
 
     private void closeObjectOutputStream() {
-        if (this.objectOutputStream != null) {
+
+        this.streamWriter.close();
+        /*if (this.objectOutputStream != null) {
             try {
                 this.objectOutputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     private void closeObjectInputStream() {
-        if (this.objectInputStream != null) {
+
+        this.streamReader.close();
+
+        /* if (this.objectInputStream != null) {
             try {
                 this.objectInputStream.close();
                 this.messageListenerThread.join();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        } */
     }
 
     private void closeSocket() {

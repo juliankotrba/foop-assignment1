@@ -18,7 +18,12 @@ public class ConnectionFactory {
 
     public static synchronized Connection getInstance() {
         if (connection == null) {
-           connection = new SocketConnection(new Socket(), getProperties());
+            connection = new SocketConnection(
+                    new Socket(),
+                    new ObjectStreamWriter(),
+                    new ObjectStreamReader(),
+                    getProperties()
+            );
         }
         return connection;
     }
