@@ -1,11 +1,14 @@
 package dto;
 
+import java.io.Serializable;
+
 /**
  * Position DTO
  *
  * @author  Julian Kotrba
  */
-public class Position {
+public class Position implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private int x;

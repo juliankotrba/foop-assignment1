@@ -3,7 +3,7 @@ package dto;
 import java.io.Serializable;
 
 /**
- * Position DTO
+ * Tile
  *
  * @author  David Walter
  */

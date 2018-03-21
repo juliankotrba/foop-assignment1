@@ -5,28 +5,29 @@ import connection.ConnectionFactory;
 import dto.Grid;
 import dto.Tile;
 import exception.ConnectionException;
-import gui.debug.Mazeloader;
+import gui.debug.MazeLoader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import service.GameService;
 import service.GameServiceImpl;
 
 import java.util.Optional;
 
+/**
+ * MainController
+ *
+ * @author  David Walter
+ */
 public class MainController {
 
 	private GameService gameService;
 
 	@FXML
 	private BorderPane mainWindow;
-
-	@FXML
-	private HBox gameMapParent;
 
 	@FXML
 	public void initialize() {
@@ -81,7 +82,7 @@ public class MainController {
 	}
 
 	private void loadDebugMap() {
-		Grid<Tile> grid = Mazeloader.shared.load(MainController.class.getResource("../maze.txt"));
+		Grid<Tile> grid = MazeLoader.shared.load(MainController.class.getResource("../maze.txt"));
 
 		if (grid == null) {
 			Platform.exit();

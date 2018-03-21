@@ -1,7 +1,7 @@
 package dto;
 
 /**
- * Position DTO
+ * TileType
  *
  * @author  David Walter
  */

@@ -4,6 +4,11 @@ import dto.Grid;
 import dto.Tile;
 import javafx.scene.layout.Pane;
 
+/**
+ * GameMap
+ *
+ * @author  David Walter
+ */
 class GameMap extends Pane {
 
 	private Grid<GameTile> gameTiles;

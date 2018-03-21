@@ -7,6 +7,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
+/**
+ * GameTile
+ *
+ * @author  David Walter
+ */
 public class GameTile extends StackPane {
 
 	private static Image floor = loadImage("floor.png");
@@ -24,7 +29,7 @@ public class GameTile extends StackPane {
 	private ImageView mark = new ImageView();
 	private ImageView player = new ImageView();
 
-	public GameTile(Tile position) {
+	GameTile(Tile position) {
 		this.tile = position;
 
 		if (position.getType() == TileType.DEFAULT) {

@@ -12,12 +12,23 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class Mazeloader {
+/**
+ * MazeLoader
+ *
+ * Loads a Maze from a file
+ *
+ * @author  David Walter
+ */
+public class MazeLoader {
 
-	public static Mazeloader shared = new Mazeloader();
+	public static MazeLoader shared = new MazeLoader();
 
-	private Mazeloader() {}
+	private MazeLoader() {}
 
+	/**
+	 * @param url location of the maze
+	 * @return Grid<Tile> representation of the maze
+	 */
 	public Grid<Tile> load(URL url) {
 		if (url == null) { return null; }
 		try {
@@ -29,6 +40,10 @@ public class Mazeloader {
 		return null;
 	}
 
+	/**
+	 * @param path location of the maze
+	 * @return Grid<Tile> representation of the maze
+	 */
 	public Grid<Tile> load(String path) {
 		try {
 			List<String> stringList = Files.readAllLines(Paths.get(path));
