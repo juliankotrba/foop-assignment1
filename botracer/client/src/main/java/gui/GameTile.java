@@ -1,26 +1,24 @@
 package gui;
 
 import dto.Mark;
+import dto.MarkType;
 import dto.Tile;
 import dto.TileType;
-import javafx.scene.image.Image;
+import javafx.geometry.Side;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 /**
  * GameTile
  *
- * @author  David Walter
+ * @author David Walter
  */
 public class GameTile extends StackPane {
-
-	private static Image floor = loadImage("floor.png");
-	private static Image exit = loadImage("exit.png");
-	private static Image border_front = loadImage("border_front.png");
-	private static Image border_top = loadImage("border_top.png");
-	private static Image shadow_front = loadImage("shadow_front.png");
-	private static Image shadow_top = loadImage("shadow_top.png");
-	private static Image shadow_last = loadImage("shadow_last.png");
 
 	private Tile tile;
 
@@ -28,52 +26,111 @@ public class GameTile extends StackPane {
 	private ImageView object = new ImageView();
 	private ImageView mark = new ImageView();
 	private ImageView player = new ImageView();
+	private Pane highlight = new Pane();
 
-	GameTile(Tile position) {
-		this.tile = position;
-
-		if (position.getType() == TileType.DEFAULT) {
-			background.setImage(floor);
-		} else if (position.getType() == TileType.EXIT) {
-			background.setImage(exit);
-		}
+	GameTile(Tile tile) {
+		this.tile = tile;
 
 		//background.setCache(true);
 		background.setPreserveRatio(true);
-		background.setSmooth(true);
+		background.setSmooth(false);
 
 		//object.setCache(true);
 		object.setPreserveRatio(true);
-		object.setSmooth(true);
+		object.setSmooth(false);
 
 		//mark.setCache(true);
 		mark.setPreserveRatio(true);
-		mark.setSmooth(true);
+		mark.setSmooth(false);
 
 		//player.setCache(true);
 		player.setPreserveRatio(true);
-		player.setSmooth(true);
-		
-		getChildren().addAll(background, object, mark, player);
+		player.setSmooth(false);
+
+		getChildren().addAll(background, object, mark, player, highlight);
+
+		if (tile.getType() == TileType.DEFAULT) {
+			background.setImage(Sprites.floor);
+
+			// TODO: Send places mark to server via some service
+			final ContextMenu contextMenu = new ContextMenu();
+
+			MenuItem title = new MenuItem("Place mark on: (" + tile.getX() + ", " + tile.getY() + ")");
+			title.setDisable(true);
+			title.getStyleClass().add("context-menu-title");
+
+			Menu changeAlgorithm = new Menu("Change algorithm");
+			// TODO: Get actual algorithms
+			String[] algorithms = {"Left hand rule", "Right hand rule"};
+			for (int i = 0; i < algorithms.length; i++) {
+				MenuItem menuItem = new MenuItem(algorithms[i]);
+				menuItem.setGraphic(Sprites.asImageView(Sprites.algorithm[i], 16.0));
+				final int type = i;
+				menuItem.setOnAction(event -> {
+					setMark(Mark.algorithm(type, tile.getPosition()));
+				});
+				changeAlgorithm.getItems().add(menuItem);
+			}
+
+			MenuItem stay = new MenuItem("Stay in area");
+			stay.setGraphic(Sprites.asImageView(Sprites.stay, 16.0));
+			stay.setOnAction(event -> {
+				setMark(new Mark(tile.getPosition(), MarkType.STAY_IN_AREA));
+			});
+			MenuItem moveAway = new MenuItem("Move away");
+			moveAway.setGraphic(Sprites.asImageView(Sprites.move_away, 16.0));
+			moveAway.setOnAction(event -> {
+				setMark(new Mark(tile.getPosition(), MarkType.MOVE_AWAY_FROM_AREA));
+			});
+
+			Menu turn = new Menu("Turn");
+			MenuItem turnLeft = new MenuItem("Left");
+			turnLeft.setGraphic(Sprites.asImageView(Sprites.left, 16.0));
+			turnLeft.setOnAction(event -> {
+				setMark(new Mark(tile.getPosition(), MarkType.TURN_LEFT));
+			});
+			MenuItem turnRight = new MenuItem("Right");
+			turnRight.setGraphic(Sprites.asImageView(Sprites.right, 16.0));
+			turnRight.setOnAction(event -> {
+				setMark(new Mark(tile.getPosition(), MarkType.TURN_RIGHT));
+			});
+			turn.getItems().addAll(turnLeft, turnRight);
+
+			MenuItem clear = new MenuItem("Clear memory");
+			clear.setGraphic(Sprites.asImageView(Sprites.clear, 16.0));
+			clear.setOnAction(event -> {
+				setMark(new Mark(tile.getPosition(), MarkType.CLEAR_MEMORY));
+			});
+
+			MenuItem remove = new MenuItem("Remove Mark");
+			remove.setOnAction(event -> {
+				System.out.println("Remove mark");
+				clearMark();
+			});
+
+			contextMenu.getItems().addAll(title, new SeparatorMenuItem(), stay, moveAway, turn, changeAlgorithm, clear, new SeparatorMenuItem(), remove);
+
+			// Mouse actions
+			setOnMousePressed(event -> contextMenu.show(this, Side.BOTTOM, 0, 0));
+			// TODO: find better way to highlight tile
+			setOnMouseEntered(event -> highlight.setStyle("-fx-background-color: rgba(0, 152, 211, 0.5)"));
+			setOnMouseExited(event -> highlight.setStyle(""));
+		} else if (tile.getType() == TileType.EXIT) {
+			background.setImage(Sprites.exit);
+		}
 	}
 
-	public void render(Double tileSize, double offsetX, double offsetY) {
-		this.setPrefWidth(tileSize);
-		this.setPrefHeight(tileSize);
+	public void draw(Double tileSize, double offsetX, double offsetY) {
+		setPrefSize(tileSize, tileSize);
 		this.setTranslateX(getX() * tileSize + offsetX);
 		this.setTranslateY(getY() * tileSize + offsetY);
 
 		background.setFitWidth(tileSize);
-		background.setFitHeight(tileSize);
-
 		object.setFitWidth(tileSize);
-		object.setFitHeight(tileSize);
-
 		mark.setFitWidth(tileSize);
-		mark.setFitHeight(tileSize);
-
 		player.setFitWidth(tileSize);
-		player.setFitHeight(tileSize);
+
+		highlight.setPrefSize(tileSize, tileSize);
 	}
 
 	public int getX() {
@@ -86,6 +143,26 @@ public class GameTile extends StackPane {
 
 	public void setMark(Mark mark) {
 		// TODO: set mark image based on Mark
+		switch (mark.getMarkType()) {
+			case STAY_IN_AREA:
+				this.mark.setImage(Sprites.stay);
+				break;
+			case MOVE_AWAY_FROM_AREA:
+				this.mark.setImage(Sprites.move_away);
+				break;
+			case TURN_LEFT:
+				this.mark.setImage(Sprites.left);
+				break;
+			case TURN_RIGHT:
+				this.mark.setImage(Sprites.right);
+				break;
+			case CHANGE_ALGORITHM:
+				this.mark.setImage(Sprites.algorithm[mark.getIndex()]);
+				break;
+			case CLEAR_MEMORY:
+				this.mark.setImage(Sprites.clear);
+				break;
+		}
 	}
 
 	public void clearMark() {
@@ -100,19 +177,15 @@ public class GameTile extends StackPane {
 		player.setImage(null);
 	}
 
-	public boolean isBorder() {
+	public boolean isWall() {
 		return tile.getType() == TileType.WALL;
 	}
 
 	public void drawBorder(boolean front) {
-		object.setImage(front ? border_front : border_top);
+		object.setImage(front ? Sprites.border_front : Sprites.border_top);
 	}
 
 	public void drawShadow(boolean front, boolean last) {
-		object.setImage(front ? shadow_front : (last ? shadow_last : shadow_top));
-	}
-
-	private static Image loadImage(String path) {
-		return new Image(GameTile.class.getResourceAsStream("/assets/" + path));
+		object.setImage(front ? Sprites.shadow_front : (last ? Sprites.shadow_last : Sprites.shadow_top));
 	}
 }

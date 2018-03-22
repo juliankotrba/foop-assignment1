@@ -1,8 +1,13 @@
 package gui;
 
 import dto.Grid;
+import dto.Mark;
+import dto.Player;
 import dto.Tile;
 import javafx.scene.layout.Pane;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GameMap
@@ -11,42 +16,47 @@ import javafx.scene.layout.Pane;
  */
 class GameMap extends Pane {
 
+	private List<Player> players;
+	private List<Mark> marks;
+
 	private Grid<GameTile> gameTiles;
 
 	GameMap(Grid<Tile> maze) {
+		players = new ArrayList<>();
+		marks = new ArrayList<>();
 		gameTiles = new Grid<>(maze.getWidth(), maze.getHeight());
 
-		loadMaze(maze);
-		render();
+		maze.forEach(this::load);
+		gameTiles.forEach(this::render);
 
 		this.widthProperty().addListener((observable, oldValue, newValue) -> draw());
 		this.heightProperty().addListener((observable, oldValue, newValue) -> draw());
 	}
 
-	private void loadMaze(Grid<Tile> maze) {
-		maze.forEach(position -> {
-			GameTile gameTile = new GameTile(position);
-			gameTiles.add(gameTile);
-			getChildren().add(gameTile);
-		});
+	private void load(Tile tile) {
+		GameTile gameTile = new GameTile(tile);
+		gameTiles.add(gameTile);
+		getChildren().add(gameTile);
 	}
 
-	private void render() {
-		gameTiles.forEach(gameTile -> {
-			if (gameTile.isBorder()) {
-				GameTile up = nextTile(gameTile, Direction.UP);
-				GameTile down = nextTile(gameTile, Direction.DOWN);
-				GameTile right = nextTile(gameTile, Direction.RIGHT);
+	private void render(GameTile gameTile) {
+		if (!gameTile.isWall()) { return; }
 
-				boolean front = !(down != null && down.isBorder());
-				if (right != null && !right.isBorder()) {
-					right.drawShadow(front, up == null || !up.isBorder());
-				}
-				gameTile.drawBorder(front);
-			}
-		});
+		GameTile up = next(gameTile, Direction.UP);
+		GameTile down = next(gameTile, Direction.DOWN);
+		GameTile right = next(gameTile, Direction.RIGHT);
+
+		boolean front = !(down != null && down.isWall());
+		if (right != null && !right.isWall()) {
+			right.drawShadow(front, up == null || !up.isWall());
+		}
+		gameTile.drawBorder(front);
 	}
 
+
+	/**
+	 * Resizes and centers the gamemap based on container size
+	 */
 	private void draw() {
 		double tileSizeW = this.widthProperty().doubleValue() / gameTiles.getWidth();
 		double tileSizeH = this.heightProperty().doubleValue() / gameTiles.getHeight();
@@ -67,10 +77,10 @@ class GameMap extends Pane {
 			offsetY = (this.heightProperty().doubleValue() - tileSize * gameTiles.getHeight()) / 2;
 		}
 
-		gameTiles.forEach(gameTile -> gameTile.render(tileSize, offsetX, offsetY));
+		gameTiles.forEach(gameTile -> gameTile.draw(tileSize, offsetX, offsetY));
 	}
 
-	private GameTile nextTile(GameTile gameTile, Direction direction) {
+	private GameTile next(GameTile gameTile, Direction direction) {
 		int width = gameTiles.getWidth();
 		int height = gameTiles.getHeight();
 
@@ -104,6 +114,7 @@ class GameMap extends Pane {
 
 		return null;
 	}
+
 }
 
 enum Direction {
