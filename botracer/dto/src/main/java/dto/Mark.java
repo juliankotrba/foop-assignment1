@@ -1,15 +1,38 @@
 package dto;
 
-import java.io.Serializable;
-
 /**
  * Mark DTO
  *
- * @author  Julian Kotrba
+ * @author Julian Kotrba
  */
-public class Mark implements Serializable {
+public class Mark extends Drawable {
 
-    private Position position;
+	private MarkType markType;
 
-    private static final long serialVersionUID = 1L;
+	public static Mark algorithm(int algorithm, Position position) {
+		return new Mark(algorithm, position);
+	}
+
+	public Mark(Position position, MarkType markType) {
+		super(0, position);
+		this.markType = markType;
+	}
+
+	private Mark(int algorithm, Position position) {
+		super(algorithm, position);
+		this.markType = MarkType.CHANGE_ALGORITHM;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public MarkType getMarkType() {
+		return markType;
+	}
+
 }

@@ -1,22 +1,17 @@
 package dto;
 
-import java.io.Serializable;
-
 /**
  * Tile
  *
  * @author  David Walter
  */
-public class Tile implements Serializable {
+public class Tile extends Drawable {
 
-	private static final long serialVersionUID = 1L;
-
-	private Position position;
 	private TileType type;
 
 	public Tile(TileType type, Position position) {
+		super(0, position);
 		this.type = type;
-		this.position = position;
 	}
 
 	public TileType getType() {
@@ -29,5 +24,9 @@ public class Tile implements Serializable {
 
 	public int getY() {
 		return position.getY();
+	}
+
+	public Position getPosition() {
+		return position;
 	}
 }

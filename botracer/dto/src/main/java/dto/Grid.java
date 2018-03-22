@@ -33,6 +33,7 @@ public class Grid<E> extends ArrayList<E> implements Serializable {
 		if (size() < capacity()) {
 			return super.add(e);
 		}
+
 		return false;
 	}
 
