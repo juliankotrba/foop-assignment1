@@ -19,6 +19,9 @@
 			<MenuItem mnemonicParsing="false" onAction="#stop" text="Stop game" />
 			<MenuItem mnemonicParsing="false" onAction="#close" text="Exit" />
 		</Menu>
+		<Menu mnemonicParsing="false" text="DEBUG">
+			<MenuItem mnemonicParsing="false" onAction="#debugPlayer" text="Move Player..." />
+		</Menu>
 		<Menu mnemonicParsing="false" text="Help">
 			<MenuItem mnemonicParsing="false" text="About" />
 		</Menu>

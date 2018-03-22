@@ -3,18 +3,23 @@ package gui;
 import connection.Connection;
 import connection.ConnectionFactory;
 import dto.Grid;
+import dto.Player;
+import dto.Position;
 import dto.Tile;
 import exception.ConnectionException;
 import gui.debug.MazeLoader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.util.Pair;
 import service.GameService;
 import service.GameServiceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -25,6 +30,7 @@ import java.util.Optional;
 public class MainController {
 
 	private GameService gameService;
+	private GameMap gameMap;
 
 	@FXML
 	private BorderPane mainWindow;
@@ -52,7 +58,7 @@ public class MainController {
 			if (result.isPresent() && result.get() == retry) {
 				initialize();
 			} else if (result.isPresent() && result.get() == debug) {
-				loadDebugMap();
+				debugLoadMap();
 			} else {
 				close();
 			}
@@ -81,7 +87,48 @@ public class MainController {
 		// TODO: load map from server
 	}
 
-	private void loadDebugMap() {
+	@FXML
+	private void debugPlayer() {
+		Dialog<Pair<Integer, Position>> dialog = new Dialog<>();
+		dialog.setTitle("Move Player");
+		dialog.setHeaderText("Move Player to position");
+
+		dialog.setGraphic(Sprites.asImageView(Sprites.player[0], 32.0));
+		ButtonType moveType = new ButtonType("Move", ButtonBar.ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(moveType, ButtonType.CANCEL);
+
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(20, 150, 10, 10));
+
+		ComboBox<Integer> player = new ComboBox<>();
+		player.getItems().addAll(0,1,2,3);
+		player.getSelectionModel().select(0);
+		Spinner<Integer> x = new Spinner<>(1, Integer.MAX_VALUE, 1, 1);
+		Spinner<Integer> y = new Spinner<>(1, Integer.MAX_VALUE, 1, 1);
+		y.setEditable(true);
+
+		grid.add(new Label("Player:"), 0, 0);
+		grid.add(player, 1, 0);
+		grid.add(new Label("Position:"), 0, 1);
+		grid.add(x, 1, 1);
+		grid.add(y, 2, 1);
+
+		dialog.getDialogPane().setContent(grid);
+
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == moveType) {
+				return new Pair<>(player.getSelectionModel().getSelectedItem(), new Position(x.getValue(), y.getValue()));
+			}
+			return null;
+		});
+
+		Optional<Pair<Integer, Position>> result = dialog.showAndWait();
+		result.ifPresent(value -> gameMap.set(new Player(value.getKey(), value.getValue())));
+	}
+
+	private void debugLoadMap() {
 		Grid<Tile> grid = MazeLoader.shared.load(MainController.class.getResource("../maze.txt"));
 
 		if (grid == null) {
@@ -89,7 +136,14 @@ public class MainController {
 			return;
 		}
 
-		GameMap map = new GameMap(grid);
-		mainWindow.setCenter(map);
+		gameMap = new GameMap(grid);
+		mainWindow.setCenter(gameMap);
+
+		List<Player> playerList = new ArrayList<>();
+		playerList.add(new Player(0, new Position(1,1)));
+		playerList.add(new Player(1, new Position(13,10)));
+		playerList.add(new Player(2, new Position(7,8)));
+		playerList.add(new Player(3, new Position(1,9)));
+		playerList.forEach(player -> gameMap.set(player));
 	}
 }

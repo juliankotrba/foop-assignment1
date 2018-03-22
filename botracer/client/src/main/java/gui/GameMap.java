@@ -1,13 +1,12 @@
 package gui;
 
-import dto.Grid;
-import dto.Mark;
-import dto.Player;
-import dto.Tile;
+import dto.*;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * GameMap
@@ -16,14 +15,10 @@ import java.util.List;
  */
 class GameMap extends Pane {
 
-	private List<Player> players;
-	private List<Mark> marks;
-
 	private Grid<GameTile> gameTiles;
+	private Map<Player, GameTile> playerMap = new HashMap<>();
 
 	GameMap(Grid<Tile> maze) {
-		players = new ArrayList<>();
-		marks = new ArrayList<>();
 		gameTiles = new Grid<>(maze.getWidth(), maze.getHeight());
 
 		maze.forEach(this::load);
@@ -33,12 +28,20 @@ class GameMap extends Pane {
 		this.heightProperty().addListener((observable, oldValue, newValue) -> draw());
 	}
 
+	/**
+	 * Loads the Tile into a GameTile
+	 * @param tile Tile to load
+	 */
 	private void load(Tile tile) {
 		GameTile gameTile = new GameTile(tile);
 		gameTiles.add(gameTile);
 		getChildren().add(gameTile);
 	}
 
+	/**
+	 * Renders the GameTiles (e.g. shadows)
+	 * @param gameTile GameTile to render
+	 */
 	private void render(GameTile gameTile) {
 		if (!gameTile.isWall()) { return; }
 
@@ -52,7 +55,6 @@ class GameMap extends Pane {
 		}
 		gameTile.drawBorder(front);
 	}
-
 
 	/**
 	 * Resizes and centers the gamemap based on container size
@@ -80,6 +82,12 @@ class GameMap extends Pane {
 		gameTiles.forEach(gameTile -> gameTile.draw(tileSize, offsetX, offsetY));
 	}
 
+	/**
+	 * Gets neighbouring game tiles
+	 * @param gameTile origin
+	 * @param direction Direction
+	 * @return GameTile in the given direction or null if there is not a game tile
+	 */
 	private GameTile next(GameTile gameTile, Direction direction) {
 		int width = gameTiles.getWidth();
 		int height = gameTiles.getHeight();
@@ -115,6 +123,35 @@ class GameMap extends Pane {
 		return null;
 	}
 
+	/**
+	 * Moves the player to its location
+	 * @param player Player to add/move on the map
+	 */
+	public void set(Player player) {
+		GameTile oldPosition = playerMap.get(player);
+		if (oldPosition != null) {
+			oldPosition.clearPlayer();
+		}
+		GameTile newPosition = gameTiles.get(player.getPosition());
+		newPosition.setPlayer(player.getNumber());
+		playerMap.put(player, newPosition);
+	}
+
+	/**
+	 * Adds the mark to the map
+	 * @param mark Mark to add
+	 */
+	public void set(Mark mark) {
+		gameTiles.get(mark.getPosition()).setMark(mark);
+	}
+
+	/**
+	 * Removes the mark from the map
+	 * @param mark Mark to remove
+	 */
+	public void remove(Mark mark) {
+		gameTiles.get(mark.getPosition()).clearMark();
+	}
 }
 
 enum Direction {

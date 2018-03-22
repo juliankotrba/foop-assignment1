@@ -169,8 +169,8 @@ public class GameTile extends StackPane {
 		mark.setImage(null);
 	}
 
-	public void setPlayer() {
-		// TODO: set player image based on Player
+	public void setPlayer(int index) {
+		player.setImage(Sprites.player[index]);
 	}
 
 	public void clearPlayer() {
