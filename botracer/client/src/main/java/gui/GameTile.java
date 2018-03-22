@@ -60,14 +60,14 @@ public class GameTile extends StackPane {
 			title.getStyleClass().add("context-menu-title");
 
 			Menu changeAlgorithm = new Menu("Change algorithm");
-			// TODO: Get actual algorithms
+
 			String[] algorithms = {"Left hand rule", "Right hand rule"};
 			for (int i = 0; i < algorithms.length; i++) {
 				MenuItem menuItem = new MenuItem(algorithms[i]);
 				menuItem.setGraphic(Sprites.asImageView(Sprites.algorithm[i], 16.0));
-				final int type = i;
+				final int number = i;
 				menuItem.setOnAction(event -> {
-					setMark(Mark.algorithm(type, tile.getPosition()));
+					setMark(new Mark(number, tile.getPosition()));
 				});
 				changeAlgorithm.getItems().add(menuItem);
 			}

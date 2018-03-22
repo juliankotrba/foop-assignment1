@@ -39,13 +39,21 @@ public class Grid<E> extends ArrayList<E> implements Serializable {
 
 	/**
 	 * Returns the object at the specified coordinate
-	 *
 	 * @param x value on X-axis
 	 * @param y value on Y-axis
 	 * @return object at the specified coordinate
 	 */
 	public E get(int x, int y) {
 		return this.get(x + y * width);
+	}
+
+	/**
+	 * Returns the object at the specified coordinate
+	 * @param position position in the coordinate system
+	 * @return object at the specified coordinate
+	 */
+	public E get(Position position) {
+		return get(position.getX(), position.getY());
 	}
 
 	public int getWidth() {

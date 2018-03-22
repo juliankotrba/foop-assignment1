@@ -9,16 +9,12 @@ public class Mark extends Drawable {
 
 	private MarkType markType;
 
-	public static Mark algorithm(int algorithm, Position position) {
-		return new Mark(algorithm, position);
-	}
-
 	public Mark(Position position, MarkType markType) {
-		super(0, position);
+		super(-1, position);
 		this.markType = markType;
 	}
 
-	private Mark(int algorithm, Position position) {
+	public Mark(int algorithm, Position position) {
 		super(algorithm, position);
 		this.markType = MarkType.CHANGE_ALGORITHM;
 	}

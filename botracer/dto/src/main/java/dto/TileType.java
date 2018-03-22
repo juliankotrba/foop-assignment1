@@ -6,5 +6,5 @@ package dto;
  * @author  David Walter
  */
 public enum TileType {
-    DEFAULT, WALL, EXIT;
+    DEFAULT, WALL, EXIT
 }
