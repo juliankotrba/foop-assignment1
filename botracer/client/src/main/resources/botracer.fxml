@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="800" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
-	<MenuBar>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="800" prefHeight="600.0" prefWidth="800.0" stylesheets="botracer.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
+	<MenuBar useSystemMenuBar="true">
 		<Menu mnemonicParsing="false" text="Game">
 			<MenuItem mnemonicParsing="false" onAction="#start" text="Start game" />
 			<MenuItem mnemonicParsing="false" onAction="#stop" text="Stop game" />
@@ -18,9 +23,194 @@
 			<MenuItem mnemonicParsing="false" text="About" />
 		</Menu>
 	</MenuBar>
-	<BorderPane fx:id="mainWindow" style="-fx-background-color: gray;" VBox.vgrow="ALWAYS">
-		<right>
-			<AnchorPane style="-fx-background-color: lightgray" maxWidth="200.0" minWidth="200.0" BorderPane.alignment="CENTER" />
-		</right>
+	<BorderPane fx:id="mainWindow" style="-fx-background-color: #40414B#40414B;" VBox.vgrow="ALWAYS">
+      <right>
+         <VBox minWidth="220.0" style="-fx-background-color: #E7E8EB#E7E8EB;" BorderPane.alignment="CENTER">
+            <children>
+               <BorderPane style="-fx-background-color: white;">
+                  <center>
+                     <Label prefHeight="29.0" text="Players" BorderPane.alignment="CENTER">
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                        <font>
+                           <Font name="System Bold" size="15.0" />
+                        </font>
+                     </Label>
+                  </center>
+               </BorderPane>
+               <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                  <children>
+                     <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <children>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@assets/players/bot_cyan.png" />
+                              </image>
+                           </ImageView>
+                           <Label text="Player 1" wrapText="true" />
+                        </children>
+                        <opaqueInsets>
+                           <Insets />
+                        </opaqueInsets>
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <children>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@assets/players/bot_red.png" />
+                              </image>
+                           </ImageView>
+                           <Label text="Player 2" wrapText="true" />
+                        </children>
+                        <opaqueInsets>
+                           <Insets />
+                        </opaqueInsets>
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <children>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@assets/players/bot_yellow.png" />
+                              </image>
+                           </ImageView>
+                           <Label text="Player 3" wrapText="true" />
+                        </children>
+                        <opaqueInsets>
+                           <Insets />
+                        </opaqueInsets>
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <children>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@assets/players/bot_green.png" />
+                              </image>
+                           </ImageView>
+                           <Label text="Player 4" wrapText="true" />
+                        </children>
+                        <opaqueInsets>
+                           <Insets />
+                        </opaqueInsets>
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                     </HBox>
+                  </children>
+                  <padding>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </padding>
+               </VBox>
+               <BorderPane style="-fx-background-color: white;">
+                  <center>
+                     <Label prefHeight="29.0" text="Marks" BorderPane.alignment="CENTER">
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                        <font>
+                           <Font name="System Bold" size="15.0" />
+                        </font>
+                     </Label>
+                  </center>
+               </BorderPane>
+               <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                  <children>
+                     <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <children>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@assets/marks/stay.png" />
+                              </image>
+                           </ImageView>
+                           <Label text="stay in this area,an exit is close" wrapText="true" />
+                        </children>
+                        <opaqueInsets>
+                           <Insets />
+                        </opaqueInsets>
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <children>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@assets/marks/move_away.png" />
+                              </image>
+                           </ImageView>
+                           <Label text="move away from this area, there is no exit nearby" wrapText="true" />
+                        </children>
+                        <opaqueInsets>
+                           <Insets />
+                        </opaqueInsets>
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <children>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@assets/marks/left.png" />
+                              </image>
+                           </ImageView>
+                           <Label text="turn left now" wrapText="true" />
+                        </children>
+                        <opaqueInsets>
+                           <Insets />
+                        </opaqueInsets>
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <children>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@assets/marks/right.png" />
+                              </image>
+                           </ImageView>
+                           <Label text="turn right now" wrapText="true" />
+                        </children>
+                        <opaqueInsets>
+                           <Insets />
+                        </opaqueInsets>
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                     </HBox>
+                     <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <children>
+                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@assets/marks/clear.png" />
+                              </image>
+                           </ImageView>
+                           <Label text="clear the memory" wrapText="true" />
+                        </children>
+                        <opaqueInsets>
+                           <Insets />
+                        </opaqueInsets>
+                        <padding>
+                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        </padding>
+                     </HBox>
+                  </children>
+                  <padding>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </padding>
+               </VBox>
+            </children>
+         </VBox>
+      </right>
 	</BorderPane>
 </VBox>
