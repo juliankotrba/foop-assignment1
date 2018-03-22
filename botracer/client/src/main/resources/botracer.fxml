@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="800" prefHeight="600.0" prefWidth="800.0" stylesheets="botracer.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
-	<MenuBar useSystemMenuBar="false">
+	<MenuBar useSystemMenuBar="true">
 		<Menu mnemonicParsing="false" text="Game">
 			<MenuItem mnemonicParsing="false" onAction="#start" text="Start game" />
 			<MenuItem mnemonicParsing="false" onAction="#stop" text="Stop game" />
@@ -25,173 +25,173 @@
 	</MenuBar>
 	<BorderPane fx:id="mainWindow" style="-fx-background-color: #40414B#40414B;" VBox.vgrow="ALWAYS">
       <right>
-		  <VBox minWidth="220.0" style="-fx-background-color: #E7E8EB#E7E8EB;" BorderPane.alignment="CENTER">
-			  <BorderPane style="-fx-background-color: white;">
+		  <VBox minWidth="220.0" prefWidth="220.0" style="-fx-background-color: #E7E8EB#E7E8EB;" BorderPane.alignment="CENTER">
+			  <BorderPane style="-fx-background-color: white;" VBox.vgrow="NEVER">
 				  <center>
 					  <Label prefHeight="29.0" text="Players" BorderPane.alignment="CENTER">
 						  <padding>
-							  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+							  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 						  </padding>
 						  <font>
-							  <Font name="System Bold" size="15.0"/>
+							  <Font name="System Bold" size="15.0" />
 						  </font>
 					  </Label>
 				  </center>
 			  </BorderPane>
 			  <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
 				  <padding>
-					  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+					  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 				  </padding>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
-						  <Insets/>
+						  <Insets />
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/players/bot_cyan.png"/>
+						  <Image url="@assets/players/bot_cyan.png" />
 					  </ImageView>
-					  <Label text="Player 1" wrapText="true"/>
+					  <Label text="Player 1" wrapText="true" />
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
-						  <Insets/>
+						  <Insets />
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/players/bot_red.png"/>
+						  <Image url="@assets/players/bot_red.png" />
 					  </ImageView>
-					  <Label text="Player 2" wrapText="true"/>
+					  <Label text="Player 2" wrapText="true" />
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
-						  <Insets/>
+						  <Insets />
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/players/bot_yellow.png"/>
+						  <Image url="@assets/players/bot_yellow.png" />
 					  </ImageView>
-					  <Label text="Player 3" wrapText="true"/>
+					  <Label text="Player 3" wrapText="true" />
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
-						  <Insets/>
+						  <Insets />
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/players/bot_green.png"/>
+						  <Image url="@assets/players/bot_green.png" />
 					  </ImageView>
-					  <Label text="Player 4" wrapText="true"/>
+					  <Label text="Player 4" wrapText="true" />
 				  </HBox>
 			  </VBox>
-			  <BorderPane style="-fx-background-color: white;">
+			  <BorderPane style="-fx-background-color: white;" VBox.vgrow="NEVER">
 				  <center>
 					  <Label prefHeight="29.0" text="Marks" BorderPane.alignment="CENTER">
 						  <padding>
-							  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+							  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 						  </padding>
 						  <font>
-							  <Font name="System Bold" size="15.0"/>
+							  <Font name="System Bold" size="15.0" />
 						  </font>
 					  </Label>
 				  </center>
 			  </BorderPane>
-			  <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+			  <VBox minHeight="229.0" spacing="5.0" VBox.vgrow="NEVER">
 				  <padding>
-					  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+					  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 				  </padding>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <children>
 						  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-							  <Image url="@assets/marks/stay.png"/>
+							  <Image url="@assets/marks/stay.png" />
 						  </ImageView>
-						  <Label text="stay in this area,an exit is close" wrapText="true"/>
+						  <Label text="stay in this area,an exit is close" wrapText="true" />
 					  </children>
 					  <opaqueInsets>
-						  <Insets/>
+						  <Insets />
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
-						  <Insets/>
+						  <Insets />
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/marks/move_away.png"/>
+						  <Image url="@assets/marks/move_away.png" />
 					  </ImageView>
-					  <Label text="move away from this area, there is no exit nearby" wrapText="true"/>
+					  <Label text="move away from this area, there is no exit nearby" wrapText="true" />
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
-						  <Insets/>
+						  <Insets />
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/marks/left.png"/>
+						  <Image url="@assets/marks/left.png" />
 					  </ImageView>
-					  <Label text="turn left now" wrapText="true"/>
+					  <Label text="turn left now" wrapText="true" />
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
-						  <Insets/>
+						  <Insets />
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/marks/right.png"/>
+						  <Image url="@assets/marks/right.png" />
 					  </ImageView>
-					  <Label text="turn right now" wrapText="true"/>
+					  <Label text="turn right now" wrapText="true" />
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
-						  <Insets/>
+						  <Insets />
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/marks/algorithms/a1.png"/>
+						  <Image url="@assets/marks/algorithms/a1.png" />
 					  </ImageView>
-					  <Label text="Left hand rule" wrapText="true"/>
+					  <Label text="Left hand rule" wrapText="true" />
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
-						  <Insets/>
+						  <Insets />
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/marks/algorithms/a2.png"/>
+						  <Image url="@assets/marks/algorithms/a2.png" />
 					  </ImageView>
-					  <Label text="Right hand rule" wrapText="true"/>
+					  <Label text="Right hand rule" wrapText="true" />
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
-						  <Insets/>
+						  <Insets />
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/marks/clear.png"/>
+						  <Image url="@assets/marks/clear.png" />
 					  </ImageView>
-					  <Label text="clear the memory" wrapText="true"/>
+					  <Label text="clear the memory" wrapText="true" />
 				  </HBox>
 			  </VBox>
 		  </VBox>
