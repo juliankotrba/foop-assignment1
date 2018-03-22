@@ -37,6 +37,10 @@ public class MainController {
 
 	@FXML
 	public void initialize() {
+
+	}
+
+	public void connect() {
 		try {
 			Connection connection = ConnectionFactory.getInstance();
 			connection.connect();
@@ -51,7 +55,7 @@ public class MainController {
 			ButtonType retry = new ButtonType("Retry");
 			ButtonType exit = new ButtonType("Exit", ButtonBar.ButtonData.CANCEL_CLOSE);
 			alert.getButtonTypes().clear();
-			alert.getButtonTypes().addAll(retry, debug, exit);
+			alert.getButtonTypes().addAll(retry, exit);
 
 			Optional<ButtonType> result = alert.showAndWait();
 
@@ -70,6 +74,7 @@ public class MainController {
 			return;
 		}
 		// TODO: start GameService
+		connect();
 	}
 
 	public void stop() {
@@ -83,8 +88,17 @@ public class MainController {
 		Platform.exit();
 	}
 
-	private void initGameMap() {
-		// TODO: load map from server
+	public void about() {
+		Alert alert = new Alert(Alert.AlertType.NONE);
+		alert.setTitle("About");
+		alert.setHeaderText("Bot racer");
+		alert.setContentText("");
+
+		ButtonType close = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
+		alert.getButtonTypes().setAll(close);
+
+		alert.showAndWait();
+
 	}
 
 	@FXML
@@ -128,6 +142,7 @@ public class MainController {
 		result.ifPresent(value -> gameMap.set(new Player(value.getKey(), value.getValue())));
 	}
 
+	@FXML
 	private void debugLoadMap() {
 		Grid<Tile> grid = MazeLoader.shared.load(MainController.class.getResource("../maze.txt"));
 
