@@ -16,9 +16,6 @@ public class ObjectStreamWriter implements StreamWriter {
 
     private ObjectOutputStream outputStream;
 
-    public ObjectStreamWriter() {
-    }
-
     @Override
     public void openStream(OutputStream out) throws IOException {
         this.outputStream = new ObjectOutputStream(out);

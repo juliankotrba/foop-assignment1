@@ -16,9 +16,6 @@ public class ObjectStreamReader implements StreamReader {
 
     private ObjectInputStream inputStream;
 
-    public ObjectStreamReader() {
-    }
-
     @Override
     public void openStream(InputStream in) throws IOException {
         this.inputStream = new ObjectInputStream(in);
