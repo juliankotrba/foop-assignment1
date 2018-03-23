@@ -43,7 +43,7 @@
 					  </Label>
 				  </center>
 			  </BorderPane>
-			  <VBox fx:id="players" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+			  <VBox fx:id="playerList" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
 				  <padding>
 					  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 				  </padding>
@@ -55,7 +55,7 @@
 						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/players/bot_cyan.png" />
+						  <Image url="@assets/playerList/bot_cyan.png" />
 					  </ImageView>
 					  <Label text="Player 1" wrapText="true" />
 				  </HBox>
@@ -67,7 +67,7 @@
 						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/players/bot_red.png" />
+						  <Image url="@assets/playerList/bot_red.png" />
 					  </ImageView>
 					  <Label text="Player 2" wrapText="true" />
 				  </HBox>
@@ -79,7 +79,7 @@
 						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/players/bot_yellow.png" />
+						  <Image url="@assets/playerList/bot_yellow.png" />
 					  </ImageView>
 					  <Label text="Player 3" wrapText="true" />
 				  </HBox>
@@ -91,7 +91,7 @@
 						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 					  </padding>
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/players/bot_green.png" />
+						  <Image url="@assets/playerList/bot_green.png" />
 					  </ImageView>
 					  <Label text="Player 4" wrapText="true" />
 				  </HBox>-->

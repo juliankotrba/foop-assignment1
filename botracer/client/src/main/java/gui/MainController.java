@@ -2,31 +2,29 @@ package gui;
 
 import connection.Connection;
 import connection.SingletonConnectionFactory;
-import dto.*;
+import dto.GameData;
+import dto.Grid;
+import dto.Player;
+import dto.Tile;
 import exception.service.ServiceException;
 import gui.GameMap.GameMap;
-import gui.debug.DebugMoves;
+import gui.debug.Debug;
 import gui.debug.MazeLoader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Window;
-import javafx.util.Pair;
 import service.GameService;
 import service.GameServiceImpl;
 
 import java.io.IOException;
-import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * MainController
@@ -36,13 +34,16 @@ import java.util.TimerTask;
 public class MainController {
 
 	private GameService gameService;
+	private Player player;
 	private GameMap gameMap;
+
+	private Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
 
 	@FXML
 	private BorderPane mainWindow;
 
 	@FXML
-	private VBox players;
+	private VBox playerList;
 
 	@FXML
 	private void initialize() {
@@ -96,9 +97,14 @@ public class MainController {
 		if (gameService == null) { return; }
 
 		try {
-			gameService.setPlayerReady(null);
-		} catch (ServiceException e) {
-			e.printStackTrace();
+			PlayerInfo playerInfo = playerInfoMap.get(player);
+			if (playerInfo == null) {
+				throw new NullPointerException("Player info not loaded");
+			}
+			playerInfo.setReady(true);
+			gameService.setPlayerReady(message -> System.out.println("Game started"));
+		} catch (ServiceException | NullPointerException e) {
+			Error.show(e.getMessage());
 		}
 	}
 
@@ -129,9 +135,9 @@ public class MainController {
 
 	private void loadGameData(GameData gameData) {
 		loadMap(gameData.getGameMap());
-		Player player = gameData.getPlayer();
+		player = gameData.getPlayer();
 		Sprites.setHighlight(player.getNumber());
-		loadPlayer(gameData.getPlayer());
+		loadPlayer(player);
 	}
 
 	private void loadMap(Grid<Tile> grid) {
@@ -142,63 +148,27 @@ public class MainController {
 
 	private void loadPlayer(Player player) {
 		try {
-			HBox playerBox = FXMLLoader.load(MainController.class.getResource("../player.fxml"));
+			PlayerInfo playerInfo = playerInfoMap.get(player);
+			if (playerInfo == null) {
+				playerInfo = PlayerInfo.load();
+				playerInfoMap.put(player, playerInfo);
+				playerList.getChildren().add(playerInfo.getNode());
+			}
 
-			players.getChildren().add(playerBox);
-
-			ImageView playerImage = (ImageView)playerBox.getChildren().get(0);
-			Label playerName = (Label)playerBox.getChildren().get(1);
-
-			playerName.setText(player.getName());
-			playerImage.setImage(Sprites.getPlayer(player.getNumber()));
-
+			playerInfo.setPlayer(player);
 			gameMap.set(player);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Error.show(e.getMessage());
 		}
 	}
 
 	// MARK: - DEBUG
 
+	private Debug debug;
+
 	@FXML
 	private void debugPlayer() {
-		Dialog<Pair<Integer, Position>> dialog = new Dialog<>();
-		dialog.setTitle("Move Player");
-		dialog.setHeaderText("Move Player to position");
-
-		dialog.setGraphic(Sprites.asImageView(Sprites.getPlayer(0), 32.0));
-		ButtonType moveType = new ButtonType("Move", ButtonBar.ButtonData.OK_DONE);
-		dialog.getDialogPane().getButtonTypes().addAll(moveType, ButtonType.CANCEL);
-
-		GridPane grid = new GridPane();
-		grid.setHgap(10);
-		grid.setVgap(10);
-		grid.setPadding(new Insets(20, 150, 10, 10));
-
-		ComboBox<Integer> player = new ComboBox<>();
-		player.getItems().addAll(0,1,2,3);
-		player.getSelectionModel().select(0);
-		Spinner<Integer> x = new Spinner<>(1, Integer.MAX_VALUE, 1, 1);
-		Spinner<Integer> y = new Spinner<>(1, Integer.MAX_VALUE, 1, 1);
-		y.setEditable(true);
-
-		grid.add(new Label("Player:"), 0, 0);
-		grid.add(player, 1, 0);
-		grid.add(new Label("Position:"), 0, 1);
-		grid.add(x, 1, 1);
-		grid.add(y, 2, 1);
-
-		dialog.getDialogPane().setContent(grid);
-
-		dialog.setResultConverter(dialogButton -> {
-			if (dialogButton == moveType) {
-				return new Pair<>(player.getSelectionModel().getSelectedItem(), new Position(x.getValue(), y.getValue()));
-			}
-			return null;
-		});
-
-		Optional<Pair<Integer, Position>> result = dialog.showAndWait();
-		result.ifPresent(value -> gameMap.set(new Player(value.getKey(), value.getValue())));
+		Debug.player(gameMap);
 	}
 
 	@FXML
@@ -207,25 +177,12 @@ public class MainController {
 		loadMap(grid);
 	}
 
-	private Timer timer;
-	private DebugMoves debugMoves = new DebugMoves(0);
-
 	@FXML
 	private void debugAnimation() {
-		debugMoves.addMoves();
-
-		if (timer == null) {
-			timer = new Timer();
-			timer.scheduleAtFixedRate(new TimerTask() {
-				@Override
-				public void run() {
-					Player player = debugMoves.poll();
-					if (player != null) {
-						gameMap.set(player);
-					}
-				}
-			}, 0, 600);
+		if (debug == null) {
+			debug = new Debug(gameMap);
 		}
+		debug.addMoves();
 	}
 
 }

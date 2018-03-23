@@ -7,3 +7,41 @@
 	-fx-opacity: 1.0;
     -fx-background-color: #0097CE;
 }
+
+.check-box .box {
+	-fx-background-color: transparent;
+	-fx-background-insets: 0;
+	-fx-background-radius: 0;
+	-fx-border-color: transparent;
+	-fx-border-width: 0px;
+	-fx-border-style: none;
+	-fx-padding: 1;
+}
+
+.check-box:focused .box {
+	-fx-background-color: transparent;
+	-fx-background-insets: 0;
+	-fx-background-radius: 0;
+	-fx-border-color: transparent;
+	-fx-border-width: 0px;
+	-fx-border-style: none;
+	-fx-padding: 1;
+}
+
+.check-box:disabled {
+	-fx-opacity: 1.0;
+}
+
+.check-box:disabled .box {
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+
+}
+
+.check-box:armed .box {
+	-fx-background-color: transparent, transparent;
+}
+
+.check-box:armed .box .mark {
+	-fx-background-color: transparent;
+}
