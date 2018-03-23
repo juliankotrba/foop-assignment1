@@ -25,7 +25,7 @@ public class GameTile extends StackPane {
 	private ImageView background = new ImageView();
 	private ImageView object = new ImageView();
 	private ImageView mark = new ImageView();
-	private ImageView player = new ImageView();
+	// private ImageView player = new ImageView();
 	private Pane highlight = new Pane();
 
 	GameTile(Tile tile) {
@@ -40,10 +40,10 @@ public class GameTile extends StackPane {
 		mark.setPreserveRatio(true);
 		mark.setSmooth(false);
 
-		player.setPreserveRatio(true);
-		player.setSmooth(false);
+		//player.setPreserveRatio(true);
+		//player.setSmooth(false);
 
-		getChildren().addAll(background, object, mark, player, highlight);
+		getChildren().addAll(background, object, mark, highlight);
 
 		if (tile.getType() == TileType.DEFAULT) {
 			background.setImage(Sprites.floor);
@@ -108,6 +108,7 @@ public class GameTile extends StackPane {
 
 			// Mouse actions
 			setOnMousePressed(event -> contextMenu.show(this, Side.BOTTOM, 0, 0));
+
 			// TODO: find better way to highlight tile
 			setOnMouseEntered(event -> highlight.setStyle("-fx-background-color: rgba(0, 152, 211, 0.5)"));
 			setOnMouseExited(event -> highlight.setStyle(""));
@@ -116,7 +117,7 @@ public class GameTile extends StackPane {
 		}
 	}
 
-	public void draw(Double tileSize, double offsetX, double offsetY) {
+	public void draw(double tileSize, double offsetX, double offsetY) {
 		setPrefSize(tileSize, tileSize);
 		this.setTranslateX(getX() * tileSize + offsetX);
 		this.setTranslateY(getY() * tileSize + offsetY);
@@ -124,7 +125,7 @@ public class GameTile extends StackPane {
 		background.setFitWidth(tileSize);
 		object.setFitWidth(tileSize);
 		mark.setFitWidth(tileSize);
-		player.setFitWidth(tileSize);
+		// player.setFitWidth(tileSize);
 
 		highlight.setPrefSize(tileSize, tileSize);
 	}
@@ -138,7 +139,6 @@ public class GameTile extends StackPane {
 	}
 
 	public void setMark(Mark mark) {
-		// TODO: set mark image based on Mark
 		switch (mark.getMarkType()) {
 			case STAY_IN_AREA:
 				this.mark.setImage(Sprites.stay);
@@ -164,7 +164,7 @@ public class GameTile extends StackPane {
 	public void clearMark() {
 		mark.setImage(null);
 	}
-
+	/*
 	public void setPlayer(int index) {
 		player.setImage(Sprites.player[index]);
 	}
@@ -172,7 +172,7 @@ public class GameTile extends StackPane {
 	public void clearPlayer() {
 		player.setImage(null);
 	}
-
+	*/
 	public boolean isWall() {
 		return tile.getType() == TileType.WALL;
 	}

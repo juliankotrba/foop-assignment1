@@ -7,6 +7,7 @@ import dto.Player;
 import dto.Position;
 import dto.Tile;
 import exception.ConnectionException;
+import gui.debug.DebugMoves;
 import gui.debug.MazeLoader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -18,9 +19,7 @@ import javafx.util.Pair;
 import service.GameService;
 import service.GameServiceImpl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * MainController
@@ -40,7 +39,7 @@ public class MainController {
 
 	}
 
-	public void connect() {
+	private void connect() {
 		try {
 			Connection connection = ConnectionFactory.getInstance();
 			connection.connect();
@@ -100,6 +99,8 @@ public class MainController {
 		alert.showAndWait();
 
 	}
+
+	// MARK: - DEBUG
 
 	@FXML
 	private void debugPlayer() {
@@ -161,4 +162,26 @@ public class MainController {
 		playerList.add(new Player(3, new Position(1,9)));
 		playerList.forEach(player -> gameMap.set(player));
 	}
+
+	private Timer timer;
+	private DebugMoves debugMoves = new DebugMoves(0);
+
+	@FXML
+	private void debugAnimation() {
+		debugMoves.addMoves();
+
+		if (timer == null) {
+			timer = new Timer();
+			timer.scheduleAtFixedRate(new TimerTask() {
+				@Override
+				public void run() {
+					Player player = debugMoves.poll();
+					if (player != null) {
+						gameMap.set(player);
+					}
+				}
+			}, 0, 600);
+		}
+	}
+
 }

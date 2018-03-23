@@ -1,6 +1,7 @@
 package gui;
 
 import dto.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
@@ -16,12 +17,18 @@ import java.util.Map;
 class GameMap extends Pane {
 
 	private Grid<GameTile> gameTiles;
-	private Map<Player, GameTile> playerMap = new HashMap<>();
+	private Map<Player, PlayerTile> playerMap = new HashMap<>();
+
+	private double tileSize = 0;
+	private double offsetX = 0;
+	private double offsetY = 0;
 
 	GameMap(Grid<Tile> maze) {
 		gameTiles = new Grid<>(maze.getWidth(), maze.getHeight());
 
+		System.out.println("GameMap.load()");
 		maze.forEach(this::load);
+		System.out.println("GameMap.render()");
 		gameTiles.forEach(this::render);
 
 		this.widthProperty().addListener((observable, oldValue, newValue) -> draw());
@@ -56,18 +63,11 @@ class GameMap extends Pane {
 		gameTile.drawBorder(front);
 	}
 
-	/**
-	 * Resizes and centers the gamemap based on container size
-	 */
-	private void draw() {
+	private void calculateTileSizes() {
 		double tileSizeW = this.widthProperty().doubleValue() / gameTiles.getWidth();
 		double tileSizeH = this.heightProperty().doubleValue() / gameTiles.getHeight();
 
 		if (tileSizeW == 0 || tileSizeH == 0) { return; }
-
-		double tileSize;
-		final double offsetX;
-		final double offsetY;
 
 		if (tileSizeH < tileSizeW) {
 			tileSize = tileSizeH;
@@ -78,7 +78,15 @@ class GameMap extends Pane {
 			offsetX = 0;
 			offsetY = (this.heightProperty().doubleValue() - tileSize * gameTiles.getHeight()) / 2;
 		}
+	}
 
+	/**
+	 * Resizes and centers the gamemap based on container size
+	 */
+	private void draw() {
+		System.out.println("GameMap.draw()");
+		calculateTileSizes();
+		playerMap.values().forEach(playerTile -> playerTile.draw(tileSize, offsetX, offsetY));
 		gameTiles.forEach(gameTile -> gameTile.draw(tileSize, offsetX, offsetY));
 	}
 
@@ -128,13 +136,16 @@ class GameMap extends Pane {
 	 * @param player Player to add/move on the map
 	 */
 	public void set(Player player) {
-		GameTile oldPosition = playerMap.get(player);
-		if (oldPosition != null) {
-			oldPosition.clearPlayer();
+		PlayerTile playerTile = playerMap.get(player);
+
+		if (playerTile == null) {
+			playerTile = new PlayerTile(player);
+			playerMap.put(player, playerTile);
+			getChildren().add(playerTile);
+			playerTile.draw(tileSize, offsetX, offsetY);
+		} else {
+			playerTile.move(player.getPosition());
 		}
-		GameTile newPosition = gameTiles.get(player.getPosition());
-		newPosition.setPlayer(player.getNumber());
-		playerMap.put(player, newPosition);
 	}
 
 	/**
