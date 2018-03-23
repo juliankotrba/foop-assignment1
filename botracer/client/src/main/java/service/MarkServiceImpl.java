@@ -2,7 +2,7 @@ package service;
 
 import connection.Connection;
 import dto.Mark;
-import dto.messages.MarkPlacementMessage;
+import dto.messages.c2s.MarkPlacementMessage;
 import exception.connection.ConnectionException;
 import exception.connection.MessageException;
 import exception.service.ServiceException;

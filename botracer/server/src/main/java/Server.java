@@ -1,9 +1,7 @@
 
 
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import dto.messages.GameStartMessage;
+import dto.messages.s2c.GameStartMessage;
 import dto.messages.Message;
 
 import java.io.*;
