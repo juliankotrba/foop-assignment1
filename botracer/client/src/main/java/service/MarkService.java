@@ -1,6 +1,7 @@
 package service;
 
 import dto.Mark;
+import exception.service.ServiceException;
 
 /**
  * Mark service
@@ -8,5 +9,5 @@ import dto.Mark;
  * @author  Julian Kotrba
  */
 public interface MarkService {
-    void addMark(Mark mark);
+    void placeMark(Mark mark) throws ServiceException;
 }
