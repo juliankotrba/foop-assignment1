@@ -19,8 +19,12 @@
 			<MenuItem mnemonicParsing="false" onAction="#stop" text="Stop game" />
 			<MenuItem mnemonicParsing="false" onAction="#close" text="Exit" />
 		</Menu>
+		<Menu mnemonicParsing="false" text="DEBUG">
+			<MenuItem mnemonicParsing="false" onAction="#debugLoadMap" text="Load debug map" />
+			<MenuItem mnemonicParsing="false" onAction="#debugPlayer" text="Move Player..." />
+		</Menu>
 		<Menu mnemonicParsing="false" text="Help">
-			<MenuItem mnemonicParsing="false" text="About" />
+			<MenuItem mnemonicParsing="false" onAction="#about" text="About" />
 		</Menu>
 	</MenuBar>
 	<BorderPane fx:id="mainWindow" style="-fx-background-color: #40414B#40414B;" VBox.vgrow="ALWAYS">

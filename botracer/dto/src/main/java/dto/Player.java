@@ -22,4 +22,21 @@ public class Player extends Drawable {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
+
+	@Override
+	public int hashCode() {
+		return getNumber();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj.getClass() != Player.class) return false;
+
+		return equals((Player) obj);
+	}
+
+	public boolean equals(Player player) {
+		return this.getNumber() == player.getNumber();
+	}
 }

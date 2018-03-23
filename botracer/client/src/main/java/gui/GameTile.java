@@ -31,19 +31,15 @@ public class GameTile extends StackPane {
 	GameTile(Tile tile) {
 		this.tile = tile;
 
-		//background.setCache(true);
 		background.setPreserveRatio(true);
 		background.setSmooth(false);
 
-		//object.setCache(true);
 		object.setPreserveRatio(true);
 		object.setSmooth(false);
 
-		//mark.setCache(true);
 		mark.setPreserveRatio(true);
 		mark.setSmooth(false);
 
-		//player.setCache(true);
 		player.setPreserveRatio(true);
 		player.setSmooth(false);
 
@@ -169,8 +165,8 @@ public class GameTile extends StackPane {
 		mark.setImage(null);
 	}
 
-	public void setPlayer() {
-		// TODO: set player image based on Player
+	public void setPlayer(int index) {
+		player.setImage(Sprites.player[index]);
 	}
 
 	public void clearPlayer() {
