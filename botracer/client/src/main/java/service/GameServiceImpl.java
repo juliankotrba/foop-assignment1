@@ -6,8 +6,9 @@ import dto.messages.GameStartMessage;
 import dto.messages.GameDataMessage;
 import dto.messages.Message;
 import dto.messages.PlayerReadyMessage;
-import exception.ConnectionException;
-import exception.MessageException;
+import exception.connection.ConnectionException;
+import exception.connection.MessageException;
+import exception.service.ServiceException;
 
 /**
  * Implementation of the game service
@@ -26,22 +27,31 @@ public class GameServiceImpl implements GameService, OnMessageReceivedListener<M
     }
 
     @Override
-    public void connect(OnMessageReceivedListener<GameDataMessage> callback) throws ConnectionException {
+    public void connect(OnMessageReceivedListener<GameDataMessage> callback) throws ServiceException {
         this.onGameMapReceivedCallback = callback;
 
-        this.connection.connect();
-        this.connection.setMessageListener(this);
+        try {
+            this.connection.connect();
+            this.connection.setMessageListener(this);
+        } catch (ConnectionException e) {
+            throw new ServiceException("connect failed", e);
+        }
     }
 
     @Override
-    public void setPlayerReady(OnMessageReceivedListener<GameStartMessage> callback) throws ConnectionException, MessageException {
+    public void setPlayerReady(OnMessageReceivedListener<GameStartMessage> callback) throws ServiceException {
         this.onGameStartReceivedCallback = callback;
-        this.connection.send(new PlayerReadyMessage());
+
+        try {
+            this.connection.send(new PlayerReadyMessage());
+        } catch (MessageException | ConnectionException e) {
+            throw new ServiceException("setPlayerReady failed", e);
+        }
     }
 
     @Override
     public void disconnect() {
-
+        this.connection.disconnect();
     }
 
     @Override
