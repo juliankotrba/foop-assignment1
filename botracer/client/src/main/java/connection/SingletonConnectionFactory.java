@@ -29,6 +29,13 @@ public class SingletonConnectionFactory {
         return connection;
     }
 
+    public static synchronized Connection getDummyInstance() {
+        if (connection == null) {
+            connection = new DummyConnection();
+        }
+        return connection;
+    }
+
     private static Properties getProperties() {
         try {
             String encodedPath = SingletonConnectionFactory.class.getResource("/").getPath();

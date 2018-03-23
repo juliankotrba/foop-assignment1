@@ -29,10 +29,11 @@ public class GameServiceImpl implements GameService, OnMessageReceivedListener<M
     @Override
     public void connect(OnMessageReceivedListener<GameDataMessage> callback) throws ServiceException {
         this.onGameMapReceivedCallback = callback;
+        this.connection.setMessageListener(this);
 
         try {
             this.connection.connect();
-            this.connection.setMessageListener(this);
+
         } catch (ConnectionException e) {
             throw new ServiceException("connect failed", e);
         }
