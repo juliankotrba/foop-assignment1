@@ -1,11 +1,11 @@
-package dto;
+package dto.messages;
 
 import java.io.Serializable;
 
 /**
  * Message DTO
  *
- * @author  Julian Kotrba
+ * @author Julian Kotrba
  */
 public class Message implements Serializable {
     private static final long serialVersionUID = 1L;

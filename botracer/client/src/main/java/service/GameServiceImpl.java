@@ -2,7 +2,8 @@ package service;
 
 import connection.Connection;
 import connection.OnMessageReceivedListener;
-import dto.MapMessage;
+import dto.messages.GameStartMessage;
+import dto.messages.MapMessage;
 
 /**
  * Implementation of the game service
@@ -24,6 +25,11 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void stopGame() {
+
+    }
+
+    @Override
+    public void playerReady(OnMessageReceivedListener<GameStartMessage> gameStartListener) {
 
     }
 }

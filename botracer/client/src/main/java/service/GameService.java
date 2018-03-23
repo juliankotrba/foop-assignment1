@@ -1,8 +1,8 @@
 package service;
 
 import connection.OnMessageReceivedListener;
-import dto.MapMessage;
-import dto.Message;
+import dto.messages.GameStartMessage;
+import dto.messages.MapMessage;
 
 /**
  * Game service
@@ -11,5 +11,8 @@ import dto.Message;
  */
 public interface GameService {
     void startGame(OnMessageReceivedListener<MapMessage> listener);
+
+    void playerReady(OnMessageReceivedListener<GameStartMessage> gameStartListener);
+
     void stopGame();
 }

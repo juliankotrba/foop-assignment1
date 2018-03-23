@@ -1,6 +1,6 @@
 package connection;
 
-import dto.Message;
+import dto.messages.Message;
 
 /**
  * Callback for received message

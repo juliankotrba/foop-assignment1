@@ -1,7 +1,6 @@
 package connection;
 
-import connection.StreamWriter;
-import dto.Message;
+import dto.messages.Message;
 import exception.WriterException;
 
 import java.io.IOException;

@@ -1,7 +1,6 @@
 package connection;
 
-import connection.StreamReader;
-import dto.Message;
+import dto.messages.Message;
 import exception.ReaderException;
 
 import java.io.IOException;

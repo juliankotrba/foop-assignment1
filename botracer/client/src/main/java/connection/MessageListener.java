@@ -1,8 +1,6 @@
 package connection;
 
-import connection.OnMessageReceivedListener;
-import connection.StreamReader;
-import dto.Message;
+import dto.messages.Message;
 import exception.ReaderException;
 
 import java.util.List;
