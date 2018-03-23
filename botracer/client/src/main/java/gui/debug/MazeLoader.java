@@ -5,6 +5,7 @@ import dto.Position;
 import dto.Tile;
 import dto.TileType;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -32,7 +33,7 @@ public class MazeLoader {
 	public Grid<Tile> load(URL url) {
 		if (url == null) { return null; }
 		try {
-			return load(url.toURI().getPath());
+			return load(new File(url.toURI()).getAbsolutePath());
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
