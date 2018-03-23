@@ -6,7 +6,7 @@ import dto.Grid;
 import dto.Player;
 import dto.Position;
 import dto.Tile;
-import exception.ConnectionException;
+import exception.connection.ConnectionException;
 import gui.debug.MazeLoader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
