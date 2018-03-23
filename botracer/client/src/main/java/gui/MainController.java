@@ -37,7 +37,7 @@ public class MainController {
 	private Player player;
 	private GameMap gameMap;
 
-	private Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
+	private final Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
 
 	@FXML
 	private BorderPane mainWindow;
@@ -109,13 +109,9 @@ public class MainController {
 	}
 
 	@FXML
-	private void stop() {
+	private void close() {
 		if (gameService == null) { return; }
 		gameService.disconnect();
-	}
-
-	@FXML
-	private void close() {
 		Platform.exit();
 	}
 

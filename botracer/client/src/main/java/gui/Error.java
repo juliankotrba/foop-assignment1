@@ -2,7 +2,7 @@ package gui;
 
 import javafx.scene.control.Alert;
 
-public class Error {
+class Error {
 
 	public static void show(String message) {
 		Alert alert = new Alert(Alert.AlertType.ERROR);

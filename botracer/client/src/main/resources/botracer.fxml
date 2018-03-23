@@ -12,12 +12,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.SeparatorMenuItem?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="800" prefHeight="600.0" prefWidth="800.0" stylesheets="botracer.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
 	<MenuBar useSystemMenuBar="true">
 		<Menu mnemonicParsing="false" text="Game">
 			<MenuItem mnemonicParsing="false" onAction="#ready" text="Ready" />
-			<MenuItem mnemonicParsing="false" onAction="#stop" text="Stop game" />
-			<MenuItem mnemonicParsing="false" onAction="#close" text="Exit" />
+			<SeparatorMenuItem />
+			<MenuItem mnemonicParsing="false" onAction="#close" text="Exit game" />
 		</Menu>
 		<Menu mnemonicParsing="false" text="DEBUG">
 			<MenuItem mnemonicParsing="false" onAction="#debugLoadMap" text="Load debug map" />
@@ -113,18 +114,16 @@
 					  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 				  </padding>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
-					  <children>
-						  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-							  <Image url="@assets/marks/stay.png" />
-						  </ImageView>
-						  <Label text="stay in this area,an exit is close" wrapText="true" />
-					  </children>
 					  <opaqueInsets>
-						  <Insets />
+						  <Insets/>
 					  </opaqueInsets>
 					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
 					  </padding>
+					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+						  <Image url="@assets/marks/stay.png"/>
+					  </ImageView>
+					  <Label text="stay in this area,an exit is close" wrapText="true"/>
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>

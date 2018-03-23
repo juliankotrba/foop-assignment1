@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class MazeLoader {
 
-	public static MazeLoader shared = new MazeLoader();
+	public static final MazeLoader shared = new MazeLoader();
 
 	private MazeLoader() {}
 
@@ -55,12 +55,16 @@ public class MazeLoader {
 				String line = stringList.get(y);
 				for (int x = 0; x < line.length(); x += 1) {
 					char c = line.charAt(x);
-					if (c == '*') {
-						grid.add(new Tile(TileType.WALL, new Position(x, y)));
-					} else if (c == 'E') {
-						grid.add(new Tile(TileType.EXIT, new Position(x, y)));
-					} else {
-						grid.add(new Tile(TileType.DEFAULT, new Position(x, y)));
+					switch (c) {
+						case '*':
+							grid.add(new Tile(TileType.WALL, new Position(x, y)));
+							break;
+						case 'E':
+							grid.add(new Tile(TileType.EXIT, new Position(x, y)));
+							break;
+						default:
+							grid.add(new Tile(TileType.DEFAULT, new Position(x, y)));
+							break;
 					}
 				}
 			}

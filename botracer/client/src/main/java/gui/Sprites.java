@@ -13,7 +13,7 @@ public class Sprites {
 	public static String highlight = null;
 
 	public static void setHighlight(int number) {
-		if (number >= 0 || number < highlights.length) {
+		if (number >= 0 && number < highlights.length) {
 			highlight = highlights[number];
 		}
 	}
@@ -27,7 +27,7 @@ public class Sprites {
 
 	// Players
 	public static Image getPlayer(int number) {
-		if (number >= 0 || number < player.length) {
+		if (number >= 0 && number < player.length) {
 			return player[number];
 		}
 

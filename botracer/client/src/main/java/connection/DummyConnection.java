@@ -29,7 +29,7 @@ public class DummyConnection implements Connection {
     }
 
     @Override
-    public void connectAndListen(OnMessageReceivedListener<Message> onMessageReceivedListener) throws ConnectionException {
+    public void connectAndListen(OnMessageReceivedListener<Message> onMessageReceivedListener) {
         this.connect();
         this.onMessageReceivedListener = onMessageReceivedListener;
     }

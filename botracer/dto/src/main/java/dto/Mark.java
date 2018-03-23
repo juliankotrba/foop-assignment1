@@ -7,7 +7,7 @@ package dto;
  */
 public class Mark extends Drawable {
 
-	private MarkType markType;
+	private final MarkType markType;
 
 	public Mark(Position position, MarkType markType) {
 		super(-1, position);

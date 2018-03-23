@@ -13,8 +13,8 @@ import java.util.Map;
  */
 public class GameMap extends Pane {
 
-	private Grid<GameTile> gameTiles;
-	private Map<Player, PlayerTile> playerMap = new HashMap<>();
+	private final Grid<GameTile> gameTiles;
+	private final Map<Player, PlayerTile> playerMap = new HashMap<>();
 
 	private double tileSize = 0;
 	private double offsetX = 0;
@@ -78,7 +78,7 @@ public class GameMap extends Pane {
 	}
 
 	/**
-	 * Resizes and centers the gamemap based on container size
+	 * Resize and center the game map based on container size
 	 */
 	private void draw() {
 		System.out.println("GameMap.draw()");

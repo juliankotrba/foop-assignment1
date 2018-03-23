@@ -9,9 +9,8 @@ public class Player extends Drawable {
 
 	private String name;
 
-	@Deprecated
 	public Player(int number, Position position) {
-		super(number, position);
+		this(number, null, position);
 	}
 
 	public Player(int number, String name, Position position) {
@@ -46,6 +45,10 @@ public class Player extends Drawable {
 
 	public boolean equals(Player player) {
 		return this.getNumber() == player.getNumber();
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getName() {

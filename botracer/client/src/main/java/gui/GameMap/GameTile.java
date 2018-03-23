@@ -21,13 +21,12 @@ import javafx.scene.layout.StackPane;
  */
 public class GameTile extends StackPane {
 
-	private Tile tile;
+	private final Tile tile;
 
-	private ImageView background = new ImageView();
-	private ImageView object = new ImageView();
-	private ImageView mark = new ImageView();
-	// private ImageView player = new ImageView();
-	private Pane highlight = new Pane();
+	private final ImageView background = new ImageView();
+	private final ImageView object = new ImageView();
+	private final ImageView mark = new ImageView();
+	private final Pane highlight = new Pane();
 
 	GameTile(Tile tile) {
 		this.tile = tile;
@@ -63,41 +62,29 @@ public class GameTile extends StackPane {
 				MenuItem menuItem = new MenuItem(algorithms[i]);
 				menuItem.setGraphic(Sprites.asImageView(Sprites.getAlgorithm(i), 16.0));
 				final int number = i;
-				menuItem.setOnAction(event -> {
-					setMark(new Mark(number, tile.getPosition()));
-				});
+				menuItem.setOnAction(event -> setMark(new Mark(number, tile.getPosition())));
 				changeAlgorithm.getItems().add(menuItem);
 			}
 
 			MenuItem stay = new MenuItem("Stay in area");
 			stay.setGraphic(Sprites.asImageView(Sprites.stay, 16.0));
-			stay.setOnAction(event -> {
-				setMark(new Mark(tile.getPosition(), MarkType.STAY_IN_AREA));
-			});
+			stay.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.STAY_IN_AREA)));
 			MenuItem moveAway = new MenuItem("Move away");
 			moveAway.setGraphic(Sprites.asImageView(Sprites.move_away, 16.0));
-			moveAway.setOnAction(event -> {
-				setMark(new Mark(tile.getPosition(), MarkType.MOVE_AWAY_FROM_AREA));
-			});
+			moveAway.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.MOVE_AWAY_FROM_AREA)));
 
 			Menu turn = new Menu("Turn");
 			MenuItem turnLeft = new MenuItem("Left");
 			turnLeft.setGraphic(Sprites.asImageView(Sprites.left, 16.0));
-			turnLeft.setOnAction(event -> {
-				setMark(new Mark(tile.getPosition(), MarkType.TURN_LEFT));
-			});
+			turnLeft.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.TURN_LEFT)));
 			MenuItem turnRight = new MenuItem("Right");
 			turnRight.setGraphic(Sprites.asImageView(Sprites.right, 16.0));
-			turnRight.setOnAction(event -> {
-				setMark(new Mark(tile.getPosition(), MarkType.TURN_RIGHT));
-			});
+			turnRight.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.TURN_RIGHT)));
 			turn.getItems().addAll(turnLeft, turnRight);
 
 			MenuItem clear = new MenuItem("Clear memory");
 			clear.setGraphic(Sprites.asImageView(Sprites.clear, 16.0));
-			clear.setOnAction(event -> {
-				setMark(new Mark(tile.getPosition(), MarkType.CLEAR_MEMORY));
-			});
+			clear.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.CLEAR_MEMORY)));
 
 			MenuItem remove = new MenuItem("Remove Mark");
 			remove.setOnAction(event -> {

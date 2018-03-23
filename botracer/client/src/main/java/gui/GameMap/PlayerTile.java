@@ -8,11 +8,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
-public class PlayerTile extends Pane {
+class PlayerTile extends Pane {
 
-	private TranslateTransition transition = new TranslateTransition(Duration.seconds(0.25), this);
+	private final TranslateTransition transition = new TranslateTransition(Duration.seconds(0.25), this);
 
-	private ImageView player = new ImageView();
+	private final ImageView player = new ImageView();
 	private Position position;
 
 	private double tileSize;
@@ -58,11 +58,11 @@ public class PlayerTile extends Pane {
 		transition.play();
 	}
 
-	public int getX() {
+	private int getX() {
 		return position.getX();
 	}
 
-	public int getY() {
+	private int getY() {
 		return position.getY();
 	}
 }

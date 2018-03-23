@@ -7,7 +7,7 @@ package dto;
  */
 public class Tile extends Drawable {
 
-	private TileType type;
+	private final TileType type;
 
 	public Tile(TileType type, Position position) {
 		super(-1, position);

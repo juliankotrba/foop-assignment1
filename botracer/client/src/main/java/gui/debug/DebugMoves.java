@@ -9,7 +9,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class DebugMoves extends ArrayBlockingQueue<Player> {
 
-	public DebugMoves(int number) {
+	DebugMoves(int number) {
 		super(1024);
 	}
 

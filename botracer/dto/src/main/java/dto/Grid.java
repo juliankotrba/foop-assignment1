@@ -14,8 +14,8 @@ public class Grid<E> extends ArrayList<E> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private int width;
-	private int height;
+	private final int width;
+	private final int height;
 
 	public Grid(int width, int height) {
 		super();
