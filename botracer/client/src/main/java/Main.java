@@ -1,4 +1,5 @@
 import gui.MainController;
+import gui.Sprites;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,6 +19,7 @@ public class Main extends Application {
 		FXMLLoader loader = new FXMLLoader(Main.class.getResource("botracer.fxml"));
 		Parent root = loader.load();
 		primaryStage.setTitle("Bot Racer");
+		primaryStage.getIcons().add(Sprites.icon);
 		primaryStage.setScene(new Scene(root, 900, 600));
 		primaryStage.setMinWidth(500);
 		primaryStage.setMinHeight(400);

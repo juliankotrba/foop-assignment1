@@ -54,7 +54,7 @@ public class MainController {
 		TextInputDialog dialog = new TextInputDialog("Player");
 		dialog.initOwner(window);
 		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.setGraphic(Sprites.asImageView(Sprites.getPlayer(0), 32.0));
+		dialog.setGraphic(Sprites.asImageView(Sprites.icon, 32.0));
 		dialog.setTitle("Bot racer");
 		dialog.setHeaderText("Choose a name to join the race");
 		dialog.setContentText("Please enter your name:");
@@ -118,6 +118,7 @@ public class MainController {
 	@FXML
 	private void about() {
 		Alert alert = new Alert(Alert.AlertType.NONE);
+		alert.setGraphic(Sprites.asImageView(Sprites.icon, 64.0));
 		alert.setTitle("About");
 		alert.setHeaderText("Bot racer");
 		alert.setContentText("");

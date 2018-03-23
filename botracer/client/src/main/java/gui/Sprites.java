@@ -10,6 +10,9 @@ import javafx.scene.image.ImageView;
  * @author David Walter
  */
 public class Sprites {
+
+	public static final Image icon = loadImage("botracer.png");
+
 	public static String highlight = null;
 
 	public static void setHighlight(int number) {
