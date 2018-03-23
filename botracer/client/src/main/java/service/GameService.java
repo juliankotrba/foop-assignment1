@@ -12,7 +12,6 @@ import exception.service.ServiceException;
  */
 public interface GameService {
     void connect(OnMessageReceivedListener<GameDataMessage> listener) throws ServiceException;
-
     void setPlayerReady(OnMessageReceivedListener<GameStartMessage> callback) throws ServiceException;
     void disconnect();
 }
