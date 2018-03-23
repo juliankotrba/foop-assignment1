@@ -21,7 +21,7 @@ public class SocketConnection implements Connection {
     private StreamWriter streamWriter;
     private StreamReader streamReader;
 
-    private List<OnMessageReceivedListener> onMessageReceivedListeners;
+    private List<OnMessageReceivedListener<Message>> onMessageReceivedListeners;
     private Thread messageListenerThread;
     private Properties properties;
     private boolean isConnected;
@@ -92,7 +92,7 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void setMessageListener(OnMessageReceivedListener onMessageReceivedListener) {
+    public void setMessageListener(OnMessageReceivedListener<Message> onMessageReceivedListener) {
         if (this.onMessageReceivedListeners != null) {
             this.onMessageReceivedListeners.add(onMessageReceivedListener);
         }
