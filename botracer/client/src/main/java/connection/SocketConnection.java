@@ -20,9 +20,7 @@ public class SocketConnection implements Connection {
     private Socket socket;
     private StreamWriter streamWriter;
     private StreamReader streamReader;
-
     private List<OnMessageReceivedListener<Message>> onMessageReceivedListeners;
-    private Thread messageListenerThread;
     private Properties properties;
     private boolean isConnected;
 
@@ -63,7 +61,7 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void connectAndListen(OnMessageReceivedListener onMessageReceivedListener) throws ConnectionException {
+    public void connectAndListen(OnMessageReceivedListener<Message> onMessageReceivedListener) throws ConnectionException {
         this.connect();
         this.setMessageListener(onMessageReceivedListener);
     }
@@ -111,11 +109,11 @@ public class SocketConnection implements Connection {
     }
 
     private void startListenerThread() {
-        this.messageListenerThread = new Thread(
+        Thread messageListenerThread = new Thread(
                 new MessageListener(this.streamReader, this.onMessageReceivedListeners)
         );
 
-        this.messageListenerThread.start();
+        messageListenerThread.start();
     }
 
     private void closeStreamWriter() {

@@ -1,7 +1,5 @@
 package dto.messages;
 
-import dto.Player;
-
 import java.io.Serializable;
 import java.util.Optional;
 

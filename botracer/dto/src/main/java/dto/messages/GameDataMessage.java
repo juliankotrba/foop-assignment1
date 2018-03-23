@@ -1,8 +1,6 @@
 package dto.messages;
 
 import dto.GameData;
-import dto.Grid;
-import dto.Tile;
 
 import java.io.Serializable;
 import java.util.Optional;
