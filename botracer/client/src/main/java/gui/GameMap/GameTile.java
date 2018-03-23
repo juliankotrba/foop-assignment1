@@ -1,9 +1,10 @@
-package gui;
+package gui.GameMap;
 
 import dto.Mark;
 import dto.MarkType;
 import dto.Tile;
 import dto.TileType;
+import gui.Sprites;
 import javafx.geometry.Side;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
@@ -60,7 +61,7 @@ public class GameTile extends StackPane {
 			String[] algorithms = {"Left hand rule", "Right hand rule"};
 			for (int i = 0; i < algorithms.length; i++) {
 				MenuItem menuItem = new MenuItem(algorithms[i]);
-				menuItem.setGraphic(Sprites.asImageView(Sprites.algorithm[i], 16.0));
+				menuItem.setGraphic(Sprites.asImageView(Sprites.getAlgorithm(i), 16.0));
 				final int number = i;
 				menuItem.setOnAction(event -> {
 					setMark(new Mark(number, tile.getPosition()));
@@ -110,8 +111,8 @@ public class GameTile extends StackPane {
 			setOnMousePressed(event -> contextMenu.show(this, Side.BOTTOM, 0, 0));
 
 			// TODO: find better way to highlight tile
-			setOnMouseEntered(event -> highlight.setStyle("-fx-background-color: rgba(0, 152, 211, 0.5)"));
-			setOnMouseExited(event -> highlight.setStyle(""));
+			setOnMouseEntered(event -> highlight.setStyle(Sprites.highlight));
+			setOnMouseExited(event -> highlight.setStyle(null));
 		} else if (tile.getType() == TileType.EXIT) {
 			background.setImage(Sprites.exit);
 		}
@@ -153,7 +154,7 @@ public class GameTile extends StackPane {
 				this.mark.setImage(Sprites.right);
 				break;
 			case CHANGE_ALGORITHM:
-				this.mark.setImage(Sprites.algorithm[mark.getIndex()]);
+				this.mark.setImage(Sprites.getAlgorithm(mark.getIndex()));
 				break;
 			case CLEAR_MEMORY:
 				this.mark.setImage(Sprites.clear);

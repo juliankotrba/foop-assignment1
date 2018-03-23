@@ -15,7 +15,7 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="800" prefHeight="600.0" prefWidth="800.0" stylesheets="botracer.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MainController">
 	<MenuBar useSystemMenuBar="true">
 		<Menu mnemonicParsing="false" text="Game">
-			<MenuItem mnemonicParsing="false" onAction="#start" text="Start game" />
+			<MenuItem mnemonicParsing="false" onAction="#ready" text="Ready" />
 			<MenuItem mnemonicParsing="false" onAction="#stop" text="Stop game" />
 			<MenuItem mnemonicParsing="false" onAction="#close" text="Exit" />
 		</Menu>
@@ -43,11 +43,11 @@
 					  </Label>
 				  </center>
 			  </BorderPane>
-			  <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+			  <VBox fx:id="players" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
 				  <padding>
 					  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 				  </padding>
-				  <HBox alignment="CENTER_LEFT" spacing="10.0">
+				  <!--<HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
 						  <Insets />
 					  </opaqueInsets>
@@ -94,7 +94,7 @@
 						  <Image url="@assets/players/bot_green.png" />
 					  </ImageView>
 					  <Label text="Player 4" wrapText="true" />
-				  </HBox>
+				  </HBox>-->
 			  </VBox>
 			  <BorderPane style="-fx-background-color: white;" VBox.vgrow="NEVER">
 				  <center>

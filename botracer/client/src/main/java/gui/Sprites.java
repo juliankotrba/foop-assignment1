@@ -1,5 +1,6 @@
 package gui;
 
+import gui.GameMap.GameTile;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -9,8 +10,31 @@ import javafx.scene.image.ImageView;
  * @author David Walter
  */
 public class Sprites {
+	public static String highlight = null;
+
+	public static void setHighlight(int number) {
+		if (number >= 0 || number < highlights.length) {
+			highlight = highlights[number];
+		}
+	}
+
+	private static final String[] highlights = {
+			"-fx-background-color: rgba(0, 152, 211, 0.5)",
+			"-fx-background-color: rgba(0, 152, 211, 0.5)",
+			"-fx-background-color: rgba(0, 152, 211, 0.5)",
+			"-fx-background-color: rgba(0, 152, 211, 0.5)"
+	};
+
 	// Players
-	public static final Image[] player = {
+	public static Image getPlayer(int number) {
+		if (number >= 0 || number < player.length) {
+			return player[number];
+		}
+
+		return null;
+	}
+
+	private static final Image[] player = {
 			loadImage("players/bot_cyan.png"),
 			loadImage("players/bot_red.png"),
 			loadImage("players/bot_yellow.png"),
@@ -31,7 +55,14 @@ public class Sprites {
 	// Marks
 	public static final Image stay = loadImage("marks/stay.png");
 	public static final Image move_away = loadImage("marks/move_away.png");
-	public static final Image[] algorithm = {
+	public static Image getAlgorithm(int index) {
+		if (index > 0 && index < algorithm.length) {
+			return algorithm[index];
+		}
+
+		return algorithm[0];
+	}
+	private static final Image[] algorithm = {
 			loadImage("marks/algorithms/a1.png"),
 			loadImage("marks/algorithms/a2.png")
 	};
@@ -45,6 +76,7 @@ public class Sprites {
 
 	/**
 	 * Wraps the specified sprite in an ImageView
+	 *
 	 * @param image image to display
 	 * @param width width of the ImageView
 	 * @return ratio preserving ImageView

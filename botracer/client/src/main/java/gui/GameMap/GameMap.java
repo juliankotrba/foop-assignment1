@@ -1,7 +1,6 @@
-package gui;
+package gui.GameMap;
 
 import dto.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import java.util.HashMap;
@@ -12,7 +11,7 @@ import java.util.Map;
  *
  * @author  David Walter
  */
-class GameMap extends Pane {
+public class GameMap extends Pane {
 
 	private Grid<GameTile> gameTiles;
 	private Map<Player, PlayerTile> playerMap = new HashMap<>();
@@ -21,7 +20,7 @@ class GameMap extends Pane {
 	private double offsetX = 0;
 	private double offsetY = 0;
 
-	GameMap(Grid<Tile> maze) {
+	public GameMap(Grid<Tile> maze) {
 		gameTiles = new Grid<>(maze.getWidth(), maze.getHeight());
 
 		System.out.println("GameMap.load()");

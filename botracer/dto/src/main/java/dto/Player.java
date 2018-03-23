@@ -7,8 +7,16 @@ package dto;
  */
 public class Player extends Drawable {
 
+	private String name;
+
+	@Deprecated
 	public Player(int number, Position position) {
 		super(number, position);
+	}
+
+	public Player(int number, String name, Position position) {
+		super(number, position);
+		this.name = name;
 	}
 
 	public int getNumber() {
@@ -38,5 +46,12 @@ public class Player extends Drawable {
 
 	public boolean equals(Player player) {
 		return this.getNumber() == player.getNumber();
+	}
+
+	public String getName() {
+		if (name == null) {
+			return "Player " + (getNumber() + 1);
+		}
+		return name;
 	}
 }

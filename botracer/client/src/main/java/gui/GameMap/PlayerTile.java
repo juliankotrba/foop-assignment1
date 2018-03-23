@@ -1,7 +1,8 @@
-package gui;
+package gui.GameMap;
 
 import dto.Player;
 import dto.Position;
+import gui.Sprites;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -21,7 +22,7 @@ public class PlayerTile extends Pane {
 	PlayerTile(Player player) {
 		this.position = player.getPosition();
 		this.player.setPreserveRatio(true);
-		this.player.setImage(Sprites.player[player.getNumber()]);
+		this.player.setImage(Sprites.getPlayer(player.getNumber()));
 
 		setMouseTransparent(true);
 		getChildren().add(this.player);

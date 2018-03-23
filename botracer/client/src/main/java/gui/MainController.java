@@ -2,24 +2,31 @@ package gui;
 
 import connection.Connection;
 import connection.SingletonConnectionFactory;
-import dto.Grid;
-import dto.Player;
-import dto.Position;
-import dto.Tile;
-import exception.connection.ConnectionException;
+import dto.*;
+import exception.service.ServiceException;
+import gui.GameMap.GameMap;
 import gui.debug.DebugMoves;
 import gui.debug.MazeLoader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Window;
 import javafx.util.Pair;
 import service.GameService;
 import service.GameServiceImpl;
 
-import java.util.*;
+import java.io.IOException;
+import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * MainController
@@ -35,22 +42,40 @@ public class MainController {
 	private BorderPane mainWindow;
 
 	@FXML
-	public void initialize() {
+	private VBox players;
 
+	@FXML
+	private void initialize() {
+
+	}
+
+	public void start(Window window) {
+		TextInputDialog dialog = new TextInputDialog("Player");
+		dialog.initOwner(window);
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.setGraphic(Sprites.asImageView(Sprites.getPlayer(0), 32.0));
+		dialog.setTitle("Bot racer");
+		dialog.setHeaderText("Choose a name to join the race");
+		dialog.setContentText("Please enter your name:");
+
+		Optional<String> result = dialog.showAndWait();
+
+		result.ifPresent(name -> connect());
 	}
 
 	private void connect() {
 		try {
-            Connection connection = SingletonConnectionFactory.getInstance();
-			connection.connect();
+			Connection connection = SingletonConnectionFactory.getDummyInstance();
 			gameService = new GameServiceImpl(connection);
-		} catch (ConnectionException e) {
+			gameService.connect(message -> message.getPayload().ifPresent(this::loadGameData));
+		} catch (ServiceException e) {
+			gameService = null;
+
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setTitle("Connection error");
 			alert.setHeaderText("Unable to connect to server");
 			alert.setContentText("The game is unable to connect to the game server.\nAre you sure it is up and running?");
 
-			ButtonType debug = new ButtonType("DEBUG");
 			ButtonType retry = new ButtonType("Retry");
 			ButtonType exit = new ButtonType("Exit", ButtonBar.ButtonData.CANCEL_CLOSE);
 			alert.getButtonTypes().clear();
@@ -59,35 +84,37 @@ public class MainController {
 			Optional<ButtonType> result = alert.showAndWait();
 
 			if (result.isPresent() && result.get() == retry) {
-				initialize();
-			} else if (result.isPresent() && result.get() == debug) {
-				debugLoadMap();
+				connect();
 			} else {
 				close();
 			}
 		}
 	}
 
-	public void start() {
-		if (gameService == null) {
-			return;
+	@FXML
+	private void ready() {
+		if (gameService == null) { return; }
+
+		try {
+			gameService.setPlayerReady(null);
+		} catch (ServiceException e) {
+			e.printStackTrace();
 		}
-		// TODO: start GameService
-		connect();
 	}
 
-	public void stop() {
-		if (gameService == null) {
-			return;
-		}
-		// TODO: stop GameService
+	@FXML
+	private void stop() {
+		if (gameService == null) { return; }
+		gameService.disconnect();
 	}
 
-	public void close() {
+	@FXML
+	private void close() {
 		Platform.exit();
 	}
 
-	public void about() {
+	@FXML
+	private void about() {
 		Alert alert = new Alert(Alert.AlertType.NONE);
 		alert.setTitle("About");
 		alert.setHeaderText("Bot racer");
@@ -100,6 +127,37 @@ public class MainController {
 
 	}
 
+	private void loadGameData(GameData gameData) {
+		loadMap(gameData.getGameMap());
+		Player player = gameData.getPlayer();
+		Sprites.setHighlight(player.getNumber());
+		loadPlayer(gameData.getPlayer());
+	}
+
+	private void loadMap(Grid<Tile> grid) {
+		if (grid == null) { return; }
+		gameMap = new GameMap(grid);
+		mainWindow.setCenter(gameMap);
+	}
+
+	private void loadPlayer(Player player) {
+		try {
+			HBox playerBox = FXMLLoader.load(MainController.class.getResource("../player.fxml"));
+
+			players.getChildren().add(playerBox);
+
+			ImageView playerImage = (ImageView)playerBox.getChildren().get(0);
+			Label playerName = (Label)playerBox.getChildren().get(1);
+
+			playerName.setText(player.getName());
+			playerImage.setImage(Sprites.getPlayer(player.getNumber()));
+
+			gameMap.set(player);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	// MARK: - DEBUG
 
 	@FXML
@@ -108,7 +166,7 @@ public class MainController {
 		dialog.setTitle("Move Player");
 		dialog.setHeaderText("Move Player to position");
 
-		dialog.setGraphic(Sprites.asImageView(Sprites.player[0], 32.0));
+		dialog.setGraphic(Sprites.asImageView(Sprites.getPlayer(0), 32.0));
 		ButtonType moveType = new ButtonType("Move", ButtonBar.ButtonData.OK_DONE);
 		dialog.getDialogPane().getButtonTypes().addAll(moveType, ButtonType.CANCEL);
 
@@ -146,21 +204,7 @@ public class MainController {
 	@FXML
 	private void debugLoadMap() {
 		Grid<Tile> grid = MazeLoader.shared.load(MainController.class.getResource("../maze.txt"));
-
-		if (grid == null) {
-			Platform.exit();
-			return;
-		}
-
-		gameMap = new GameMap(grid);
-		mainWindow.setCenter(gameMap);
-
-		List<Player> playerList = new ArrayList<>();
-		playerList.add(new Player(0, new Position(1,1)));
-		playerList.add(new Player(1, new Position(13,10)));
-		playerList.add(new Player(2, new Position(7,8)));
-		playerList.add(new Player(3, new Position(1,9)));
-		playerList.forEach(player -> gameMap.set(player));
+		loadMap(grid);
 	}
 
 	private Timer timer;
