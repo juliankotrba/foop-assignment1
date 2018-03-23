@@ -1,9 +1,9 @@
-package exception;
+package exception.connection;
 
 /**
  * Message exception
  *
- * @author  Julian Kotrba
+ * @author Julian Kotrba
  */
 public class MessageException extends Exception {
 

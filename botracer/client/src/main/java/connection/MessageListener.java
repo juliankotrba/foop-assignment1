@@ -1,7 +1,7 @@
 package connection;
 
 import dto.messages.Message;
-import exception.ReaderException;
+import exception.connection.ReaderException;
 
 import java.util.List;
 import java.util.Objects;

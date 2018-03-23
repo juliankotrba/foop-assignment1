@@ -1,9 +1,9 @@
 package connection;
 
 import dto.messages.Message;
-import exception.ConnectionException;
-import exception.MessageException;
-import exception.WriterException;
+import exception.connection.ConnectionException;
+import exception.connection.MessageException;
+import exception.connection.WriterException;
 
 import java.io.*;
 import java.net.InetSocketAddress;
