@@ -4,15 +4,18 @@ import dto.Grid;
 import dto.Position;
 import dto.Tile;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <description>
+ * DFS strategy
  *
  * @author Julian Kotrba
  */
-public class DfsStrategy implements MazeSolverStrategy {
+public class DfsStrategy implements MazeSolverStrategy, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private List<Position> visited;
 
