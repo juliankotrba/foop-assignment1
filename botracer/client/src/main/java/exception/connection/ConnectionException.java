@@ -1,9 +1,9 @@
-package exception;
+package exception.connection;
 
 /**
  * Connection exception
  *
- * @author  Julian Kotrba
+ * @author Julian Kotrba
  */
 public class ConnectionException extends Exception {
 

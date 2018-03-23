@@ -1,8 +1,8 @@
 package connection;
 
 import dto.messages.Message;
-import exception.ConnectionException;
-import exception.MessageException;
+import exception.connection.ConnectionException;
+import exception.connection.MessageException;
 
 /**
  * Connection

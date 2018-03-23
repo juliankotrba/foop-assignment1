@@ -2,7 +2,8 @@ package service;
 
 import connection.OnMessageReceivedListener;
 import dto.messages.GameStartMessage;
-import dto.messages.MapMessage;
+import dto.messages.GameDataMessage;
+import exception.service.ServiceException;
 
 /**
  * Game service
@@ -10,9 +11,8 @@ import dto.messages.MapMessage;
  * @author  Julian Kotrba
  */
 public interface GameService {
-    void startGame(OnMessageReceivedListener<MapMessage> listener);
+    void connect(OnMessageReceivedListener<GameDataMessage> listener) throws ServiceException;
 
-    void playerReady(OnMessageReceivedListener<GameStartMessage> gameStartListener);
-
-    void stopGame();
+    void setPlayerReady(OnMessageReceivedListener<GameStartMessage> callback) throws ServiceException;
+    void disconnect();
 }

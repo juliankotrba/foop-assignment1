@@ -1,9 +1,9 @@
 package connection;
 
 import dto.messages.Message;
-import exception.ConnectionException;
-import exception.MessageException;
-import exception.WriterException;
+import exception.connection.ConnectionException;
+import exception.connection.MessageException;
+import exception.connection.WriterException;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -20,9 +20,7 @@ public class SocketConnection implements Connection {
     private Socket socket;
     private StreamWriter streamWriter;
     private StreamReader streamReader;
-
-    private List<OnMessageReceivedListener> onMessageReceivedListeners;
-    private Thread messageListenerThread;
+    private List<OnMessageReceivedListener<Message>> onMessageReceivedListeners;
     private Properties properties;
     private boolean isConnected;
 
@@ -63,7 +61,7 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void connectAndListen(OnMessageReceivedListener onMessageReceivedListener) throws ConnectionException {
+    public void connectAndListen(OnMessageReceivedListener<Message> onMessageReceivedListener) throws ConnectionException {
         this.connect();
         this.setMessageListener(onMessageReceivedListener);
     }
@@ -92,7 +90,7 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void setMessageListener(OnMessageReceivedListener onMessageReceivedListener) {
+    public void setMessageListener(OnMessageReceivedListener<Message> onMessageReceivedListener) {
         if (this.onMessageReceivedListeners != null) {
             this.onMessageReceivedListeners.add(onMessageReceivedListener);
         }
@@ -111,11 +109,11 @@ public class SocketConnection implements Connection {
     }
 
     private void startListenerThread() {
-        this.messageListenerThread = new Thread(
+        Thread messageListenerThread = new Thread(
                 new MessageListener(this.streamReader, this.onMessageReceivedListeners)
         );
 
-        this.messageListenerThread.start();
+        messageListenerThread.start();
     }
 
     private void closeStreamWriter() {

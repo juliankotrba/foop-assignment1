@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.Optional;
 
 /**
- * Message which indicates the a game start
+ * Message which indicates the ready state of a player
  *
  * @author Julian Kotrba
  */
-public class GameStartMessage implements Message<Void>, Serializable {
+public class PlayerReadyMessage implements Message<Void>, Serializable {
 
     private static final long serialVersionUID = 1L;
 

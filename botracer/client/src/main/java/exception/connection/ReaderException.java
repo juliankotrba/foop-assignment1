@@ -1,4 +1,4 @@
-package exception;
+package exception.connection;
 
 /**
  * Message reader exception

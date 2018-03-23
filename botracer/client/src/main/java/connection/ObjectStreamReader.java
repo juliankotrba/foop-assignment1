@@ -1,7 +1,7 @@
 package connection;
 
 import dto.messages.Message;
-import exception.ReaderException;
+import exception.connection.ReaderException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,9 +15,6 @@ import java.io.ObjectInputStream;
 public class ObjectStreamReader implements StreamReader {
 
     private ObjectInputStream inputStream;
-
-    public ObjectStreamReader() {
-    }
 
     @Override
     public void openStream(InputStream in) throws IOException {

@@ -1,7 +1,7 @@
 package connection;
 
 import dto.messages.Message;
-import exception.WriterException;
+import exception.connection.WriterException;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -15,9 +15,6 @@ import java.io.OutputStream;
 public class ObjectStreamWriter implements StreamWriter {
 
     private ObjectOutputStream outputStream;
-
-    public ObjectStreamWriter() {
-    }
 
     @Override
     public void openStream(OutputStream out) throws IOException {

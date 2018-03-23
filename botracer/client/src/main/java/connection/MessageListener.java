@@ -1,7 +1,7 @@
 package connection;
 
 import dto.messages.Message;
-import exception.ReaderException;
+import exception.connection.ReaderException;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,9 +14,9 @@ import java.util.Objects;
 public class MessageListener implements Runnable {
 
     private StreamReader streamReader;
-    private List<OnMessageReceivedListener> onMessageReceivedListeners;
+    private List<OnMessageReceivedListener<Message>> onMessageReceivedListeners;
 
-    public MessageListener(StreamReader streamReader, List<OnMessageReceivedListener> onMessageReceivedListeners) {
+    public MessageListener(StreamReader streamReader, List<OnMessageReceivedListener<Message>> onMessageReceivedListeners) {
         this.streamReader = streamReader;
         this.onMessageReceivedListeners = onMessageReceivedListeners;
     }

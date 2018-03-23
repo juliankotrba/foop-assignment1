@@ -1,7 +1,7 @@
 package connection;
 
 import dto.messages.Message;
-import exception.WriterException;
+import exception.connection.WriterException;
 
 import java.io.IOException;
 import java.io.OutputStream;

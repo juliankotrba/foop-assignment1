@@ -1,12 +1,13 @@
 package dto.messages;
 
-import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * Message DTO
  *
  * @author Julian Kotrba
  */
-public class Message implements Serializable {
-    private static final long serialVersionUID = 1L;
+public interface Message<T> {
+    Optional<T> getPayload();
 }
+

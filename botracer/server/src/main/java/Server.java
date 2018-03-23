@@ -1,13 +1,14 @@
+
+
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dto.messages.GameStartMessage;
+import dto.messages.Message;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
 import java.util.HashSet;
 
 public class Server {
@@ -21,7 +22,7 @@ public class Server {
      * The set of all the print writers for all the clients.  This
      * set is kept so we can easily broadcast messages.
      */
-    private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
+    private static HashSet<ObjectOutputStream> writers = new HashSet<ObjectOutputStream>();
 
     /**
      * The appplication main method, which just listens on a port and
@@ -47,8 +48,8 @@ public class Server {
     private static class Handler extends Thread {
         private String name;
         private Socket socket;
-        private BufferedReader in;
-        private PrintWriter out;
+        private ObjectInputStream in;
+        private ObjectOutputStream out;
 
         /**
          * Constructs a handler thread, squirreling away the socket.
@@ -69,25 +70,33 @@ public class Server {
             try {
 
                 // Create character streams for the socket.
-                in = new BufferedReader(new InputStreamReader(
-                        socket.getInputStream()));
-                out = new PrintWriter(socket.getOutputStream(), true);
+                out = new ObjectOutputStream(socket.getOutputStream());
+                in = new ObjectInputStream(socket.getInputStream());
+
 
                 writers.add(out);
 
                 // Accept messages from this client and broadcast them.
                 // Ignore other clients that cannot be broadcasted to.
                 while (true) {
-                    String input = in.readLine();
-                    if (input == null) {
+
+                    Message message = null;
+                    try {
+                        message = (Message) in.readObject();
+                        System.out.println("Received message from type: " + message.getClass());
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    if (message == null) {
                         return;
                     }
-                    for (PrintWriter writer : writers) {
-                        writer.println(input);
+                    for (ObjectOutputStream writer : writers) {
+                        writer.writeObject(new GameStartMessage());
                     }
+                    //Gson gson = new GsonBuilder().create();
                 }
             } catch (IOException e) {
-                System.out.println(e);
+                e.printStackTrace();
             } finally {
                 // This client is going down!  Remove its name and its print
                 // writer from the sets, and close its socket.

@@ -1,12 +1,12 @@
 package gui;
 
 import connection.Connection;
-import connection.ConnectionFactory;
+import connection.SingletonConnectionFactory;
 import dto.Grid;
 import dto.Player;
 import dto.Position;
 import dto.Tile;
-import exception.ConnectionException;
+import exception.connection.ConnectionException;
 import gui.debug.DebugMoves;
 import gui.debug.MazeLoader;
 import javafx.application.Platform;
@@ -41,7 +41,7 @@ public class MainController {
 
 	private void connect() {
 		try {
-			Connection connection = ConnectionFactory.getInstance();
+            Connection connection = SingletonConnectionFactory.getInstance();
 			connection.connect();
 			gameService = new GameServiceImpl(connection);
 		} catch (ConnectionException e) {
