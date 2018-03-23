@@ -1,7 +1,7 @@
 package gui;
 
 import connection.Connection;
-import connection.ConnectionFactory;
+import connection.SingletonConnectionFactory;
 import dto.Grid;
 import dto.Player;
 import dto.Position;
@@ -42,7 +42,7 @@ public class MainController {
 
 	public void connect() {
 		try {
-			Connection connection = ConnectionFactory.getInstance();
+            Connection connection = SingletonConnectionFactory.getInstance();
 			connection.connect();
 			gameService = new GameServiceImpl(connection);
 		} catch (ConnectionException e) {

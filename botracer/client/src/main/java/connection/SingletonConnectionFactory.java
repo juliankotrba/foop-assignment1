@@ -10,11 +10,12 @@ import java.util.Properties;
  *
  * @author  Julian Kotrba
  */
-public class ConnectionFactory {
+public class SingletonConnectionFactory {
 
     private static Connection connection;
 
-    private ConnectionFactory() { }
+    private SingletonConnectionFactory() {
+    }
 
     public static synchronized Connection getInstance() {
         if (connection == null) {
@@ -30,7 +31,7 @@ public class ConnectionFactory {
 
     private static Properties getProperties() {
         try {
-            String encodedPath = ConnectionFactory.class.getResource("/").getPath();
+            String encodedPath = SingletonConnectionFactory.class.getResource("/").getPath();
             String path = URLDecoder.decode(encodedPath, "utf-8");
 
             InputStream fileInputStream = new FileInputStream(path + "config.properties");
