@@ -5,8 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * Sprites
- *
+ * Sprites.java
+ * Access the sprites of the game
  * @author David Walter
  */
 public class Sprites {

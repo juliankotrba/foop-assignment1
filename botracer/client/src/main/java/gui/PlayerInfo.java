@@ -11,6 +11,11 @@ import log.Log;
 
 import java.io.IOException;
 
+/**
+ * PlayerInfo.java
+ * Manages the player info view
+ * @author David Walter
+ */
 public class PlayerInfo {
 
 	private Node node;

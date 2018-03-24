@@ -14,10 +14,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * MazeLoader
- *
+ * MazeLoader.java
  * Loads a Maze from a file
- *
  * @author  David Walter
  */
 public class MazeLoader {

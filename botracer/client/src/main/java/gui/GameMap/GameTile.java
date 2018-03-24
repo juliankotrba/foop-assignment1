@@ -16,8 +16,8 @@ import javafx.scene.layout.StackPane;
 import log.Log;
 
 /**
- * GameTile
- *
+ * GameTile.java
+ * Tile on the game map
  * @author David Walter
  */
 public class GameTile extends StackPane {
@@ -106,6 +106,18 @@ public class GameTile extends StackPane {
 		}
 	}
 
+	// MARK: - Getter
+
+	public int getX() {
+		return tile.getX();
+	}
+
+	public int getY() {
+		return tile.getY();
+	}
+
+	// MARK: - draw
+
 	public void draw(double tileSize, double offsetX, double offsetY) {
 		setPrefSize(tileSize, tileSize);
 		this.setTranslateX(getX() * tileSize + offsetX);
@@ -119,13 +131,19 @@ public class GameTile extends StackPane {
 		highlight.setPrefSize(tileSize, tileSize);
 	}
 
-	public int getX() {
-		return tile.getX();
+	public void drawBorder(boolean front) {
+		object.setImage(front ? Sprites.border_front : Sprites.border_top);
 	}
 
-	public int getY() {
-		return tile.getY();
+	public void drawShadow(boolean front, boolean last) {
+		object.setImage(front ? Sprites.shadow_front : (last ? Sprites.shadow_last : Sprites.shadow_top));
 	}
+
+	public boolean isWall() {
+		return tile.getType() == TileType.WALL;
+	}
+
+	// MARK: - interaction
 
 	public void setMark(Mark mark) {
 		switch (mark.getMarkType()) {
@@ -153,24 +171,5 @@ public class GameTile extends StackPane {
 	public void clearMark() {
 		mark.setImage(null);
 	}
-	/*
-	public void setPlayer(int index) {
-		player.setImage(Sprites.player[index]);
-	}
 
-	public void clearPlayer() {
-		player.setImage(null);
-	}
-	*/
-	public boolean isWall() {
-		return tile.getType() == TileType.WALL;
-	}
-
-	public void drawBorder(boolean front) {
-		object.setImage(front ? Sprites.border_front : Sprites.border_top);
-	}
-
-	public void drawShadow(boolean front, boolean last) {
-		object.setImage(front ? Sprites.shadow_front : (last ? Sprites.shadow_last : Sprites.shadow_top));
-	}
 }

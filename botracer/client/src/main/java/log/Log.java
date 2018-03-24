@@ -1,5 +1,10 @@
 package log;
 
+/**
+ * Log.java
+ * Simple log formatter
+ * @author David Walter
+ */
 public class Log {
 
 	public static void debug(String message) {

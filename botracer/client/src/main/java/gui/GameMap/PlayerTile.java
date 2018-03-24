@@ -8,6 +8,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
+/**
+ * PlayerTile.java
+ * Manages the movement of players on the map
+ * @author David Walter
+ */
 class PlayerTile extends Pane {
 
 	private final TranslateTransition transition = new TranslateTransition(Duration.seconds(0.25), this);
@@ -28,6 +33,16 @@ class PlayerTile extends Pane {
 		getChildren().add(this.player);
 	}
 
+	private int getX() {
+		return position.getX();
+	}
+
+	private int getY() {
+		return position.getY();
+	}
+
+	// MARK: - draw
+
 	public void draw(double tileSize, double offsetX, double offsetY) {
 		this.tileSize = tileSize;
 		this.offsetX = offsetX;
@@ -45,6 +60,8 @@ class PlayerTile extends Pane {
 		this.setTranslateY(y);
 	}
 
+	// MARK: - interaction
+
 	public void move(Position position) {
 		this.position = position;
 
@@ -52,13 +69,5 @@ class PlayerTile extends Pane {
 		transition.setToY(getY() * tileSize + offsetY);
 
 		transition.play();
-	}
-
-	private int getX() {
-		return position.getX();
-	}
-
-	private int getY() {
-		return position.getY();
 	}
 }

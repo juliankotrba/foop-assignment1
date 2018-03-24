@@ -28,8 +28,8 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * MainController
- *
+ * MainController.java
+ * Main controller of the JavaFX window
  * @author  David Walter
  */
 public class MainController {

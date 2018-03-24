@@ -8,8 +8,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 /**
- * Main
- *
+ * Main.java
+ * Starting point of the application
  * @author David Walter
  */
 public class Main extends Application {

@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * GameMap
- *
+ * GameMap.java
+ * Renders the map of the game
  * @author David Walter
  */
 public class GameMap extends Pane {
@@ -65,6 +65,11 @@ public class GameMap extends Pane {
 		gameTile.drawBorder(front);
 	}
 
+
+	/**
+	 * Calculates the tile size and their offset based on the view size
+	 * @return true if sizes changed, false if not
+	 */
 	private boolean calculateTileSizes() {
 		double tileSizeW = this.widthProperty().doubleValue() / gameTiles.getWidth();
 		double tileSizeH = this.heightProperty().doubleValue() / gameTiles.getHeight();
