@@ -1,5 +1,6 @@
 package connection;
 
+import debug.Log;
 import dto.messages.Message;
 import exception.connection.ConnectionException;
 import exception.connection.MessageException;
@@ -44,8 +45,9 @@ public class SocketConnection implements Connection {
 
     @Override
     public void connect() throws ConnectionException {
-        if (!this.isConnected) {
+        Log.debug("connect()");
 
+        if (!this.isConnected) {
             final String host = this.properties.getProperty("host");
             final int port = Integer.parseInt(this.properties.getProperty("port"));
             try {
@@ -78,6 +80,8 @@ public class SocketConnection implements Connection {
 
     @Override
     public void send(Message message) throws MessageException, ConnectionException {
+        Log.debug(String.format("send(%s)", message.getClass().getSimpleName()));
+
         if (!this.isConnected) {
             throw new ConnectionException("Not connected.");
         }

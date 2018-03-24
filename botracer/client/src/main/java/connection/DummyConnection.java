@@ -1,5 +1,6 @@
 package connection;
 
+import debug.Log;
 import dto.*;
 import dto.messages.s2c.GameDataMessage;
 import dto.messages.s2c.GameStartMessage;
@@ -22,10 +23,13 @@ public class DummyConnection implements Connection {
 
     @Override
     public void connect() {
+        Log.debug("connect()");
+
         this.isConnected = true;
 
         GameData gameData = this.createGameData();
-        this.onMessageReceivedListener.onMessageReceived(new GameDataMessage(gameData));
+        GameDataMessage gameDataMessage = new GameDataMessage(gameData);
+        this.onMessageReceivedListener.onMessageReceived(gameDataMessage);
     }
 
     @Override
@@ -41,6 +45,8 @@ public class DummyConnection implements Connection {
 
     @Override
     public void send(Message message) throws ConnectionException {
+        Log.debug(String.format("send(%s)", message.getClass().getSimpleName()));
+
         if (!isConnected) throw new ConnectionException("not connected");
 
         if (message instanceof PlayerReadyMessage) {
