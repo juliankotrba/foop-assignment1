@@ -2,7 +2,7 @@ package gui.GameMap;
 
 import dto.*;
 import javafx.scene.layout.Pane;
-import log.Log;
+import debug.Log;
 
 import java.util.HashMap;
 import java.util.Map;

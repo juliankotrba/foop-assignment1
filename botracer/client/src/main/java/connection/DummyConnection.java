@@ -7,7 +7,7 @@ import dto.messages.Message;
 import dto.messages.c2s.PlayerReadyMessage;
 import exception.connection.ConnectionException;
 import gui.MainController;
-import gui.debug.MazeLoader;
+import debug.MazeLoader;
 
 /**
  * Dummy connection for testing purpose

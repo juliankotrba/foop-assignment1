@@ -8,19 +8,16 @@ import dto.Player;
 import dto.Tile;
 import exception.service.ServiceException;
 import gui.GameMap.GameMap;
-import gui.debug.Debug;
-import gui.debug.MazeLoader;
+import debug.Debug;
+import debug.MazeLoader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Window;
-import log.Log;
+import debug.Log;
 import service.GameService;
 import service.GameServiceImpl;
 
@@ -30,7 +27,8 @@ import java.util.*;
 /**
  * MainController.java
  * Main controller of the JavaFX window
- * @author  David Walter
+ *
+ * @author David Walter
  */
 public class MainController {
 
@@ -48,6 +46,7 @@ public class MainController {
 
 	@FXML
 	private void initialize() {
+		debugMenu.setVisible(Debug.DEBUG);
 		Log.debug("initialized");
 	}
 
@@ -68,7 +67,7 @@ public class MainController {
 
 	private void connect() {
 		try {
-			Connection connection = SingletonConnectionFactory.getDummyInstance();
+			Connection connection = Debug.DEBUG ? SingletonConnectionFactory.getDummyInstance() : SingletonConnectionFactory.getInstance();
 			gameService = new GameServiceImpl(connection);
 			gameService.connect(message -> message.getPayload().ifPresent(this::loadGameData));
 		} catch (ServiceException e) {
@@ -98,7 +97,9 @@ public class MainController {
 
 	@FXML
 	private void ready() {
-		if (gameService == null) { return; }
+		if (gameService == null) {
+			return;
+		}
 
 		try {
 			PlayerInfo playerInfo = playerInfoMap.get(player);
@@ -115,8 +116,9 @@ public class MainController {
 
 	@FXML
 	private void close() {
-		if (gameService == null) { return; }
-		gameService.disconnect();
+		if (gameService != null) {
+			gameService.disconnect();
+		}
 		Platform.exit();
 	}
 
@@ -143,7 +145,9 @@ public class MainController {
 	}
 
 	private void loadMap(Grid<Tile> grid) {
-		if (grid == null) { return; }
+		if (grid == null) {
+			return;
+		}
 		gameMap = new GameMap(grid);
 		mainWindow.setCenter(gameMap);
 	}
@@ -166,6 +170,9 @@ public class MainController {
 	}
 
 	// MARK: - DEBUG
+
+	@FXML
+	private Menu debugMenu;
 
 	private Debug debug;
 

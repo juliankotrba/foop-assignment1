@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import log.Log;
 
 import java.io.IOException;
 

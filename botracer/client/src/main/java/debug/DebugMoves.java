@@ -1,4 +1,4 @@
-package gui.debug;
+package debug;
 
 import dto.Player;
 import dto.Position;

@@ -1,4 +1,4 @@
-package gui.debug;
+package debug;
 
 import dto.Player;
 import dto.Position;
@@ -14,6 +14,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Debug {
+
+	public static final boolean DEBUG = true;
 
 	public static void player(GameMap gameMap) {
 		Dialog<Pair<Integer, Position>> dialog = new Dialog<>();

@@ -20,7 +20,7 @@
 			<SeparatorMenuItem />
 			<MenuItem mnemonicParsing="false" onAction="#close" text="Exit game" />
 		</Menu>
-		<Menu mnemonicParsing="false" text="DEBUG">
+		<Menu fx:id="debugMenu" mnemonicParsing="false" text="DEBUG">
 			<MenuItem mnemonicParsing="false" onAction="#debugLoadMap" text="Load debug map" />
 			<MenuItem mnemonicParsing="false" onAction="#debugPlayer" text="Move Player..." />
 			<MenuItem mnemonicParsing="false" onAction="#debugAnimation" text="Start player animation" />

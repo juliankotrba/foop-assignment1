@@ -1,4 +1,4 @@
-package gui.debug;
+package debug;
 
 import dto.Grid;
 import dto.Position;

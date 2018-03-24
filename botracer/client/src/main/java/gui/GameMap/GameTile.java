@@ -13,7 +13,7 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import log.Log;
+import debug.Log;
 
 /**
  * GameTile.java
