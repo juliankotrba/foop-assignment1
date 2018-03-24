@@ -46,10 +46,6 @@ class PlayerTile extends Pane {
 	}
 
 	public void move(Position position) {
-		//transition.stop();
-		//transition.setFromX(getX() * tileSize + offsetX);
-		//transition.setFromY(getY() * tileSize + offsetY);
-
 		this.position = position;
 
 		transition.setToX(getX() * tileSize + offsetX);

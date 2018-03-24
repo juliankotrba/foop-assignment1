@@ -20,6 +20,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Window;
+import log.Log;
 import service.GameService;
 import service.GameServiceImpl;
 
@@ -47,10 +48,11 @@ public class MainController {
 
 	@FXML
 	private void initialize() {
-
+		Log.debug("initialized");
 	}
 
 	public void start(Window window) {
+		Log.debug("started");
 		TextInputDialog dialog = new TextInputDialog("Player");
 		dialog.initOwner(window);
 		dialog.initModality(Modality.WINDOW_MODAL);
@@ -70,6 +72,8 @@ public class MainController {
 			gameService = new GameServiceImpl(connection);
 			gameService.connect(message -> message.getPayload().ifPresent(this::loadGameData));
 		} catch (ServiceException e) {
+			Log.error(e.getMessage());
+
 			gameService = null;
 
 			Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -102,8 +106,9 @@ public class MainController {
 				throw new NullPointerException("Player info not loaded");
 			}
 			playerInfo.setReady(true);
-			gameService.setPlayerReady(message -> System.out.println("Game started"));
+			gameService.setPlayerReady(message -> Log.debug("Game started"));
 		} catch (ServiceException | NullPointerException e) {
+			Log.error(e.getMessage());
 			Error.show(e.getMessage());
 		}
 	}
@@ -155,6 +160,7 @@ public class MainController {
 			playerInfo.setPlayer(player);
 			gameMap.set(player);
 		} catch (IOException e) {
+			Log.error(e.getMessage());
 			Error.show(e.getMessage());
 		}
 	}

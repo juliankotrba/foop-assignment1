@@ -2,6 +2,7 @@ package gui.GameMap;
 
 import dto.*;
 import javafx.scene.layout.Pane;
+import log.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.Map;
 /**
  * GameMap
  *
- * @author  David Walter
+ * @author David Walter
  */
 public class GameMap extends Pane {
 
@@ -23,9 +24,9 @@ public class GameMap extends Pane {
 	public GameMap(Grid<Tile> maze) {
 		gameTiles = new Grid<>(maze.getWidth(), maze.getHeight());
 
-		System.out.println("GameMap.load()");
+		Log.debug("Loading map");
 		maze.forEach(this::load);
-		System.out.println("GameMap.render()");
+		Log.debug("Render map");
 		gameTiles.forEach(this::render);
 
 		this.widthProperty().addListener((observable, oldValue, newValue) -> draw());
@@ -34,6 +35,7 @@ public class GameMap extends Pane {
 
 	/**
 	 * Loads the Tile into a GameTile
+	 *
 	 * @param tile Tile to load
 	 */
 	private void load(Tile tile) {
@@ -44,10 +46,13 @@ public class GameMap extends Pane {
 
 	/**
 	 * Renders the GameTiles (e.g. shadows)
+	 *
 	 * @param gameTile GameTile to render
 	 */
 	private void render(GameTile gameTile) {
-		if (!gameTile.isWall()) { return; }
+		if (!gameTile.isWall()) {
+			return;
+		}
 
 		GameTile up = next(gameTile, Direction.UP);
 		GameTile down = next(gameTile, Direction.DOWN);
@@ -60,11 +65,13 @@ public class GameMap extends Pane {
 		gameTile.drawBorder(front);
 	}
 
-	private void calculateTileSizes() {
+	private boolean calculateTileSizes() {
 		double tileSizeW = this.widthProperty().doubleValue() / gameTiles.getWidth();
 		double tileSizeH = this.heightProperty().doubleValue() / gameTiles.getHeight();
 
-		if (tileSizeW == 0 || tileSizeH == 0) { return; }
+		if (tileSizeW == 0 || tileSizeH == 0) {
+			return false;
+		}
 
 		if (tileSizeH < tileSizeW) {
 			tileSize = tileSizeH;
@@ -75,21 +82,25 @@ public class GameMap extends Pane {
 			offsetX = 0;
 			offsetY = (this.heightProperty().doubleValue() - tileSize * gameTiles.getHeight()) / 2;
 		}
+
+		return true;
 	}
 
 	/**
 	 * Resize and center the game map based on container size
 	 */
 	private void draw() {
-		System.out.println("GameMap.draw()");
-		calculateTileSizes();
-		playerMap.values().forEach(playerTile -> playerTile.draw(tileSize, offsetX, offsetY));
-		gameTiles.forEach(gameTile -> gameTile.draw(tileSize, offsetX, offsetY));
+		if (calculateTileSizes()) {
+			Log.debug("Draw map [tileSize: " + tileSize + ", offset: (x: " + offsetX + ", y: " + offsetY + ")]");
+			playerMap.values().forEach(playerTile -> playerTile.draw(tileSize, offsetX, offsetY));
+			gameTiles.forEach(gameTile -> gameTile.draw(tileSize, offsetX, offsetY));
+		}
 	}
 
 	/**
 	 * Gets neighbouring game tiles
-	 * @param gameTile origin
+	 *
+	 * @param gameTile  origin
 	 * @param direction Direction
 	 * @return GameTile in the given direction or null if there is not a game tile
 	 */
@@ -130,12 +141,14 @@ public class GameMap extends Pane {
 
 	/**
 	 * Moves the player to its location
+	 *
 	 * @param player Player to add/move on the map
 	 */
 	public void set(Player player) {
 		PlayerTile playerTile = playerMap.get(player);
 
 		if (playerTile == null) {
+			Log.debug("Add new player '" + player.getName() + "' to map");
 			playerTile = new PlayerTile(player);
 			playerMap.put(player, playerTile);
 			getChildren().add(playerTile);
@@ -147,6 +160,7 @@ public class GameMap extends Pane {
 
 	/**
 	 * Adds the mark to the map
+	 *
 	 * @param mark Mark to add
 	 */
 	public void set(Mark mark) {
@@ -155,6 +169,7 @@ public class GameMap extends Pane {
 
 	/**
 	 * Removes the mark from the map
+	 *
 	 * @param mark Mark to remove
 	 */
 	public void remove(Mark mark) {

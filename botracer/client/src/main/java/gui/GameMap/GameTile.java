@@ -13,6 +13,7 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import log.Log;
 
 /**
  * GameTile
@@ -88,7 +89,7 @@ public class GameTile extends StackPane {
 
 			MenuItem remove = new MenuItem("Remove Mark");
 			remove.setOnAction(event -> {
-				System.out.println("Remove mark");
+				Log.debug("Remove Mark");
 				clearMark();
 			});
 
