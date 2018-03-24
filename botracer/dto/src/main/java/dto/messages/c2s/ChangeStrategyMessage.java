@@ -1,6 +1,7 @@
-package dto.messages;
+package dto.messages.c2s;
 
 import dto.algorithms.MazeSolverStrategy;
+import dto.messages.Message;
 
 import java.io.Serializable;
 import java.util.Optional;

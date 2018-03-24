@@ -1,10 +1,10 @@
 package connection;
 
 import dto.*;
-import dto.messages.GameDataMessage;
-import dto.messages.GameStartMessage;
+import dto.messages.s2c.GameDataMessage;
+import dto.messages.s2c.GameStartMessage;
 import dto.messages.Message;
-import dto.messages.PlayerReadyMessage;
+import dto.messages.c2s.PlayerReadyMessage;
 import exception.connection.ConnectionException;
 import gui.MainController;
 import gui.debug.MazeLoader;

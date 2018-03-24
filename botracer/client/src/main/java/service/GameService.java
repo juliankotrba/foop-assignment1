@@ -1,8 +1,8 @@
 package service;
 
 import connection.OnMessageReceivedListener;
-import dto.messages.GameStartMessage;
-import dto.messages.GameDataMessage;
+import dto.messages.s2c.GameStartMessage;
+import dto.messages.s2c.GameDataMessage;
 import exception.service.ServiceException;
 
 /**

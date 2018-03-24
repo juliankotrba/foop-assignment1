@@ -1,14 +1,16 @@
-package dto.messages;
+package dto.messages.s2c;
+
+import dto.messages.Message;
 
 import java.io.Serializable;
 import java.util.Optional;
 
 /**
- * Message which indicates the ready state of a player
+ * Message which indicates the a game start
  *
  * @author Julian Kotrba
  */
-public class PlayerReadyMessage implements Message<Void>, Serializable {
+public class GameStartMessage implements Message<Void>, Serializable {
 
     private static final long serialVersionUID = 1L;
 

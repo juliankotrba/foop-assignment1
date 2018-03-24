@@ -2,10 +2,10 @@ package service;
 
 import connection.Connection;
 import connection.OnMessageReceivedListener;
-import dto.messages.GameStartMessage;
-import dto.messages.GameDataMessage;
+import dto.messages.s2c.GameStartMessage;
+import dto.messages.s2c.GameDataMessage;
 import dto.messages.Message;
-import dto.messages.PlayerReadyMessage;
+import dto.messages.c2s.PlayerReadyMessage;
 import exception.connection.ConnectionException;
 import exception.connection.MessageException;
 import exception.service.ServiceException;

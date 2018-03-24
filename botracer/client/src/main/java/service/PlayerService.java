@@ -1,7 +1,7 @@
 package service;
 
 import connection.OnMessageReceivedListener;
-import dto.messages.PlayersChangedMessage;
+import dto.messages.s2c.PlayersChangedMessage;
 import exception.service.ServiceException;
 
 /**
