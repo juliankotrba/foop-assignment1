@@ -13,5 +13,8 @@ public interface MazeSolverStrategy {
 
     Position nextPosition(Position position, Grid<Tile> grid);
 
+    void nextLeft();
+
+    void nextRight();
     void reset();
 }
