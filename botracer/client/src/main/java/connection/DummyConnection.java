@@ -4,6 +4,7 @@ import debug.Log;
 import dto.*;
 import dto.algorithms.DfsStrategy;
 import dto.algorithms.MazeSolverStrategy;
+import dto.algorithms.RandomStrategy;
 import dto.messages.s2c.GameDataMessage;
 import dto.messages.s2c.GameStartMessage;
 import dto.messages.Message;
@@ -29,7 +30,7 @@ public class DummyConnection implements Connection {
     private int playerCount = 0;
     private Grid<Tile> grid;
 
-    private MazeSolverStrategy dftStrategy = new DfsStrategy();
+    private MazeSolverStrategy dftStrategy = new RandomStrategy();
     private Player player = new Player(0, new Position(1, 1));
 
     @Override
@@ -59,7 +60,7 @@ public class DummyConnection implements Connection {
                 onMessageReceivedListener.onMessageReceived(playersChangedMessage);
 
                 try {
-                    Thread.sleep(400);
+                    Thread.sleep(350);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
