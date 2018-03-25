@@ -14,6 +14,7 @@ import java.util.Set;
  *
  * @author Julian Kotrba
  */
+// TODO: Create proper DFS
 // TODO: REFACTOR!
 public class DfsStrategy implements MazeSolverStrategy, Serializable {
 
