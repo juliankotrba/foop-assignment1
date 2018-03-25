@@ -207,6 +207,7 @@ public class MainController implements OnMessageReceivedListener<PlayersChangedM
 
     @Override
     public void onMessageReceived(PlayersChangedMessage message) {
+        Log.debug("PlayersChanged message received");
         message.getPayload().ifPresent(players ->
                 players.stream()
                         .filter(Objects::nonNull)
