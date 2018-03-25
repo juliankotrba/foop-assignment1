@@ -2,24 +2,35 @@ package connection;
 
 import debug.Log;
 import dto.*;
+import dto.algorithms.DfsStrategy;
+import dto.algorithms.MazeSolverStrategy;
 import dto.messages.s2c.GameDataMessage;
 import dto.messages.s2c.GameStartMessage;
 import dto.messages.Message;
 import dto.messages.c2s.PlayerReadyMessage;
+import dto.messages.s2c.PlayersChangedMessage;
 import exception.connection.ConnectionException;
 import gui.MainController;
 import debug.MazeLoader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Dummy connection for testing purpose
  *
  * @author Julian Kotrba
  */
+// TODO: REFACTOR!
 public class DummyConnection implements Connection {
 
     private OnMessageReceivedListener<Message> onMessageReceivedListener;
     private boolean isConnected = false;
     private int playerCount = 0;
+    private Grid<Tile> grid;
+
+    private MazeSolverStrategy dftStrategy = new DfsStrategy();
+    private Player player = new Player(0, new Position(1, 1));
 
     @Override
     public void connect() {
@@ -30,6 +41,32 @@ public class DummyConnection implements Connection {
         GameData gameData = this.createGameData();
         GameDataMessage gameDataMessage = new GameDataMessage(gameData);
         this.onMessageReceivedListener.onMessageReceived(gameDataMessage);
+
+        startStrategySimulation();
+    }
+
+    private void startStrategySimulation() {
+
+        new Thread(() -> {
+
+            while (true) {
+                Position newPos = this.dftStrategy.nextPosition(this.player.getPosition(), this.grid);
+                this.player.setPosition(newPos);
+
+                List<Player> playerList = new ArrayList<Player>();
+                playerList.add(player);
+                PlayersChangedMessage playersChangedMessage = new PlayersChangedMessage(playerList);
+                onMessageReceivedListener.onMessageReceived(playersChangedMessage);
+
+                try {
+                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }).start();
+
     }
 
     @Override
@@ -52,6 +89,7 @@ public class DummyConnection implements Connection {
         if (message instanceof PlayerReadyMessage) {
             this.onMessageReceivedListener.onMessageReceived(new GameStartMessage());
         }
+
     }
 
     @Override
@@ -68,7 +106,7 @@ public class DummyConnection implements Connection {
         Position position = new Position(1, 1 + playerCount);
         Player player = new Player(0, position);
 
-        Grid<Tile> grid = MazeLoader.shared.load(MainController.class.getResource("../maze.txt"));
+        this.grid = MazeLoader.shared.load(MainController.class.getResource("../maze.txt"));
         return new GameData(grid, player);
     }
 

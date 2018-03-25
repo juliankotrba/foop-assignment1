@@ -14,6 +14,7 @@ import java.util.Set;
  *
  * @author Julian Kotrba
  */
+// TODO: REFACTOR!
 public class DfsStrategy implements MazeSolverStrategy, Serializable {
 
     private enum Direction {
@@ -135,7 +136,6 @@ public class DfsStrategy implements MazeSolverStrategy, Serializable {
 
 
     private boolean isPositionFreeAndNotVisited(Grid<Tile> grid, Position position) {
-        System.out.println(grid.get(1, 1).getType());
         return grid.get(position).getType() != TileType.WALL && !this.visited.contains(position);
     }
 

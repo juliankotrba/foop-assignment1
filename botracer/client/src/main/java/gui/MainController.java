@@ -1,11 +1,13 @@
 package gui;
 
 import connection.Connection;
+import connection.OnMessageReceivedListener;
 import connection.SingletonConnectionFactory;
 import dto.GameData;
 import dto.Grid;
 import dto.Player;
 import dto.Tile;
+import dto.messages.s2c.PlayersChangedMessage;
 import exception.service.ServiceException;
 import gui.GameMap.GameMap;
 import debug.Debug;
@@ -20,9 +22,12 @@ import javafx.stage.Window;
 import debug.Log;
 import service.GameService;
 import service.GameServiceImpl;
+import service.PlayerService;
+import service.PlayerServiceImpl;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * MainController.java
@@ -30,9 +35,10 @@ import java.util.*;
  *
  * @author David Walter
  */
-public class MainController {
+public class MainController implements OnMessageReceivedListener<PlayersChangedMessage> {
 
 	private GameService gameService;
+    private PlayerService playerService;
 	private Player player;
 	private GameMap gameMap;
 
@@ -70,6 +76,10 @@ public class MainController {
 			Connection connection = Debug.DEBUG ? SingletonConnectionFactory.getDummyInstance() : SingletonConnectionFactory.getInstance();
 			gameService = new GameServiceImpl(connection);
 			gameService.connect(message -> message.getPayload().ifPresent(this::loadGameData));
+
+            playerService = new PlayerServiceImpl(connection);
+            this.playerService.registerForPlayerUpdates(this);
+
 		} catch (ServiceException e) {
 			Log.error(e.getMessage());
 
@@ -195,4 +205,11 @@ public class MainController {
 		debug.addMoves();
 	}
 
+    @Override
+    public void onMessageReceived(PlayersChangedMessage message) {
+        message.getPayload().ifPresent(players ->
+                players.stream()
+                        .filter(Objects::nonNull)
+                        .forEach(p -> this.gameMap.set(p)));
+    }
 }
