@@ -87,6 +87,8 @@ public class DfsStrategy implements MazeSolverStrategy, Serializable {
         abstract Direction right();
     }
 
+    private Grid<Tile> maze;
+
     private Set<Position> visited;
     private Direction currDirection;
     private Queue<Direction> rememberedDirections;
@@ -96,7 +98,10 @@ public class DfsStrategy implements MazeSolverStrategy, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public DfsStrategy() {
+    public DfsStrategy(Grid<Tile> maze) {
+
+        this.maze = maze;
+
         this.visited = new HashSet<>();
         this.currDirection = Direction.N;
         this.isTurn = false;
@@ -104,7 +109,7 @@ public class DfsStrategy implements MazeSolverStrategy, Serializable {
     }
 
     @Override
-    public Position nextPosition(Position position, Grid<Tile> grid) {
+    public Position nextPosition(Position position) {
         Direction nextDirection;
 
         if (isTurn) {
@@ -116,7 +121,7 @@ public class DfsStrategy implements MazeSolverStrategy, Serializable {
 
             // TODO: Scan environment for exit
 
-            List<Direction> possibleDirections = this.getPossibleDirections(grid, position);
+            List<Direction> possibleDirections = this.getPossibleDirections(position);
             if (possibleDirections.isEmpty()) {
 
                 // Empty means we need to go back
@@ -179,34 +184,34 @@ public class DfsStrategy implements MazeSolverStrategy, Serializable {
         return nextPosition;
     }
 
-    private List<Direction> getPossibleDirections(Grid<Tile> grid, Position position) {
+    private List<Direction> getPossibleDirections(Position position) {
         List<Direction> possibleDirections = new ArrayList<>();
 
-        if (isPositionFreeAndNotVisited(grid, getNorth(position))) {
+        if (isPositionFreeAndNotVisited(getNorth(position))) {
             possibleDirections.add(Direction.N);
         }
 
-        if (isPositionFreeAndNotVisited(grid, getEast(position))) {
+        if (isPositionFreeAndNotVisited(getEast(position))) {
             possibleDirections.add(Direction.E);
         }
 
-        if (isPositionFreeAndNotVisited(grid, getSouth(position))) {
+        if (isPositionFreeAndNotVisited(getSouth(position))) {
             possibleDirections.add(Direction.S);
         }
 
-        if (isPositionFreeAndNotVisited(grid, getWest(position))) {
+        if (isPositionFreeAndNotVisited(getWest(position))) {
             possibleDirections.add(Direction.W);
         }
 
         return possibleDirections;
     }
 
-    private boolean isPositionFree(Grid<Tile> grid, Position position) {
-        return grid.get(position).getType() == TileType.DEFAULT;
+    private boolean isPositionFree(Position position) {
+        return this.maze.get(position).getType() == TileType.DEFAULT;
     }
 
-    private boolean isPositionFreeAndNotVisited(Grid<Tile> grid, Position position) {
-        return this.isPositionFree(grid, position) && !this.visited.contains(position);
+    private boolean isPositionFreeAndNotVisited(Position position) {
+        return this.isPositionFree(position) && !this.visited.contains(position);
     }
 
     private Position getNorth(Position position) {

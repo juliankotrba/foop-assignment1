@@ -4,7 +4,6 @@ import debug.Log;
 import dto.*;
 import dto.algorithms.DfsStrategy;
 import dto.algorithms.MazeSolverStrategy;
-import dto.algorithms.RandomStrategy;
 import dto.messages.s2c.GameDataMessage;
 import dto.messages.s2c.GameStartMessage;
 import dto.messages.Message;
@@ -30,8 +29,14 @@ public class DummyConnection implements Connection {
     private int playerCount = 0;
     private Grid<Tile> grid;
 
-    private MazeSolverStrategy dftStrategy = new RandomStrategy();
-    private Player player = new Player(0, new Position(1, 1));
+    private MazeSolverStrategy mazeSolverStrategy;
+    private Player player;
+
+    public DummyConnection() {
+        this.grid = MazeLoader.shared.load(MainController.class.getResource("../maze.txt"));
+        this.mazeSolverStrategy = new DfsStrategy(this.grid);
+        this.player = new Player(0, new Position(1, 1));
+    }
 
     @Override
     public void connect() {
@@ -51,7 +56,7 @@ public class DummyConnection implements Connection {
         new Thread(() -> {
 
             while (true) {
-                Position newPos = this.dftStrategy.nextPosition(this.player.getPosition(), this.grid);
+                Position newPos = this.mazeSolverStrategy.nextPosition(this.player.getPosition());
                 this.player.setPosition(newPos);
 
                 List<Player> playerList = new ArrayList<Player>();
@@ -60,7 +65,7 @@ public class DummyConnection implements Connection {
                 onMessageReceivedListener.onMessageReceived(playersChangedMessage);
 
                 try {
-                    Thread.sleep(350);
+                    Thread.sleep(150);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -107,7 +112,6 @@ public class DummyConnection implements Connection {
         Position position = new Position(1, 1 + playerCount);
         Player player = new Player(0, position);
 
-        this.grid = MazeLoader.shared.load(MainController.class.getResource("../maze.txt"));
         return new GameData(grid, player);
     }
 

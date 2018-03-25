@@ -16,16 +16,18 @@ import java.util.Random;
  */
 public class RandomStrategy implements MazeSolverStrategy {
 
+    private Grid<Tile> maze;
     private Random random;
 
-    public RandomStrategy() {
+    public RandomStrategy(Grid<Tile> maze) {
+        this.maze = maze;
         this.random = new Random();
     }
 
     @Override
-    public Position nextPosition(Position position, Grid<Tile> grid) {
+    public Position nextPosition(Position position) {
 
-        List<Position> positions = this.getPossibleDirections(grid, position);
+        List<Position> positions = this.getPossibleDirections(position);
         return positions.get(random.nextInt(positions.size() - 1 + 1));
     }
 
@@ -44,30 +46,30 @@ public class RandomStrategy implements MazeSolverStrategy {
         // Nothing to do here
     }
 
-    private List<Position> getPossibleDirections(Grid<Tile> grid, Position position) {
+    private List<Position> getPossibleDirections(Position position) {
         List<Position> possibleDirections = new ArrayList<>();
 
-        if (isPositionFree(grid, getNorth(position))) {
+        if (isPositionFree(getNorth(position))) {
             possibleDirections.add(getNorth(position));
         }
 
-        if (isPositionFree(grid, getEast(position))) {
+        if (isPositionFree(getEast(position))) {
             possibleDirections.add(getEast(position));
         }
 
-        if (isPositionFree(grid, getSouth(position))) {
+        if (isPositionFree(getSouth(position))) {
             possibleDirections.add(getSouth(position));
         }
 
-        if (isPositionFree(grid, getWest(position))) {
+        if (isPositionFree(getWest(position))) {
             possibleDirections.add(getWest(position));
         }
 
         return possibleDirections;
     }
 
-    private boolean isPositionFree(Grid<Tile> grid, Position position) {
-        return grid.get(position).getType() == TileType.DEFAULT;
+    private boolean isPositionFree(Position position) {
+        return this.maze.get(position).getType() == TileType.DEFAULT;
     }
 
 

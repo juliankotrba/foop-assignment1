@@ -11,10 +11,8 @@ import dto.Tile;
  */
 public interface MazeSolverStrategy {
 
-    Position nextPosition(Position position, Grid<Tile> grid);
-
+    Position nextPosition(Position position);
     void nextLeft();
-
     void nextRight();
     void reset();
 }
