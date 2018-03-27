@@ -1,3 +1,8 @@
+package game;
+
+import algorithms.Algorithm;
+import algorithms.Step;
+
 public class Player {
     private Memory memory;
     private Algorithm algorithm;

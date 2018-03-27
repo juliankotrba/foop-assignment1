@@ -1,3 +1,7 @@
+package marks;
+
+import game.Player;
+
 public class ClearMemoryMark implements Mark {
 
     @Override

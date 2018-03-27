@@ -1,11 +1,14 @@
+package game;
+
 import dto.messages.s2c.GameDataMessage;
+import marks.Mark;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.HashSet;
 import java.util.List;
 
-public class Game {
+public class Game implements Runnable{
 
 
     private Boolean gameRunning;
@@ -36,10 +39,14 @@ public class Game {
         }
 
     }
-    public void newMark(Mark mark,int x, int y){
+    public void newMark(Mark mark, int x, int y){
         synchronized (gameBoard){
             gameBoard.newMark(mark,x,y);
         }
     }
 
+    @Override
+    public void run() {
+        runGame();
+    }
 }
