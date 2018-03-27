@@ -21,4 +21,11 @@ public abstract class Tile{
     public void setMark(Mark mark) {
         this.mark = mark;
     }
+
+    @Override
+    public String toString() {
+        return "Tile{" +
+                "mark=" + mark +
+                '}';
+    }
 }

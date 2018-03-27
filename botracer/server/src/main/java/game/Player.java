@@ -8,6 +8,15 @@ public class Player {
     private Algorithm algorithm;
     private int x;
     private int y;
+    private String name;
+
+    public Player(){
+
+    }
+    public Player(int x,int y){
+        this.x=x;
+        this.y=y;
+    }
 
     public Memory getMemory() {
         return memory;
@@ -26,7 +35,35 @@ public class Player {
     }
 
     public void nextStep(GameBoard gameBoard){
-        Step step = algorithm.nextStep(memory,gameBoard,x,y);
+        y++;
+        //Step step = algorithm.nextStep(memory,gameBoard,x,y);
 
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "memory=" + memory +
+                ", algorithm=" + algorithm +
+                ", x=" + x +
+                ", y=" + y +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

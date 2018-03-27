@@ -5,37 +5,46 @@ import marks.Mark;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 public class Game implements Runnable{
 
 
-    private Boolean gameRunning;
+    private Boolean gameRunning = true;
     private List<Player> players;
     private GameBoard gameBoard;
     private static HashSet<ObjectOutputStream> writers;
 
+    public Game(){
+        MazeLoader mazeLoader = new MazeLoader();
+        gameBoard=mazeLoader.createGameBoard();
+    }
+
     public void runGame(){
-
-
+        players= new ArrayList<>();
+        players.add(new Player(0,0));
+        players.add(new Player(1,1));
         while(gameRunning){
+
             synchronized (gameBoard) {
                 for (Player player : players) {
                     player.nextStep(gameBoard);
                 }
             }
             try{
-            for(ObjectOutputStream objectOutputStream:writers){
+            /*for(ObjectOutputStream objectOutputStream:writers){
                 objectOutputStream.writeObject(new GameDataMessage(null));
-            }
-
-                Thread.sleep(500);
+            }*/
+            System.out.println(gameBoard);
+            System.out.println(players);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            } catch (IOException io){
+            } /*catch (IOException io){
 
-            }
+            }*/
         }
 
     }
@@ -43,10 +52,31 @@ public class Game implements Runnable{
         synchronized (gameBoard){
             gameBoard.newMark(mark,x,y);
         }
+        System.out.println(gameBoard);
     }
 
     @Override
     public void run() {
         runGame();
+    }
+
+    public Boolean getGameRunning() {
+        return gameRunning;
+    }
+
+    public void setGameRunning(Boolean gameRunning) {
+        this.gameRunning = gameRunning;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+    public void addPlayer(Player player){
+        this.players.add(player);
+
     }
 }

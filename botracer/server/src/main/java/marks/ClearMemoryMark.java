@@ -8,4 +8,9 @@ public class ClearMemoryMark implements Mark {
     public void enter(Player player) {
         player.getMemory().reset();
     }
+
+    @Override
+    public String toString() {
+        return "ClearMemoryMark{}";
+    }
 }
