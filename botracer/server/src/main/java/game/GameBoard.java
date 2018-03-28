@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 public class GameBoard {
     private Tile[][] tiles;
+    private Integer[] goalLocation;
 
 
     public void newMark(Mark mark, int x, int y){
@@ -23,6 +24,14 @@ public class GameBoard {
 
     public void setTiles(Tile[][] tiles) {
         this.tiles = tiles;
+    }
+
+    public Integer[] getGoalLocation() {
+        return goalLocation;
+    }
+
+    public void setGoalLocation(Integer[] goalLocation) {
+        this.goalLocation = goalLocation;
     }
 
     @Override
