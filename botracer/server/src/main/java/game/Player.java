@@ -13,9 +13,10 @@ public class Player {
     public Player(){
 
     }
-    public Player(int x,int y){
+    public Player(int x,int y,Algorithm algorithm){
         this.x=x;
         this.y=y;
+        this.algorithm=algorithm;
     }
 
     public Memory getMemory() {
@@ -35,9 +36,18 @@ public class Player {
     }
 
     public void nextStep(GameBoard gameBoard){
-        y++;
-        //Step step = algorithm.nextStep(memory,gameBoard,x,y);
-
+        Step step = algorithm.nextStep(memory,gameBoard,x,y);
+        switch(step){
+            case UP:
+                y--;
+            case DOWN:
+                y++;
+            case LEFT:
+                x--;
+            case RIGHT:
+                x++;
+        }
+        gameBoard.getTile(x,y).enters(this);
     }
 
     public int getX() {

@@ -1,5 +1,6 @@
 package game;
 
+import algorithms.RandomAlgorithm;
 import dto.messages.s2c.GameDataMessage;
 import marks.Mark;
 
@@ -24,8 +25,8 @@ public class Game implements Runnable{
 
     public void runGame(){
         players= new ArrayList<>();
-        players.add(new Player(0,0));
-        players.add(new Player(1,1));
+        players.add(new Player(0,0,new RandomAlgorithm()));
+        players.add(new Player(1,1,new RandomAlgorithm()));
         while(gameRunning){
 
             synchronized (gameBoard) {
