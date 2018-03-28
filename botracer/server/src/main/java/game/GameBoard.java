@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 public class GameBoard {
     private Tile[][] tiles;
+    private Integer[] goalLocation;
 
 
     public void newMark(Mark mark, int x, int y){
@@ -25,16 +26,21 @@ public class GameBoard {
         this.tiles = tiles;
     }
 
+    public Integer[] getGoalLocation() {
+        return goalLocation;
+    }
+
+    public void setGoalLocation(Integer[] goalLocation) {
+        this.goalLocation = goalLocation;
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i=0;i<tiles.length;i++){
-            for(int j=0;j<tiles[i].length;j++){
-                if(tiles[i][j].getMark()==null){
-                    stringBuilder.append("_");
-                }else{
-                    stringBuilder.append("x");
-                }
+
+        for (Tile[] tile : tiles) {
+            for (Tile aTile : tile) {
+                stringBuilder.append(aTile);
             }
             stringBuilder.append("\n");
         }
