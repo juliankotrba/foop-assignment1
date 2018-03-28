@@ -62,8 +62,8 @@ public class GameTile extends StackPane {
 			for (int i = 0; i < algorithms.length; i++) {
 				MenuItem menuItem = new MenuItem(algorithms[i]);
 				menuItem.setGraphic(Sprites.asImageView(Sprites.getAlgorithm(i), 16.0));
-				final int number = i;
-				menuItem.setOnAction(event -> setMark(new Mark(number, tile.getPosition())));
+				final int algorithm = i;
+				menuItem.setOnAction(event -> setMark(new Mark(algorithm, tile.getPosition())));
 				changeAlgorithm.getItems().add(menuItem);
 			}
 
@@ -160,7 +160,7 @@ public class GameTile extends StackPane {
 				this.mark.setImage(Sprites.right);
 				break;
 			case CHANGE_ALGORITHM:
-				this.mark.setImage(Sprites.getAlgorithm(mark.getIndex()));
+				this.mark.setImage(Sprites.getAlgorithm(mark.getAlgorithm()));
 				break;
 			case CLEAR_MEMORY:
 				this.mark.setImage(Sprites.clear);

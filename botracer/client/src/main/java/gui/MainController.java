@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 
 /**
  * MainController.java
- * Main controller of the JavaFX window
+ * BotRacer controller of the JavaFX window
  *
  * @author David Walter
  */

@@ -7,6 +7,7 @@ package dto;
  */
 public class Player extends Drawable {
 
+	private int number;
 	private String name;
 
 	public Player(int number, Position position) {
@@ -14,12 +15,13 @@ public class Player extends Drawable {
 	}
 
 	public Player(int number, String name, Position position) {
-		super(number, position);
+		super(position);
+		this.number = number;
 		this.name = name;
 	}
 
 	public int getNumber() {
-		return index;
+		return number;
 	}
 
 	public Position getPosition() {

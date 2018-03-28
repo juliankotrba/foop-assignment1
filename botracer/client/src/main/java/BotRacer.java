@@ -8,15 +8,15 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 /**
- * Main.java
+ * BotRacer.java
  * Starting point of the application
  * @author David Walter
  */
-public class Main extends Application {
+public class BotRacer extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(Main.class.getResource("botracer.fxml"));
+		FXMLLoader loader = new FXMLLoader(BotRacer.class.getResource("botracer.fxml"));
 		Parent root = loader.load();
 		primaryStage.setTitle("Bot Racer");
 		primaryStage.getIcons().add(Sprites.icon);

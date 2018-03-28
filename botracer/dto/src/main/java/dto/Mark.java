@@ -8,19 +8,22 @@ package dto;
 public class Mark extends Drawable {
 
 	private final MarkType markType;
+	private final int algorithm;
 
 	public Mark(Position position, MarkType markType) {
-		super(-1, position);
+		super(position);
+		this.algorithm = -1;
 		this.markType = markType;
 	}
 
 	public Mark(int algorithm, Position position) {
-		super(algorithm, position);
+		super(position);
+		this.algorithm = algorithm;
 		this.markType = MarkType.CHANGE_ALGORITHM;
 	}
 
-	public int getIndex() {
-		return index;
+	public int getAlgorithm() {
+		return algorithm;
 	}
 
 	public Position getPosition() {
