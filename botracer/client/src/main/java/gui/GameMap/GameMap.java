@@ -1,11 +1,17 @@
 package gui.GameMap;
 
+import connection.OnMessageReceivedListener;
 import dto.*;
+import dto.messages.s2c.MarkPlacementMessage;
+import dto.messages.s2c.PlayersChangedMessage;
 import javafx.scene.layout.Pane;
 import debug.Log;
+import service.PlayerService;
+import service.PlayerServiceImpl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * GameMap.java
@@ -15,7 +21,7 @@ import java.util.Map;
 public class GameMap extends Pane {
 
 	private final Grid<GameTile> gameTiles;
-	private final Map<Player, PlayerTile> playerMap = new HashMap<>();
+	private final Map<Player, PlayerTile> players = new HashMap<>();
 
 	private double tileSize = 0;
 	private double offsetX = 0;
@@ -97,7 +103,7 @@ public class GameMap extends Pane {
 	private void draw() {
 		if (calculateTileSizes()) {
 			Log.debug("Draw map [tileSize: " + tileSize + ", offset: (x: " + offsetX + ", y: " + offsetY + ")]");
-			playerMap.values().forEach(playerTile -> playerTile.draw(tileSize, offsetX, offsetY));
+			players.values().forEach(playerTile -> playerTile.draw(tileSize, offsetX, offsetY));
 			gameTiles.forEach(gameTile -> gameTile.draw(tileSize, offsetX, offsetY));
 		}
 	}
@@ -150,12 +156,12 @@ public class GameMap extends Pane {
 	 * @param player Player to add/move on the map
 	 */
 	public void set(Player player) {
-		PlayerTile playerTile = playerMap.get(player);
+		PlayerTile playerTile = players.get(player);
 
 		if (playerTile == null) {
 			Log.debug("Add new player '" + player.getName() + "' to map");
 			playerTile = new PlayerTile(player);
-			playerMap.put(player, playerTile);
+			players.put(player, playerTile);
 			getChildren().add(playerTile);
 			playerTile.draw(tileSize, offsetX, offsetY);
 		} else {
@@ -169,7 +175,7 @@ public class GameMap extends Pane {
 	 * @param mark Mark to add
 	 */
 	public void set(Mark mark) {
-		gameTiles.get(mark.getPosition()).setMark(mark);
+		gameTiles.get(mark.getPosition()).drawMark(mark);
 	}
 
 	/**
@@ -178,8 +184,9 @@ public class GameMap extends Pane {
 	 * @param mark Mark to remove
 	 */
 	public void remove(Mark mark) {
-		gameTiles.get(mark.getPosition()).clearMark();
+		gameTiles.get(mark.getPosition()).drawMark(null);
 	}
+
 }
 
 enum Direction {

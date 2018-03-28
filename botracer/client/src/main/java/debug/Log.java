@@ -8,6 +8,12 @@ package debug;
  */
 public class Log {
 
+	public static void verbose(String message) {
+		if (Debug.VERBOSE) {
+			System.out.println(message(message));
+		}
+	}
+
 	public static void debug(String message) {
 		if (Debug.DEBUG) {
 			System.out.println(message(message));

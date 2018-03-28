@@ -11,4 +11,5 @@ class Error {
 		alert.setContentText(message);
 		alert.show();
 	}
+
 }

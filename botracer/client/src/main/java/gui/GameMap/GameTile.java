@@ -1,9 +1,12 @@
 package gui.GameMap;
 
+import connection.Connection;
+import connection.SingletonConnectionFactory;
 import dto.Mark;
 import dto.MarkType;
 import dto.Tile;
 import dto.TileType;
+import exception.service.ServiceException;
 import gui.Sprites;
 import javafx.geometry.Side;
 import javafx.scene.control.ContextMenu;
@@ -14,6 +17,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import debug.Log;
+import service.MarkService;
+import service.MarkServiceImpl;
 
 /**
  * GameTile.java
@@ -21,6 +26,8 @@ import debug.Log;
  * @author David Walter
  */
 public class GameTile extends StackPane {
+
+	private final MarkService markService = new MarkServiceImpl(SingletonConnectionFactory.getInstance());
 
 	private final Tile tile;
 
@@ -41,15 +48,11 @@ public class GameTile extends StackPane {
 		mark.setPreserveRatio(true);
 		mark.setSmooth(false);
 
-		//player.setPreserveRatio(true);
-		//player.setSmooth(false);
-
 		getChildren().addAll(background, object, mark, highlight);
 
 		if (tile.getType() == TileType.DEFAULT) {
 			background.setImage(Sprites.floor);
 
-			// TODO: Send places mark to server via some service
 			final ContextMenu contextMenu = new ContextMenu();
 
 			MenuItem title = new MenuItem("Place mark on: (" + tile.getX() + ", " + tile.getY() + ")");
@@ -90,7 +93,7 @@ public class GameTile extends StackPane {
 			MenuItem remove = new MenuItem("Remove Mark");
 			remove.setOnAction(event -> {
 				Log.debug("Remove Mark");
-				clearMark();
+				setMark(null);
 			});
 
 			contextMenu.getItems().addAll(title, new SeparatorMenuItem(), stay, moveAway, turn, changeAlgorithm, clear, new SeparatorMenuItem(), remove);
@@ -145,7 +148,20 @@ public class GameTile extends StackPane {
 
 	// MARK: - interaction
 
-	public void setMark(Mark mark) {
+	private void setMark(Mark mark) {
+		try {
+			markService.placeMark(mark);
+		} catch (ServiceException e) {
+			Log.error(e.getMessage());
+		}
+	}
+
+	public void drawMark(Mark mark) {
+		if (mark == null) {
+			this.mark.setImage(null);
+			return;
+		}
+
 		switch (mark.getMarkType()) {
 			case STAY_IN_AREA:
 				this.mark.setImage(Sprites.stay);
@@ -166,10 +182,6 @@ public class GameTile extends StackPane {
 				this.mark.setImage(Sprites.clear);
 				break;
 		}
-	}
-
-	public void clearMark() {
-		mark.setImage(null);
 	}
 
 }
