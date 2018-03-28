@@ -8,4 +8,9 @@ public class WallTile extends Tile {
     public boolean isWalkable() {
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "+";
+    }
 }

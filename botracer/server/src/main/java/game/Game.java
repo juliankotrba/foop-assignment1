@@ -17,9 +17,10 @@ public class Game implements Runnable{
     private GameBoard gameBoard;
     private static HashSet<ObjectOutputStream> writers;
 
-    public Game(){
+    public Game(String path) throws IOException {
         MazeLoader mazeLoader = new MazeLoader();
-        gameBoard=mazeLoader.createGameBoard();
+        gameBoard = mazeLoader.createGameBoard(path);
+        //System.out.println(gameBoard);
     }
 
     public void runGame(){

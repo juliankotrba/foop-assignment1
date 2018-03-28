@@ -28,13 +28,10 @@ public class GameBoard {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i=0;i<tiles.length;i++){
-            for(int j=0;j<tiles[i].length;j++){
-                if(tiles[i][j].getMark()==null){
-                    stringBuilder.append("_");
-                }else{
-                    stringBuilder.append("x");
-                }
+
+        for (Tile[] tile : tiles) {
+            for (Tile aTile : tile) {
+                stringBuilder.append(aTile);
             }
             stringBuilder.append("\n");
         }
