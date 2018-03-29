@@ -40,12 +40,16 @@ public class Player {
         switch(step){
             case UP:
                 y--;
+                break;
             case DOWN:
                 y++;
+                break;
             case LEFT:
                 x--;
+                break;
             case RIGHT:
                 x++;
+                break;
         }
         gameBoard.getTile(x,y).enters(this);
     }

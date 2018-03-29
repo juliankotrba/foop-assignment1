@@ -6,6 +6,9 @@ import tiles.Tile;
 import tiles.WallTile;
 
 import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -23,7 +26,13 @@ public class MazeLoader {
         int y;
         GameBoard gameBoard = new GameBoard();
 
-        List<String> lines = readGameBoardFile(path);
+
+        List<String> lines = null;
+        try {
+            lines = Files.readAllLines(Paths.get(new File(MazeLoader.class.getResource(path).toURI()).getAbsolutePath()));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         x = lines.size();
         // todo: error handling? (e.g. if maze only has <= 2 lines)
         y = lines.get(0).length();
@@ -118,27 +127,6 @@ public class MazeLoader {
         gameBoard.setTiles(tiles);
     }
 
-
-    /**
-     * Reads the file at path line by line and saves it into an list.
-     *
-     * @param path of the file
-     * @return list of Strings, representing the file's content
-     * @throws IOException if the file does not exist or other IOExceptions occur
-     */
-    private List<String> readGameBoardFile (String path) throws IOException {
-        List<String> lines = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            String line;
-
-            while((line = reader.readLine()) != null){
-                lines.add(line);
-            }
-        }
-
-        return lines;
-    }
 
     /**
      * Calculates the area on which players can be initially set.

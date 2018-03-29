@@ -26,7 +26,6 @@ public class Game implements Runnable{
 
     public void runGame(){
         players= new ArrayList<>();
-        players.add(new Player(0,0,new RandomAlgorithm()));
         players.add(new Player(1,1,new RandomAlgorithm()));
         while(gameRunning){
 
@@ -39,8 +38,8 @@ public class Game implements Runnable{
             /*for(ObjectOutputStream objectOutputStream:writers){
                 objectOutputStream.writeObject(new GameDataMessage(null));
             }*/
-            System.out.println(gameBoard);
-            System.out.println(players);
+            drawBoard();
+            System.out.print(players);
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -54,7 +53,7 @@ public class Game implements Runnable{
         synchronized (gameBoard){
             gameBoard.newMark(mark,x,y);
         }
-        System.out.println(gameBoard);
+        //drawBoard();
     }
 
     @Override
@@ -80,5 +79,14 @@ public class Game implements Runnable{
     public void addPlayer(Player player){
         this.players.add(player);
 
+    }
+
+    public void drawBoard(){
+        System.out.print("\033[H\033[2J");
+        StringBuilder stringBuilder = new StringBuilder(gameBoard.toString());
+        for(Player player:players){
+            stringBuilder.setCharAt(player.getY()*62+player.getX(),'o');
+        }
+        System.out.print(stringBuilder.toString());
     }
 }
