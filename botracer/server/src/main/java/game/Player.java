@@ -6,17 +6,43 @@ import algorithms.Step;
 public class Player {
     private Memory memory;
     private Algorithm algorithm;
-    private int x;
-    private int y;
+    private int height;
+    private int width;
+    private int id;
     private String name;
+    private boolean ownedByPlayer;
 
-    public Player(){
+    public Player(){ }
 
+
+    public Player(int id, String name, int height, int width, Algorithm algorithm){
+        this.id = id;
+        this.name = name;
+        this.height = height;
+        this.width = width;
+        this.algorithm = algorithm;
+        this.ownedByPlayer = false;
     }
-    public Player(int x,int y,Algorithm algorithm){
-        this.x=x;
-        this.y=y;
-        this.algorithm=algorithm;
+
+    public Player(int id, String name, int height, int width, Algorithm algorithm, boolean ownedByPlayer){
+        this(id, name, height, width, algorithm);
+        this.ownedByPlayer = ownedByPlayer;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Memory getMemory() {
@@ -36,38 +62,46 @@ public class Player {
     }
 
     public void nextStep(GameBoard gameBoard){
-        Step step = algorithm.nextStep(memory,gameBoard,x,y);
+        Step step = algorithm.nextStep(memory, gameBoard, width, height);
         switch(step){
             case UP:
-                y--;
+                height--;
                 break;
             case DOWN:
-                y++;
+                height++;
                 break;
             case LEFT:
-                x--;
+                height--;
                 break;
             case RIGHT:
-                x++;
+                height++;
                 break;
         }
-        gameBoard.getTile(x,y).enters(this);
+        gameBoard.getTile(height,width).enters(this);
     }
 
-    public int getX() {
-        return x;
+    public int getWidth() {
+        return width;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setWidth(int width) {
+        this.width = width;
     }
 
-    public int getY() {
-        return y;
+    public int getHeight() {
+        return height;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public boolean isOwnedByPlayer() {
+        return ownedByPlayer;
+    }
+
+    public void setOwnedByPlayer(boolean ownedByPlayer) {
+        this.ownedByPlayer = ownedByPlayer;
     }
 
     @Override
@@ -75,8 +109,8 @@ public class Player {
         return "Player{" +
                 "memory=" + memory +
                 ", algorithm=" + algorithm +
-                ", x=" + x +
-                ", y=" + y +
+                ", width=" + width +
+                ", height=" + height +
                 ", name='" + name + '\'' +
                 '}';
     }

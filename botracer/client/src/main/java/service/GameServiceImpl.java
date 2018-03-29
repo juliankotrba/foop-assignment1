@@ -2,6 +2,7 @@ package service;
 
 import connection.Connection;
 import connection.OnMessageReceivedListener;
+import dto.messages.c2s.PlayerNameMessage;
 import dto.messages.s2c.GameStartMessage;
 import dto.messages.s2c.GameDataMessage;
 import dto.messages.Message;
@@ -53,6 +54,15 @@ public class GameServiceImpl implements GameService, OnMessageReceivedListener<M
     @Override
     public void disconnect() {
         this.connection.disconnect();
+    }
+
+    @Override
+    public void setPlayerName(String playerName) throws ServiceException {
+        try {
+            connection.send(new PlayerNameMessage(playerName));
+        } catch (MessageException | ConnectionException e) {
+            throw new ServiceException("setPlayerName failed", e);
+        }
     }
 
     @Override

@@ -19,11 +19,11 @@ public class Tile extends Drawable {
 	}
 
 	public int getX() {
-		return position.getX();
+		return position.getWidth();
 	}
 
 	public int getY() {
-		return position.getY();
+		return position.getHeight();
 	}
 
 	public Position getPosition() {

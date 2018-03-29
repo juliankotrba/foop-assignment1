@@ -53,7 +53,7 @@ public class Grid<E> extends ArrayList<E> implements Serializable {
 	 * @return object at the specified coordinate
 	 */
 	public E get(Position position) {
-		return get(position.getX(), position.getY());
+		return get(position.getWidth(), position.getHeight());
 	}
 
 	public int getWidth() {

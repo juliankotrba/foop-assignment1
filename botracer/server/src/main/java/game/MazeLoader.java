@@ -1,5 +1,6 @@
 package game;
 
+import dto.Position;
 import tiles.GoalTile;
 import tiles.PathTile;
 import tiles.Tile;
@@ -14,6 +15,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class MazeLoader {
 
+    private Map<String, Integer> placeableArea;
+
     /**
      * Creates a game board according to a string representation in a file at path.
      *
@@ -21,70 +24,55 @@ public class MazeLoader {
      * @return a new game board according file specifications
      * @throws IOException if the file can not be found or other IO Exceptions occur
      */
-    public GameBoard createGameBoard(String path) throws IOException {
-        int x;
-        int y;
-        GameBoard gameBoard = new GameBoard();
+    public GameBoard createGameBoard(String path) throws IOException, URISyntaxException {
+        GameBoard gameBoard = GameBoard.getInstance();
 
 
-        List<String> lines = null;
-        try {
-            lines = Files.readAllLines(Paths.get(new File(MazeLoader.class.getResource(path).toURI()).getAbsolutePath()));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        x = lines.size();
+        List<String> lines = Files.readAllLines(Paths.get(new File(MazeLoader.class.getResource(path).toURI()).getAbsolutePath()));
+        int gameBoardHeight = lines.size();
         // todo: error handling? (e.g. if maze only has <= 2 lines)
-        y = lines.get(0).length();
+        int gameBoardWidth = lines.get(0).length();
 
-        buildGameBoard(gameBoard, lines, x, y);
+        buildGameBoard(gameBoard, lines, gameBoardWidth, gameBoardHeight);
+        placeableArea = calculatePlaceableArea(gameBoard.getGoalLocation(), gameBoardHeight, gameBoardWidth);
         return gameBoard;
     }
 
 
     /**
-     * Sets all players on a random place on the game board.
+     * Gets a new Position on a random place on the game board.
      * The chosen position is not near the goal, is a PathTile and is not the same as the position of another player.
      *
-     * @param playerList players which should be positioned
+     * @param playerList already positioned players
      * @param gameBoard on which the players should be positioned
+     * @return a new Position
      */
-    public void setStartingPosition(List<Player> playerList, GameBoard gameBoard){
-        Integer[] goal = gameBoard.getGoalLocation();
-        int gameBoardHeight = gameBoard.getTiles().length;
-        int gameBoardWidth = gameBoard.getTiles()[0].length;
+    public Position getNewStartingPosition(List<Player> playerList, GameBoard gameBoard){
+        boolean foundPosition = false;
+        int height = 0;
+        int width = 0;
 
-        Map<String, Integer> placeableArea = calculatePlaceableArea(goal, gameBoardHeight, gameBoardWidth);
+        // search a position for player as long as a suitable position is found
+        while (!foundPosition) {
+            foundPosition = true;
+            height = ThreadLocalRandom.current().nextInt(placeableArea.get("top"), placeableArea.get("bottom"));
+            width = ThreadLocalRandom.current().nextInt(placeableArea.get("left"), placeableArea.get("right"));
 
-        for (Player player : playerList) {
-            boolean playerAlreadyOnPosition = false;
+            // position must be a PathTile
+            if (gameBoard.getTile(height, width).getClass().equals(PathTile.class)) {
 
-            // search a position for player as long as a suitable position is found
-            while (true) {
-                int x = ThreadLocalRandom.current().nextInt(placeableArea.get("top"), placeableArea.get("bottom"));
-                int y = ThreadLocalRandom.current().nextInt(placeableArea.get("left"), placeableArea.get("right"));
-
-                // position must be a PathTile
-                if (gameBoard.getTile(x, y).getClass().equals(PathTile.class)) {
-                    Player player1;
-                    Iterator<Player> playerIterator = playerList.iterator();
-
-                    // check if the position does not overlap with the position other players
-                    while (!(player1 = playerIterator.next()).equals(player)) {
-                        if (player1.getX() == x && player1.getY() == y) {
-                            playerAlreadyOnPosition = true;
-                            break;
-                        }
-                    }
-                    if (!playerAlreadyOnPosition) {
-                        player.setX(x);
-                        player.setY(y);
+                // check if the position does not overlap with the position other players
+                for (Player player : playerList){
+                    if (player.getWidth() == width && player.getHeight() == height) {
+                        foundPosition = false;
                         break;
                     }
                 }
+            } else {
+                foundPosition = false;
             }
         }
-
+        return new Position(width, height);
     }
 
 
@@ -96,18 +84,17 @@ public class MazeLoader {
      *
      * @param gameBoard which should be filled
      * @param lines contains the structure of the game board
-     * @param x height of the game board
-     * @param y length of the game board
+     * @param gameBoardHeight height of the game board
+     * @param gameBoardWidth length of the game board
      */
-    private void buildGameBoard(GameBoard gameBoard, List<String> lines, int x, int y) {
-        Tile[][] tiles = new Tile[x][y];
+    private void buildGameBoard(GameBoard gameBoard, List<String> lines, int gameBoardWidth, int gameBoardHeight) {
+        Tile[][] tiles = new Tile[gameBoardHeight][gameBoardWidth];
 
-        for (int i = 0; i < x; i++) {
+        for (int i = 0; i < gameBoardHeight; i++) {
             String line = lines.get(i);
-            char c;
 
-            for (int j = 0; j < y; j++) {
-                switch (c = line.charAt(j)) {
+            for (int j = 0; j < gameBoardWidth; j++) {
+                switch (line.charAt(j)) {
                     case '*':
                         tiles[i][j] = new WallTile();
                         break;
@@ -141,8 +128,8 @@ public class MazeLoader {
      */
     private Map<String, Integer> calculatePlaceableArea (Integer[] goal, int gameBoardHeight, int gameBoardWidth) {
         Map<String, Integer> placeableArea = new HashMap<>();
-        int goalX = goal[0];
-        int goalY = goal[1];
+        int goalX = goal[1];
+        int goalY = goal[0];
 
         int boundaryLeft = 1;
         int boundaryRight = gameBoardWidth - 2;
@@ -153,19 +140,19 @@ public class MazeLoader {
         int widthOfOneThirdOfGameBoard = Math.round(gameBoardWidth / 3);
 
         // goal is on top of the game board
-        if (goalX == 0) {
+        if (goalY == 0) {
             boundaryTop = heightOfOneThirdOfGameBoard;
         }
         // goal is at bottom of the game board
-        else if (goalX == gameBoardHeight - 1) {
+        else if (goalY == gameBoardHeight - 1) {
             boundaryBottom = gameBoardHeight - heightOfOneThirdOfGameBoard;
         }
         // goal is on the left side of the game board
-        else if (goalY == 0) {
+        else if (goalX == 0) {
             boundaryLeft = widthOfOneThirdOfGameBoard;
         }
         // goal is on the right side of the game board
-        else if (goalY == gameBoardWidth - 1) {
+        else if (goalX == gameBoardWidth - 1) {
             boundaryRight = gameBoardWidth - widthOfOneThirdOfGameBoard;
         }
 

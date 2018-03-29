@@ -45,7 +45,7 @@ public class DummyConnection implements Connection {
         this.isConnected = true;
 
         GameData gameData = this.createGameData();
-        GameDataMessage gameDataMessage = new GameDataMessage(gameData);
+        GameDataMessage gameDataMessage = new GameDataMessage(grid);
         this.onMessageReceivedListener.onMessageReceived(gameDataMessage);
 
         startStrategySimulation();

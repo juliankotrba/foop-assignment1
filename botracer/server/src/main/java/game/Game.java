@@ -1,13 +1,12 @@
 package game;
 
 import algorithms.RandomAlgorithm;
-import dto.messages.s2c.GameDataMessage;
+import dto.Position;
 import marks.Mark;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class Game implements Runnable{
@@ -15,45 +14,41 @@ public class Game implements Runnable{
 
     private Boolean gameRunning = true;
     private List<Player> players;
-    private GameBoard gameBoard;
-    private static HashSet<ObjectOutputStream> writers;
+    private final GameBoard gameBoard;
+    private MazeLoader mazeLoader;
 
-    public Game(String path) throws IOException {
-        MazeLoader mazeLoader = new MazeLoader();
+    public Game(String path) throws IOException, URISyntaxException {
+        mazeLoader = new MazeLoader();
         gameBoard = mazeLoader.createGameBoard(path);
-        //System.out.println(gameBoard);
+        players = new ArrayList<>();
     }
 
     public void runGame(){
-        players= new ArrayList<>();
-        players.add(new Player(1,1,new RandomAlgorithm()));
         while(gameRunning){
-
             synchronized (gameBoard) {
                 for (Player player : players) {
                     player.nextStep(gameBoard);
                 }
             }
             try{
-            /*for(ObjectOutputStream objectOutputStream:writers){
-                objectOutputStream.writeObject(new GameDataMessage(null));
-            }*/
-            drawBoard();
-            System.out.print(players);
+                drawBoard();
+                System.out.print(players);
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            } /*catch (IOException io){
-
-            }*/
+            }
         }
 
     }
-    public void newMark(Mark mark, int x, int y){
+
+    public GameBoard getGameBoard() {
+        return gameBoard;
+    }
+
+    public void newMark(Mark mark, int height, int width){
         synchronized (gameBoard){
-            gameBoard.newMark(mark,x,y);
+            gameBoard.newMark(mark, height, width);
         }
-        //drawBoard();
     }
 
     @Override
@@ -76,16 +71,30 @@ public class Game implements Runnable{
     public void setPlayers(List<Player> players) {
         this.players = players;
     }
-    public void addPlayer(Player player){
-        this.players.add(player);
 
+    /**
+     * Adds a new Player with a generated name.
+     */
+    public void addPlayer() {
+        addPlayer("Player" + (players.size() + 1));
+    }
+
+    /**
+     * Adds a new Player with {name}.
+     *
+     * @param name of the player
+     */
+    public void addPlayer(String name){
+        Position position = mazeLoader.getNewStartingPosition(players, gameBoard);
+        Player player = new Player(players.size() + 1, name, position.getHeight(), position.getWidth(), new RandomAlgorithm());
+        this.players.add(player);
     }
 
     public void drawBoard(){
         System.out.print("\033[H\033[2J");
         StringBuilder stringBuilder = new StringBuilder(gameBoard.toString());
-        for(Player player:players){
-            stringBuilder.setCharAt(player.getY()*62+player.getX(),'o');
+        for (Player player : players){
+            stringBuilder.setCharAt(player.getHeight() * 62 + player.getHeight(),'o');
         }
         System.out.print(stringBuilder.toString());
     }

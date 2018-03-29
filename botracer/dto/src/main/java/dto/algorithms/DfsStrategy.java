@@ -215,18 +215,18 @@ public class DfsStrategy implements MazeSolverStrategy, Serializable {
     }
 
     private Position getNorth(Position position) {
-        return new Position(position.getX(), position.getY() - 1);
+        return new Position(position.getWidth(), position.getHeight() - 1);
     }
 
     private Position getEast(Position position) {
-        return new Position(position.getX() + 1, position.getY());
+        return new Position(position.getWidth() + 1, position.getHeight());
     }
 
     private Position getSouth(Position position) {
-        return new Position(position.getX(), position.getY() + 1);
+        return new Position(position.getWidth(), position.getHeight() + 1);
     }
 
     private Position getWest(Position position) {
-        return new Position(position.getX() - 1, position.getY());
+        return new Position(position.getWidth() - 1, position.getHeight());
     }
 }
