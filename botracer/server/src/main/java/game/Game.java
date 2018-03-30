@@ -1,5 +1,6 @@
 package game;
 
+import algorithms.LeftWallAlgorithm;
 import algorithms.RandomAlgorithm;
 import dto.messages.s2c.GameDataMessage;
 import marks.Mark;
@@ -26,24 +27,28 @@ public class Game implements Runnable{
 
     public void runGame(){
         players= new ArrayList<>();
-        players.add(new Player(1,1,new RandomAlgorithm()));
+        players.add(new Player(1,1,new LeftWallAlgorithm()));
         while(gameRunning){
-
+            drawBoard();
+            System.out.print(players);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             synchronized (gameBoard) {
                 for (Player player : players) {
                     player.nextStep(gameBoard);
                 }
             }
-            try{
-            /*for(ObjectOutputStream objectOutputStream:writers){
+            /*try{
+            for(ObjectOutputStream objectOutputStream:writers){
                 objectOutputStream.writeObject(new GameDataMessage(null));
-            }*/
-            drawBoard();
-            System.out.print(players);
+            }
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            } /*catch (IOException io){
+            } catch (IOException io){
 
             }*/
         }

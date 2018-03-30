@@ -11,11 +11,11 @@ public class GameBoard {
 
 
     public void newMark(Mark mark, int x, int y){
-        tiles[x][y].setMark(mark);
+        tiles[y][x].setMark(mark);
     }
 
     public Tile getTile(int x,int y){
-        return tiles[x][y];
+        return tiles[y][x];
     }
 
     public Tile[][] getTiles() {

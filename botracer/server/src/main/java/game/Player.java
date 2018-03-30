@@ -1,6 +1,7 @@
 package game;
 
 import algorithms.Algorithm;
+import algorithms.Memory;
 import algorithms.Step;
 
 public class Player {
@@ -17,6 +18,7 @@ public class Player {
         this.x=x;
         this.y=y;
         this.algorithm=algorithm;
+        memory = new Memory();
     }
 
     public Memory getMemory() {
@@ -51,6 +53,7 @@ public class Player {
                 x++;
                 break;
         }
+        memory.setLastStep(step);
         gameBoard.getTile(x,y).enters(this);
     }
 

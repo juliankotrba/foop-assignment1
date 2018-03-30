@@ -12,7 +12,7 @@ public class Main {
         Thread gameThread = new Thread(game);
         gameThread.start();
         Thread datageneratorThread = new Thread(datagenerator);
-        datageneratorThread.start();
+        //datageneratorThread.start();
         while(true){
 
         }
