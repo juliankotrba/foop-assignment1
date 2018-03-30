@@ -1,9 +1,9 @@
-package gui.GameMap.receivers;
+package gui.receivers;
 
 import dto.messages.OnMessageReceivedListener;
 import debug.Log;
 import dto.messages.s2c.MarkPlacementMessage;
-import gui.GameMap.GameMap;
+import gui.gamemap.GameMap;
 
 /*public class MarkPlacementReceiver implements OnMessageReceivedListener<MarkPlacementMessage> {
 	private GameMap gameMap;

@@ -1,9 +1,9 @@
-package gui.GameMap.receivers;
+package gui.receivers;
 
 import dto.messages.OnMessageReceivedListener;
 import debug.Log;
 import dto.messages.s2c.PlayersChangedMessage;
-import gui.GameMap.GameMap;
+import gui.gamemap.GameMap;
 
 import java.util.Objects;
 

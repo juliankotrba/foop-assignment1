@@ -1,13 +1,13 @@
-package gui.GameMap.receivers;
+//package gui.GameMap.receivers;
 
-import dto.messages.OnMessageReceivedListener;
+/*import dto.messages.OnMessageReceivedListener;
 import debug.Log;
 import dto.Player;
 import dto.messages.s2c.NewPlayerMessage;
 import gui.GameMap.GameMap;
 import gui.Sprites;
 
-import java.util.Objects;
+import java.util.Objects;*/
 
 /**
  * This Receiver handles NewPlayerMessages.

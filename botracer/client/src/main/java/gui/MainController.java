@@ -9,7 +9,7 @@ import dto.Grid;
 import dto.Player;
 import dto.Tile;
 import exception.service.ServiceException;
-import gui.GameMap.GameMap;
+import gui.gamemap.GameMap;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,6 +19,8 @@ import javafx.stage.Modality;
 import javafx.stage.Window;
 import service.GameService;
 import service.GameServiceImpl;
+import service.MarkService;
+import service.MarkServiceImpl;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,8 +40,6 @@ public class MainController {
 
 	// Message receivers
 
-	// Player and map info
-	private Player player;
 	private GameMap gameMap;
 
 	private final Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
@@ -58,6 +58,7 @@ public class MainController {
 
 	/**
 	 * Starting dialog
+	 *
 	 * @param window Dialog owner
 	 */
 	public void start(Window window) {
@@ -72,7 +73,7 @@ public class MainController {
 
 		Optional<String> result = dialog.showAndWait();
 
-		result.ifPresent(this::connect); // needed for the server to get the name of the player
+		result.ifPresent(this::connect);
 	}
 
 	/**
@@ -80,11 +81,13 @@ public class MainController {
 	 */
 	private void connect(String playerName) {
 		try {
-			Connection connection = SingletonConnectionFactory.getInstance(); // dummy connection removed
+			Connection connection = SingletonConnectionFactory.getInstance();
 			connection.setMainController(this); // necessary for MessageReceiver;
 			gameService = new GameServiceImpl(connection);
-			gameService.connect(); // explanation on line 168
-			gameService.setPlayerName(playerName); // needed for the server to get the name of the player
+            // Connect and load the received map
+			gameService.connect();
+            // Send the chosen player name to the server
+			gameService.setPlayerName(playerName);
 
 		} catch (ServiceException e) {
 			Log.error(e.getMessage());
@@ -104,7 +107,7 @@ public class MainController {
 			Optional<ButtonType> result = alert.showAndWait();
 
 			if (result.isPresent() && result.get() == retry) {
-				connect(""); // needed because of method change
+				connect(playerName);
 			} else {
 				close();
 			}
@@ -112,23 +115,18 @@ public class MainController {
 	}
 
 	@FXML
-	private void ready() {
-		if (gameService == null) {
-			return;
-		}
+    private void ready() {
+        if (gameService == null) {
+            return;
+        }
 
-		try {
-			PlayerInfo playerInfo = playerInfoMap.get(player);
-			if (playerInfo == null) {
-				throw new NullPointerException("Player info not loaded");
-			}
-			playerInfo.setReady(true);
-			gameService.setPlayerReady();
-		} catch (ServiceException | NullPointerException e) {
-			Log.error(e.getMessage());
-			Error.show(e.getMessage());
-		}
-	}
+        try {
+            gameService.setPlayerReady();
+        } catch (ServiceException | NullPointerException e) {
+            Log.error(e.getMessage());
+            Error.show(e.getMessage());
+        }
+    }
 
 	@FXML
 	private void close() {
@@ -153,21 +151,9 @@ public class MainController {
 
 	}
 
-	// no longer needed, because the map and the player list needed to be send in separate messages (NewPlayerMessage and GameDataMessage (holds ony map))
-	/**
-	 * Loads the game board received from the GameService
-	 * @param gameBoard game board map
-	 */
-	/*private void loadGameData(Grid<Tile> gameBoard) {
-		loadMap(gameBoard);
-		//player = gameData.getPlayer();
-		//Sprites.setHighlight(player.getNumber());
-		//loadPlayer(player);
-		//gameMap.set(player);
-	}*/
-
 	/**
 	 * Loads the map from the Grid to the window
+	 *
 	 * @param grid Grid of Tiles
 	 */
 	public GameMap loadMap(Grid<Tile> grid) {
@@ -182,17 +168,16 @@ public class MainController {
 
 	/**
 	 * Loads the player info
+	 *
 	 * @param player Player to load
 	 */
-	private void loadPlayer(Player player) {
+	public void loadPlayer(Player player) {
 		try {
 			PlayerInfo playerInfo = playerInfoMap.get(player);
 			if (playerInfo == null) {
 				playerInfo = PlayerInfo.load();
 				playerInfoMap.put(player, playerInfo);
-				// needed because of thrown exception
-				PlayerInfo finalPlayerInfo = playerInfo;
-				Platform.runLater(() -> playerList.getChildren().add(finalPlayerInfo.getNode()));
+				playerList.getChildren().add(playerInfo.getNode());
 			}
 
 			playerInfo.setPlayer(player);

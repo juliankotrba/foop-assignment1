@@ -1,13 +1,9 @@
 package connection;
 
 import dto.messages.Message;
-import dto.messages.OnMessageReceivedListener;
 import exception.connection.ReaderException;
-import gui.GameMap.receivers.MessageReceiver;
+import gui.receivers.MessageReceiver;
 import gui.MainController;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Listener for incoming socket messages

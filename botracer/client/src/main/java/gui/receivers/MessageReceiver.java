@@ -1,4 +1,4 @@
-package gui.GameMap.receivers;
+package gui.receivers;
 
 import debug.Log;
 import dto.Player;
@@ -11,9 +11,10 @@ import dto.messages.s2c.GameDataMessage;
 import dto.messages.s2c.GameStartMessage;
 import dto.messages.s2c.NewPlayerMessage;
 import dto.messages.s2c.PlayersChangedMessage;
-import gui.GameMap.GameMap;
+import gui.gamemap.GameMap;
 import gui.MainController;
 import gui.Sprites;
+import javafx.application.Platform;
 
 import java.util.Objects;
 
@@ -53,20 +54,15 @@ public class MessageReceiver implements OnMessageReceivedListener {
         if (gameMap == null) {
             return;
         }
-        // set bots on map
-        message.getPayload().ifPresent(players ->
-                players.stream()
-                        .filter(Objects::nonNull)
-                        .forEach(gameMap::set));
 
-        // TODO: set player names in UI player list
-        message.getPayload().ifPresent(
-                players -> {
-                    for (Player player : players) {
-                        Sprites.setHighlight(player.getNumber());
-                    }
-                }
-        );
+        message.getPayload().ifPresent(players ->
+                players.forEach(player -> {
+                    gameMap.set(player);
+                    Platform.runLater(
+                            () -> {
+                                mainController.loadPlayer(player);
+                            });
+                }));
     }
 
     @Override
