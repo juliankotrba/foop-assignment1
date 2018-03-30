@@ -1,6 +1,8 @@
 package dto.messages.s2c;
 
 import dto.GameData;
+import dto.Grid;
+import dto.Tile;
 import dto.messages.Message;
 
 import java.io.Serializable;
@@ -11,18 +13,20 @@ import java.util.Optional;
  *
  * @author Julian Kotrba
  */
-public class GameDataMessage implements Message<GameData>, Serializable {
+public class GameDataMessage implements Message<Grid<Tile>>, Serializable {
 
-    private GameData gameData;
+    //private GameData gameData;
+
+    private Grid<Tile> gameBoard;
 
     private static final long serialVersionUID = 1L;
 
-    public GameDataMessage(GameData gameData) {
-        this.gameData = gameData;
+    public GameDataMessage(Grid<Tile> gameBoard) {
+        this.gameBoard = gameBoard;
     }
 
     @Override
-    public Optional<GameData> getPayload() {
-        return Optional.of(this.gameData);
+    public Optional<Grid<Tile>> getPayload() {
+        return Optional.of(this.gameBoard);
     }
 }

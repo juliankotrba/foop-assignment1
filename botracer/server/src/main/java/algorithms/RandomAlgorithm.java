@@ -12,16 +12,16 @@ public class RandomAlgorithm extends Algorithm {
         List<Step> possiblesteps = new ArrayList<>();
 
 
-        if(gameBoard.getTile(x,y-1).isWalkable()){
+        if(gameBoard.getTile(y-1,x).isWalkable()){
             possiblesteps.add(Step.UP);
         }
-        if(gameBoard.getTile(x,y+1).isWalkable()){
+        if(gameBoard.getTile(y+1,x).isWalkable()){
             possiblesteps.add(Step.DOWN);
         }
-        if(gameBoard.getTile(x-1,y).isWalkable()){
+        if(gameBoard.getTile(y,x-1).isWalkable()){
             possiblesteps.add(Step.LEFT);
         }
-        if(gameBoard.getTile(x+1,y).isWalkable()){
+        if(gameBoard.getTile(y,x+1).isWalkable()){
             possiblesteps.add(Step.RIGHT);
         }
         if(possiblesteps.size()!=1&&memory.getLastStep()!=Step.NONE){

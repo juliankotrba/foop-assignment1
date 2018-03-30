@@ -14,4 +14,12 @@ public interface GameService {
     void connect(OnMessageReceivedListener<GameDataMessage> listener) throws ServiceException;
     void setPlayerReady(OnMessageReceivedListener<GameStartMessage> callback) throws ServiceException;
     void disconnect();
+
+    /**
+     * Sends a PlayerNameMessage to the server.
+     *
+     * @param playerName name of the player which should be sent to the server
+     * @throws ServiceException if a ConnectionException or MessageException occurs
+     */
+    void setPlayerName(String playerName) throws ServiceException;
 }

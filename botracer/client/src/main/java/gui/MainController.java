@@ -12,6 +12,7 @@ import dto.Tile;
 import exception.service.ServiceException;
 import gui.GameMap.GameMap;
 import gui.GameMap.receivers.MarkPlacementReceiver;
+import gui.GameMap.receivers.NewPlayerReceiver;
 import gui.GameMap.receivers.PlayersChangedReceiver;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -41,6 +42,7 @@ public class MainController {
 	// Message receivers
 	private PlayersChangedReceiver playersChangedReceiver = new PlayersChangedReceiver();
 	private MarkPlacementReceiver markPlacementReceiver = new MarkPlacementReceiver();
+	private NewPlayerReceiver newPlayerReceiver = new NewPlayerReceiver();
 
 	// Player and map info
 	private Player player;
@@ -76,20 +78,22 @@ public class MainController {
 
 		Optional<String> result = dialog.showAndWait();
 
-		result.ifPresent(name -> connect());
+		result.ifPresent(this::connect); // needed for the server to get the name of the player
 	}
 
 	/**
 	 * Connect to the GameService
 	 */
-	private void connect() {
+	private void connect(String playerName) {
 		try {
-			Connection connection = Debug.DEBUG ? SingletonConnectionFactory.getDummyInstance() : SingletonConnectionFactory.getInstance();
+			Connection connection = SingletonConnectionFactory.getInstance(); // dummy connection removed
 			gameService = new GameServiceImpl(connection);
-			gameService.connect(message -> message.getPayload().ifPresent(this::loadGameData));
+			gameService.connect(message -> message.getPayload().ifPresent(this::loadMap)); // explanation on line 168
+			gameService.setPlayerName(playerName); // needed for the server to get the name of the player
 
 			PlayerService playerService = new PlayerServiceImpl(connection);
             playerService.registerForPlayerUpdates(playersChangedReceiver);
+            playerService.registerForNewPlayerUpdates(newPlayerReceiver); // needed because players list should not be updated in the ui every time the bots move, therefore: separate listeners for NewPlayerConnected and PlayersMove
 
 			MarkService markService = new MarkServiceImpl(connection);
             // markService.registerForMarkUpdates(markPlacementReceiver);
@@ -111,7 +115,7 @@ public class MainController {
 			Optional<ButtonType> result = alert.showAndWait();
 
 			if (result.isPresent() && result.get() == retry) {
-				connect();
+				connect(""); // needed because of method change
 			} else {
 				close();
 			}
@@ -160,17 +164,18 @@ public class MainController {
 
 	}
 
+	// no longer needed, because the map and the player list needed to be send in separate messages (NewPlayerMessage and GameDataMessage (holds ony map))
 	/**
-	 * Loads the GameData received from the GameService
-	 * @param gameData GameData containing the map
+	 * Loads the game board received from the GameService
+	 * @param gameBoard game board map
 	 */
-	private void loadGameData(GameData gameData) {
-		loadMap(gameData.getGameMap());
-		player = gameData.getPlayer();
-		Sprites.setHighlight(player.getNumber());
-		loadPlayer(player);
-		gameMap.set(player);
-	}
+	/*private void loadGameData(Grid<Tile> gameBoard) {
+		loadMap(gameBoard);
+		//player = gameData.getPlayer();
+		//Sprites.setHighlight(player.getNumber());
+		//loadPlayer(player);
+		//gameMap.set(player);
+	}*/
 
 	/**
 	 * Loads the map from the Grid to the window
@@ -184,8 +189,9 @@ public class MainController {
 
 		playersChangedReceiver.setGameMap(gameMap);
 		markPlacementReceiver.setGameMap(gameMap);
+		newPlayerReceiver.setGameMap(gameMap); // needed because players list should not be updated in the ui every time the bots move, therefore: separate listeners for NewPlayerConnected and PlayersMove
 
-		mainWindow.setCenter(gameMap);
+		Platform.runLater(() -> mainWindow.setCenter(gameMap)); // needed because of thrown exception
 	}
 
 	/**
@@ -198,7 +204,9 @@ public class MainController {
 			if (playerInfo == null) {
 				playerInfo = PlayerInfo.load();
 				playerInfoMap.put(player, playerInfo);
-				playerList.getChildren().add(playerInfo.getNode());
+				// needed because of thrown exception
+				PlayerInfo finalPlayerInfo = playerInfo;
+				Platform.runLater(() -> playerList.getChildren().add(finalPlayerInfo.getNode()));
 			}
 
 			playerInfo.setPlayer(player);

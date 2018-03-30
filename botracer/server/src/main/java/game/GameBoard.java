@@ -3,19 +3,30 @@ package game;
 import marks.Mark;
 import tiles.Tile;
 
-import java.util.Arrays;
-
 public class GameBoard {
+
+    private static GameBoard gameBoard;
+
     private Tile[][] tiles;
     private Integer[] goalLocation;
 
 
-    public void newMark(Mark mark, int x, int y){
-        tiles[y][x].setMark(mark);
+
+    private GameBoard() {}
+
+    public static synchronized GameBoard getInstance() {
+        if (GameBoard.gameBoard == null) {
+            GameBoard.gameBoard = new GameBoard();
+        }
+        return GameBoard.gameBoard;
     }
 
-    public Tile getTile(int x,int y){
-        return tiles[y][x];
+    public void newMark(Mark mark, int height, int width){
+        tiles[height][width].setMark(mark);
+    }
+
+    public Tile getTile(int height, int width){
+        return tiles[height][width];
     }
 
     public Tile[][] getTiles() {

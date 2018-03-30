@@ -34,11 +34,11 @@ class PlayerTile extends Pane {
 	}
 
 	private int getX() {
-		return position.getX();
+		return position.getWidth();
 	}
 
 	private int getY() {
-		return position.getY();
+		return position.getHeight();
 	}
 
 	// MARK: - draw

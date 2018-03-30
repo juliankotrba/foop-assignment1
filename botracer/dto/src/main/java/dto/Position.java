@@ -12,20 +12,20 @@ public class Position implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final int x;
-    private final int y;
+    private final int width;
+    private final int height;
 
-    public Position(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Position(int width, int height) {
+        this.width = width;
+        this.height = height;
     }
 
-    public int getX() {
-        return x;
+    public int getWidth() {
+        return width;
     }
 
-    public int getY() {
-        return y;
+    public int getHeight() {
+        return height;
     }
 
     @Override
@@ -33,13 +33,13 @@ public class Position implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Position position = (Position) o;
-        return x == position.x &&
-                y == position.y;
+        return width == position.width &&
+                height == position.height;
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(x, y);
+        return Objects.hash(width, height);
     }
 }

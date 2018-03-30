@@ -1,17 +1,15 @@
 package gui.GameMap;
 
-import connection.OnMessageReceivedListener;
-import dto.*;
-import dto.messages.s2c.MarkPlacementMessage;
-import dto.messages.s2c.PlayersChangedMessage;
-import javafx.scene.layout.Pane;
 import debug.Log;
-import service.PlayerService;
-import service.PlayerServiceImpl;
+import dto.Grid;
+import dto.Mark;
+import dto.Player;
+import dto.Tile;
+import javafx.application.Platform;
+import javafx.scene.layout.Pane;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * GameMap.java
@@ -162,7 +160,9 @@ public class GameMap extends Pane {
 			Log.debug("Add new player '" + player.getName() + "' to map");
 			playerTile = new PlayerTile(player);
 			players.put(player, playerTile);
-			getChildren().add(playerTile);
+			// change was necessary because of an exception
+			PlayerTile finalPlayerTile = playerTile;
+			Platform.runLater(() -> getChildren().add(finalPlayerTile));
 			playerTile.draw(tileSize, offsetX, offsetY);
 		} else {
 			playerTile.move(player.getPosition());
