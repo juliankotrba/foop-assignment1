@@ -1,5 +1,7 @@
 package dto.messages;
 
+import dto.messages.s2c.OnMessageReceivedListener;
+
 import java.util.Optional;
 
 /**

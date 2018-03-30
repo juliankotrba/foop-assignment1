@@ -2,7 +2,6 @@ package dto.messages.s2c;
 
 import dto.Mark;
 import dto.messages.Message;
-import dto.messages.OnMessageReceivedListener;
 
 import java.io.Serializable;
 import java.util.Optional;

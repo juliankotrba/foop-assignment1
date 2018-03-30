@@ -1,7 +1,7 @@
 package connection;
 
 import dto.messages.Message;
-import dto.messages.OnMessageReceivedListener;
+import dto.messages.s2c.OnMessageReceivedListener;
 import exception.connection.ReaderException;
 
 /**

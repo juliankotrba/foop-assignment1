@@ -1,12 +1,6 @@
-import dto.messages.OnMessageReceivedListener;
-import dto.messages.c2s.ChangeStrategyMessage;
-import dto.messages.c2s.MarkPlacementMessage;
-import dto.messages.c2s.PlayerNameMessage;
-import dto.messages.c2s.PlayerReadyMessage;
+import dto.messages.c2s.*;
 import dto.messages.s2c.GameDataMessage;
-import dto.messages.s2c.GameStartMessage;
 import dto.messages.s2c.NewPlayerMessage;
-import dto.messages.s2c.PlayersChangedMessage;
 import game.Game;
 import game.Player;
 
@@ -81,20 +75,7 @@ public class MessageHandler implements OnMessageReceivedListener {
     }
 
     @Override
-    public void onMessageReceived(GameDataMessage message) { }
-
-    @Override
-    public void onMessageReceived(GameStartMessage message) { }
-
-    @Override
     public void onMessageReceived(dto.messages.s2c.MarkPlacementMessage message) { }
-
-    @Override
-    public void onMessageReceived(NewPlayerMessage message) { }
-
-    @Override
-    public void onMessageReceived(PlayersChangedMessage message) { }
-
 
     /**
      * Allocates the player to a bot, or add a new bot if all initial bots are already allocated.
