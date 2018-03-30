@@ -1,0 +1,43 @@
+Server-Client / Client-Server Kommunikation
+
+---
+Server startet 
+    -> erstellt 4 initiale Bots und weißt ihnen Koordinaten auf Map zu 
+        (Server: main (muss ev. wieder auskommentiert werden)
+        
+    -> wartet auf Client-Nachrichten 
+        (Server: ConnectionHandler)
+
+---
+Client startet
+    -> verbindet sich mit dem Server 
+        (Client: MainController.connect(playerName))
+        
+    -> Client schickt PlayerNameMessage mit eingegebenen Namen an Server 
+        (Client: MainController.connect(pN) -> GameService.setPlayerName(pN))
+        
+        -> Server setzt Namen 
+        (Server: ConnectionHandler.handlePlayerNameMessage)
+        
+        -> Server schickt GameDataMessage (= Grid<Tile> map) an Client 
+            (Server: ConnectionHandler.handlePlayerNameMessage)
+            
+            -> Client ladet Map 
+                (Client: 
+        
+        -> Server weist Spieler einem Bot zu 
+            (Server: ConnectionHandler.handlePlayerNameMessage)
+            
+            -> nächster initialer Bot wenn noch nicht alle bereits zugewiesen 
+            -> andernfalls, neuer Bot wird erstellt und einem Platz zugewiesen
+        
+        -> Server schickt NewPlayerMessage an ALLE Clients 
+            (Server: ConnectionHandler.handlePlayerNameMessage)
+        
+        -> Client setzt alle Bots aufs Spielfeld 
+            (Client: NewPlayerReceiver.onMessageReceived)
+            !! BUG: höchstens 3 Bots werden gesetzt !!
+        
+        -> Client setzt Namen aller Bots/Spieler in "Players" Lister der UI 
+            (Client: NewPlayerReceiver.onMessageReceived)
+            !! TODO !!
