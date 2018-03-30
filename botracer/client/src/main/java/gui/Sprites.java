@@ -13,7 +13,7 @@ public class Sprites {
 
 	public static final Image icon = loadImage("botracer.png");
 
-	public static String highlight = null;
+	public static String highlight = "-fx-background-color: rgba(0, 152, 211, 0.5)";
 
 	public static void setHighlight(int number) {
 		if (number >= 0 && number < highlights.length) {
@@ -41,7 +41,10 @@ public class Sprites {
 			loadImage("players/bot_cyan.png"),
 			loadImage("players/bot_red.png"),
 			loadImage("players/bot_yellow.png"),
-			loadImage("players/bot_green.png")
+			loadImage("players/bot_green.png"),
+			loadImage("players/bot_pink.png"),
+			loadImage("players/bot_white.png"),
+			loadImage("players/bot_brown.png")
 	};
 
 	// Maze
