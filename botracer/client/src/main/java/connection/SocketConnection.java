@@ -6,7 +6,7 @@ import dto.messages.OnMessageReceivedListener;
 import exception.connection.ConnectionException;
 import exception.connection.MessageException;
 import exception.connection.WriterException;
-import gui.MainController;
+import gui.UIManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -21,7 +21,7 @@ import java.util.Properties;
 public class SocketConnection implements Connection {
 
     private Socket socket;
-    private OnMessageReceivedListener onMessageReceivedListener;
+    private MessageReceiver messageReceiver = new MessageReceiver();
     private StreamWriter streamWriter;
     private StreamReader streamReader;
     private Properties properties;
@@ -45,8 +45,8 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void setOnMessageReceivedListener(OnMessageReceivedListener mainController) {
-        this.onMessageReceivedListener = onMessageReceivedListener;
+    public void setUIManager(UIManager uiManager) {
+        messageReceiver.setUIManager(uiManager);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class SocketConnection implements Connection {
 
     private void startListenerThread() {
         Thread messageListenerThread = new Thread(
-                new MessageListener(this.streamReader, this.onMessageReceivedListener)
+                new MessageListener(this.streamReader, messageReceiver)
         );
 
         messageListenerThread.start();

@@ -5,7 +5,6 @@ import dto.Grid;
 import dto.Mark;
 import dto.Player;
 import dto.Tile;
-import ui.GameMap;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 
@@ -17,7 +16,7 @@ import java.util.Map;
  * Renders the map of the game
  * @author David Walter
  */
-public class FXMLGameMap extends Pane implements GameMap {
+public class FXMLGameMap extends Pane {
 
 	private final Grid<GameTile> gameTiles;
 	private final Map<Player, PlayerTile> players = new HashMap<>();

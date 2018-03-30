@@ -1,8 +1,5 @@
 package connection;
 
-import dto.messages.OnMessageReceivedListener;
-import gui.MainController;
-
 import java.io.*;
 import java.net.Socket;
 import java.net.URLDecoder;

@@ -6,6 +6,7 @@ import dto.messages.c2s.PlayerReadyMessage;
 import exception.connection.ConnectionException;
 import exception.connection.MessageException;
 import exception.service.ServiceException;
+import gui.UIManager;
 
 /**
  * Implementation of the game service
@@ -22,9 +23,10 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void connect() throws ServiceException {
+    public void connect(UIManager uiManager) throws ServiceException {
 
         try {
+            this.connection.setUIManager(uiManager);
             this.connection.connect();
 
         } catch (ConnectionException e) {

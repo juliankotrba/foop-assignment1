@@ -1,4 +1,4 @@
-package gui;
+package connection;
 
 import debug.Log;
 import dto.messages.OnMessageReceivedListener;
@@ -10,24 +10,19 @@ import dto.messages.s2c.GameDataMessage;
 import dto.messages.s2c.GameStartMessage;
 import dto.messages.s2c.NewPlayerMessage;
 import dto.messages.s2c.PlayersChangedMessage;
-import ui.GameMap;
-import ui.UIManager;
-import javafx.application.Platform;
-
-import java.util.Objects;
+import gui.UIManager;
 
 public class MessageReceiver implements OnMessageReceivedListener {
 
 	private UIManager uiManager;
-	private GameMap gameMap;
 
-	MessageReceiver(UIManager uiManager) {
+	public void setUIManager(UIManager uiManager) {
 		this.uiManager = uiManager;
 	}
 
 	@Override
 	public void onMessageReceived(GameDataMessage message) {
-		message.getPayload().ifPresent(grid -> gameMap = uiManager.loadMap(grid));
+		message.getPayload().ifPresent(grid -> uiManager.loadMap(grid));
 	}
 
 	@Override
@@ -38,36 +33,26 @@ public class MessageReceiver implements OnMessageReceivedListener {
 	@Override
 	public void onMessageReceived(dto.messages.s2c.MarkPlacementMessage message) {
 		Log.verbose("MarkPlacement message received");
-		if (gameMap == null) {
-			return;
-		}
-		message.getPayload().ifPresent(mark -> gameMap.set(mark));
+		message.getPayload().ifPresent(mark -> uiManager.set(mark));
 	}
 
 	@Override
 	public void onMessageReceived(NewPlayerMessage message) {
 		Log.debug("NewPlayer message received");
-		if (gameMap == null) {
-			return;
-		}
-
 		message.getPayload().ifPresent(players ->
 				players.forEach(player -> {
-					gameMap.set(player);
-					Platform.runLater(() -> uiManager.loadPlayer(player));
+					uiManager.set(player);
+					uiManager.loadPlayer(player);
 				}));
 	}
 
 	@Override
 	public void onMessageReceived(PlayersChangedMessage message) {
 		Log.verbose("PlayersChanged message received");
-		if (gameMap == null) {
-			return;
-		}
 		message.getPayload().ifPresent(players ->
-				players.stream()
-						.filter(Objects::nonNull)
-						.forEach(gameMap::set));
+				players.forEach(player -> {
+					uiManager.set(player);
+				}));
 	}
 
 	/*
@@ -89,4 +74,5 @@ public class MessageReceiver implements OnMessageReceivedListener {
 	@Override
 	public void onMessageReceived(PlayerReadyMessage message) {
 	}
+
 }

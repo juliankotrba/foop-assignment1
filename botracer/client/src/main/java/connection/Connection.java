@@ -4,7 +4,8 @@ import dto.messages.Message;
 import dto.messages.OnMessageReceivedListener;
 import exception.connection.ConnectionException;
 import exception.connection.MessageException;
-import gui.MainController;
+import gui.FXMLUIManager;
+import gui.UIManager;
 
 /**
  * Connection
@@ -13,9 +14,10 @@ import gui.MainController;
  */
 public interface Connection {
     void connect() throws ConnectionException;
-    void setOnMessageReceivedListener(OnMessageReceivedListener onMessageReceivedListener);
+    void setUIManager(UIManager uiManager);
     void disconnect();
     void send(Message message) throws MessageException, ConnectionException;
 
     boolean isConnected();
+
 }

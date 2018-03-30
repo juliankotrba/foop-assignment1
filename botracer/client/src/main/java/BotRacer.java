@@ -1,4 +1,4 @@
-import gui.MainController;
+import gui.FXMLUIManager;
 import gui.Sprites;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +25,7 @@ public class BotRacer extends Application {
 		primaryStage.setMinHeight(400);
 
 		primaryStage.addEventHandler(WindowEvent.WINDOW_SHOWN, window -> {
-			MainController controller = loader.getController();
+			FXMLUIManager controller = loader.getController();
 			controller.start(primaryStage.getScene().getWindow());
 		});
 

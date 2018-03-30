@@ -1,11 +1,13 @@
 package gui;
 
 import connection.Connection;
+import connection.MessageReceiver;
 import connection.SingletonConnectionFactory;
 import debug.Debug;
 import debug.Log;
 import debug.MazeLoader;
 import dto.Grid;
+import dto.Mark;
 import dto.Player;
 import dto.Tile;
 import exception.service.ServiceException;
@@ -19,7 +21,6 @@ import javafx.stage.Modality;
 import javafx.stage.Window;
 import service.GameService;
 import service.GameServiceImpl;
-import ui.UIManager;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -27,22 +28,18 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * MainController.java
+ * FXMLUIManager.java
  * BotRacer controller of the JavaFX window
  *
  * @author David Walter
  */
-public class MainController implements UIManager {
+public class FXMLUIManager implements UIManager {
+
+	private FXMLGameMap gameMap;
+	private final Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
 
 	// Services
 	private GameService gameService;
-
-	// Message receivers
-	private MessageReceiver messageReceiver;
-
-	private FXMLGameMap gameMap;
-
-	private final Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
 
 	@FXML
 	private BorderPane mainWindow;
@@ -53,7 +50,6 @@ public class MainController implements UIManager {
 	@FXML
 	private void initialize() {
 		debugMenu.setVisible(Debug.DEBUG);
-		messageReceiver = new MessageReceiver(this);
 		Log.debug("initialized");
 	}
 
@@ -83,10 +79,10 @@ public class MainController implements UIManager {
 	private void connect(String playerName) {
 		try {
 			Connection connection = SingletonConnectionFactory.getInstance();
-			connection.setOnMessageReceivedListener(messageReceiver); // necessary for MessageReceiver;
+
 			gameService = new GameServiceImpl(connection);
             // Connect and load the received map
-			gameService.connect();
+			gameService.connect(this);
             // Send the chosen player name to the server
 			gameService.setPlayerName(playerName);
 
@@ -155,25 +151,13 @@ public class MainController implements UIManager {
 	// MARK: - UIManager
 
 	/**
-	 * Starts the game
-	 */
-	public void startGame() {
-		
-	}
-
-	/**
 	 * Loads the map from the Grid to the window
 	 *
 	 * @param grid Grid of Tiles
 	 */
-	public FXMLGameMap loadMap(Grid<Tile> grid) {
-		if (grid == null) {
-			return null;
-		}
+	public void loadMap(Grid<Tile> grid) {
 		gameMap = new FXMLGameMap(grid);
-
 		Platform.runLater(() -> mainWindow.setCenter(gameMap)); // needed because of thrown exception
-		return gameMap;
 	}
 
 	/**
@@ -197,6 +181,31 @@ public class MainController implements UIManager {
 		}
 	}
 
+	/**
+	 * Starts the game
+	 */
+	public void startGame() {
+
+	}
+
+	@Override
+	public void set(Player player) {
+		if (gameMap == null) { return; }
+		gameMap.set(player);
+	}
+
+	@Override
+	public void set(Mark mark) {
+		if (gameMap == null) { return; }
+		gameMap.set(mark);
+	}
+
+	@Override
+	public void remove(Mark mark) {
+		if (gameMap == null) { return; }
+		gameMap.remove(mark);
+	}
+
 	// MARK: - DEBUG
 
 	@FXML
@@ -211,7 +220,7 @@ public class MainController implements UIManager {
 
 	@FXML
 	private void debugLoadMap() {
-		Grid<Tile> grid = MazeLoader.shared.load(MainController.class.getResource("../maze.txt"));
+		Grid<Tile> grid = MazeLoader.shared.load(FXMLUIManager.class.getResource("../maze.txt"));
 		loadMap(grid);
 	}
 
