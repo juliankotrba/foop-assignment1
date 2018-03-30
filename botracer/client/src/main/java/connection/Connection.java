@@ -13,7 +13,7 @@ import gui.MainController;
  */
 public interface Connection {
     void connect() throws ConnectionException;
-    void setMainController(MainController maincontroller);
+    void setOnMessageReceivedListener(OnMessageReceivedListener onMessageReceivedListener);
     void disconnect();
     void send(Message message) throws MessageException, ConnectionException;
 

@@ -1,5 +1,6 @@
 package connection;
 
+import dto.messages.OnMessageReceivedListener;
 import gui.MainController;
 
 import java.io.*;
@@ -29,12 +30,6 @@ public class SingletonConnectionFactory {
             );
         }
         return connection;
-    }
-
-    public static synchronized void init(MainController mainController){
-        if (connection != null) {
-            connection.setMainController(mainController);
-        }
     }
 
     /*public static synchronized Connection getDummyInstance() {

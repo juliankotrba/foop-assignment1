@@ -5,6 +5,7 @@ import dto.Grid;
 import dto.Mark;
 import dto.Player;
 import dto.Tile;
+import ui.GameMap;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 
@@ -12,11 +13,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * gamemap.java
+ * FXMLGameMap.java
  * Renders the map of the game
  * @author David Walter
  */
-public class GameMap extends Pane {
+public class FXMLGameMap extends Pane implements GameMap {
 
 	private final Grid<GameTile> gameTiles;
 	private final Map<Player, PlayerTile> players = new HashMap<>();
@@ -25,7 +26,7 @@ public class GameMap extends Pane {
 	private double offsetX = 0;
 	private double offsetY = 0;
 
-	public GameMap(Grid<Tile> maze) {
+	public FXMLGameMap(Grid<Tile> maze) {
 		gameTiles = new Grid<>(maze.getWidth(), maze.getHeight());
 
 		Log.debug("Loading map");

@@ -9,7 +9,7 @@ import dto.Grid;
 import dto.Player;
 import dto.Tile;
 import exception.service.ServiceException;
-import gui.gamemap.GameMap;
+import gui.gamemap.FXMLGameMap;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,8 +19,7 @@ import javafx.stage.Modality;
 import javafx.stage.Window;
 import service.GameService;
 import service.GameServiceImpl;
-import service.MarkService;
-import service.MarkServiceImpl;
+import ui.UIManager;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,14 +32,15 @@ import java.util.Optional;
  *
  * @author David Walter
  */
-public class MainController {
+public class MainController implements UIManager {
 
 	// Services
 	private GameService gameService;
 
 	// Message receivers
+	private MessageReceiver messageReceiver;
 
-	private GameMap gameMap;
+	private FXMLGameMap gameMap;
 
 	private final Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
 
@@ -53,6 +53,7 @@ public class MainController {
 	@FXML
 	private void initialize() {
 		debugMenu.setVisible(Debug.DEBUG);
+		messageReceiver = new MessageReceiver(this);
 		Log.debug("initialized");
 	}
 
@@ -82,7 +83,7 @@ public class MainController {
 	private void connect(String playerName) {
 		try {
 			Connection connection = SingletonConnectionFactory.getInstance();
-			connection.setMainController(this); // necessary for MessageReceiver;
+			connection.setOnMessageReceivedListener(messageReceiver); // necessary for MessageReceiver;
 			gameService = new GameServiceImpl(connection);
             // Connect and load the received map
 			gameService.connect();
@@ -151,16 +152,25 @@ public class MainController {
 
 	}
 
+	// MARK: - UIManager
+
+	/**
+	 * Starts the game
+	 */
+	public void startGame() {
+		
+	}
+
 	/**
 	 * Loads the map from the Grid to the window
 	 *
 	 * @param grid Grid of Tiles
 	 */
-	public GameMap loadMap(Grid<Tile> grid) {
+	public FXMLGameMap loadMap(Grid<Tile> grid) {
 		if (grid == null) {
 			return null;
 		}
-		gameMap = new GameMap(grid);
+		gameMap = new FXMLGameMap(grid);
 
 		Platform.runLater(() -> mainWindow.setCenter(gameMap)); // needed because of thrown exception
 		return gameMap;

@@ -2,6 +2,7 @@ package connection;
 
 import debug.Log;
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 import exception.connection.ConnectionException;
 import exception.connection.MessageException;
 import exception.connection.WriterException;
@@ -19,8 +20,8 @@ import java.util.Properties;
  */
 public class SocketConnection implements Connection {
 
-    private MainController mainController;
     private Socket socket;
+    private OnMessageReceivedListener onMessageReceivedListener;
     private StreamWriter streamWriter;
     private StreamReader streamReader;
     private Properties properties;
@@ -44,8 +45,8 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
+    public void setOnMessageReceivedListener(OnMessageReceivedListener mainController) {
+        this.onMessageReceivedListener = onMessageReceivedListener;
     }
 
     @Override
@@ -105,7 +106,7 @@ public class SocketConnection implements Connection {
 
     private void startListenerThread() {
         Thread messageListenerThread = new Thread(
-                new MessageListener(this.streamReader, this.mainController)
+                new MessageListener(this.streamReader, this.onMessageReceivedListener)
         );
 
         messageListenerThread.start();

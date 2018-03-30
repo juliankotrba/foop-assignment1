@@ -1,9 +1,8 @@
 package connection;
 
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 import exception.connection.ReaderException;
-import gui.receivers.MessageReceiver;
-import gui.MainController;
 
 /**
  * Listener for incoming socket messages
@@ -13,11 +12,11 @@ import gui.MainController;
 public class MessageListener implements Runnable {
 
     private StreamReader streamReader;
-    private MainController mainController;
+    private OnMessageReceivedListener onMessageReceivedListener;
 
-    public MessageListener(StreamReader streamReader, MainController mainController) {
+    public MessageListener(StreamReader streamReader, OnMessageReceivedListener onMessageReceivedListener) {
         this.streamReader = streamReader;
-        this.mainController = mainController;
+        this.onMessageReceivedListener = onMessageReceivedListener;
     }
 
     @Override
@@ -26,7 +25,7 @@ public class MessageListener implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 Message message = this.streamReader.read();
-                message.accept(new MessageReceiver(mainController));
+                message.accept(onMessageReceivedListener);
 
             } catch (ReaderException e) {
                 // TODO: Proper thread killing
