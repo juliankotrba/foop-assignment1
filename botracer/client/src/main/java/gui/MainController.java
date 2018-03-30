@@ -1,18 +1,16 @@
 package gui;
 
 import connection.Connection;
-import connection.OnMessageReceivedListener;
 import connection.SingletonConnectionFactory;
 import debug.Debug;
 import debug.Log;
 import debug.MazeLoader;
 import dto.Grid;
-import dto.Player;
 import dto.Tile;
-import dto.messages.s2c.NewPlayerMessage;
 import exception.service.ServiceException;
 import gui.gamemap.GameMap;
 import gui.receivers.MarkPlacementReceiver;
+import gui.receivers.NewPlayerReceiver;
 import gui.receivers.PlayersChangedReceiver;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -26,9 +24,6 @@ import service.GameServiceImpl;
 import service.PlayerService;
 import service.PlayerServiceImpl;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -37,7 +32,7 @@ import java.util.Optional;
  *
  * @author David Walter
  */
-public class MainController implements OnMessageReceivedListener<NewPlayerMessage> {
+public class MainController {
 
 	// Services
 	private GameService gameService;
@@ -45,10 +40,9 @@ public class MainController implements OnMessageReceivedListener<NewPlayerMessag
 	// Message receivers
 	private PlayersChangedReceiver playersChangedReceiver = new PlayersChangedReceiver();
 	private MarkPlacementReceiver markPlacementReceiver = new MarkPlacementReceiver();
+	private NewPlayerReceiver newPlayerReceiver = new NewPlayerReceiver();
 
 	private GameMap gameMap;
-
-	private final Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
 
 	@FXML
 	private BorderPane mainWindow;
@@ -59,6 +53,7 @@ public class MainController implements OnMessageReceivedListener<NewPlayerMessag
 	@FXML
 	private void initialize() {
 		debugMenu.setVisible(Debug.DEBUG);
+		newPlayerReceiver.setPlayerInfo(playerList);
 		Log.debug("initialized");
 	}
 
@@ -96,7 +91,7 @@ public class MainController implements OnMessageReceivedListener<NewPlayerMessag
 
 			PlayerService playerService = new PlayerServiceImpl(connection);
 			playerService.registerForPlayerUpdates(playersChangedReceiver);
-			playerService.registerForNewPlayerUpdates(this);
+			playerService.registerForNewPlayerUpdates(newPlayerReceiver);
 		} catch (ServiceException e) {
 			Log.error(e.getMessage());
 
@@ -172,40 +167,12 @@ public class MainController implements OnMessageReceivedListener<NewPlayerMessag
 
 		playersChangedReceiver.setGameMap(gameMap);
 		markPlacementReceiver.setGameMap(gameMap);
+		newPlayerReceiver.setGameMap(gameMap);
 
 		// Load the game map into the window on the FX Thread
 		Platform.runLater(() -> mainWindow.setCenter(gameMap));
 	}
 
-	/**
-	 * Loads the player info
-	 *
-	 * @param player Player to load
-	 */
-	private void loadPlayer(Player player) {
-		try {
-			PlayerInfo playerInfo = playerInfoMap.get(player);
-			if (playerInfo == null) {
-				playerInfo = PlayerInfo.load();
-				playerInfoMap.put(player, playerInfo);
-				playerList.getChildren().add(playerInfo.getNode());
-			}
-
-			playerInfo.setPlayer(player);
-		} catch (IOException e) {
-			Log.error(e.getMessage());
-			Error.show(e.getMessage());
-		}
-	}
-
-	@Override
-	public void onMessageReceived(NewPlayerMessage message) {
-		message.getPayload().ifPresent(players ->
-				players.forEach(player -> {
-					gameMap.set(player);
-					Platform.runLater(() -> loadPlayer(player));
-				}));
-	}
 
 	// MARK: - DEBUG
 
