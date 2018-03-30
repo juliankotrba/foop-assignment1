@@ -1,7 +1,10 @@
 package connection;
 
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 import exception.connection.ReaderException;
+import gui.GameMap.receivers.MessageReceiver;
+import gui.MainController;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,11 +17,11 @@ import java.util.Objects;
 public class MessageListener implements Runnable {
 
     private StreamReader streamReader;
-    private List<OnMessageReceivedListener<Message>> onMessageReceivedListeners;
+    private MainController mainController;
 
-    public MessageListener(StreamReader streamReader, List<OnMessageReceivedListener<Message>> onMessageReceivedListeners) {
+    public MessageListener(StreamReader streamReader, MainController mainController) {
         this.streamReader = streamReader;
-        this.onMessageReceivedListeners = onMessageReceivedListeners;
+        this.mainController = mainController;
     }
 
     @Override
@@ -27,7 +30,8 @@ public class MessageListener implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 Message message = this.streamReader.read();
-                this.notifyListeners(message);
+                message.accept(new MessageReceiver(mainController));
+
             } catch (ReaderException e) {
                 // TODO: Proper thread killing
                 Thread.currentThread().interrupt();
@@ -36,12 +40,5 @@ public class MessageListener implements Runnable {
                 System.out.println("Shutting down message listener thread: \n" + e.getLocalizedMessage());
             }
         }
-    }
-
-    private void notifyListeners(Message message) {
-        this.onMessageReceivedListeners
-                .stream()
-                .filter(Objects::nonNull)
-                .forEach(listener -> listener.onMessageReceived(message));
     }
 }

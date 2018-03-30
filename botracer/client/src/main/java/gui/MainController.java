@@ -5,15 +5,11 @@ import connection.SingletonConnectionFactory;
 import debug.Debug;
 import debug.Log;
 import debug.MazeLoader;
-import dto.GameData;
 import dto.Grid;
 import dto.Player;
 import dto.Tile;
 import exception.service.ServiceException;
 import gui.GameMap.GameMap;
-import gui.GameMap.receivers.MarkPlacementReceiver;
-import gui.GameMap.receivers.NewPlayerReceiver;
-import gui.GameMap.receivers.PlayersChangedReceiver;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -21,7 +17,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Window;
-import service.*;
+import service.GameService;
+import service.GameServiceImpl;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -40,9 +37,6 @@ public class MainController {
 	private GameService gameService;
 
 	// Message receivers
-	private PlayersChangedReceiver playersChangedReceiver = new PlayersChangedReceiver();
-	private MarkPlacementReceiver markPlacementReceiver = new MarkPlacementReceiver();
-	private NewPlayerReceiver newPlayerReceiver = new NewPlayerReceiver();
 
 	// Player and map info
 	private Player player;
@@ -87,16 +81,11 @@ public class MainController {
 	private void connect(String playerName) {
 		try {
 			Connection connection = SingletonConnectionFactory.getInstance(); // dummy connection removed
+			connection.setMainController(this); // necessary for MessageReceiver;
 			gameService = new GameServiceImpl(connection);
-			gameService.connect(message -> message.getPayload().ifPresent(this::loadMap)); // explanation on line 168
+			gameService.connect(); // explanation on line 168
 			gameService.setPlayerName(playerName); // needed for the server to get the name of the player
 
-			PlayerService playerService = new PlayerServiceImpl(connection);
-            playerService.registerForPlayerUpdates(playersChangedReceiver);
-            playerService.registerForNewPlayerUpdates(newPlayerReceiver); // needed because players list should not be updated in the ui every time the bots move, therefore: separate listeners for NewPlayerConnected and PlayersMove
-
-			MarkService markService = new MarkServiceImpl(connection);
-            // markService.registerForMarkUpdates(markPlacementReceiver);
 		} catch (ServiceException e) {
 			Log.error(e.getMessage());
 
@@ -134,7 +123,7 @@ public class MainController {
 				throw new NullPointerException("Player info not loaded");
 			}
 			playerInfo.setReady(true);
-			gameService.setPlayerReady(message -> Log.debug("Game started"));
+			gameService.setPlayerReady();
 		} catch (ServiceException | NullPointerException e) {
 			Log.error(e.getMessage());
 			Error.show(e.getMessage());
@@ -181,17 +170,14 @@ public class MainController {
 	 * Loads the map from the Grid to the window
 	 * @param grid Grid of Tiles
 	 */
-	private void loadMap(Grid<Tile> grid) {
+	public GameMap loadMap(Grid<Tile> grid) {
 		if (grid == null) {
-			return;
+			return null;
 		}
 		gameMap = new GameMap(grid);
 
-		playersChangedReceiver.setGameMap(gameMap);
-		markPlacementReceiver.setGameMap(gameMap);
-		newPlayerReceiver.setGameMap(gameMap); // needed because players list should not be updated in the ui every time the bots move, therefore: separate listeners for NewPlayerConnected and PlayersMove
-
 		Platform.runLater(() -> mainWindow.setCenter(gameMap)); // needed because of thrown exception
+		return gameMap;
 	}
 
 	/**

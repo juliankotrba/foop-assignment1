@@ -25,13 +25,11 @@ public class ConnectionHandler extends Thread {
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private Game game;
-    private DTOUtil dtoUtil;
 
 
     public ConnectionHandler(Socket socket, Game game) {
         this.socket = socket;
         this.game = game;
-        this.dtoUtil = new DTOUtil();
     }
 
     public void run() {
@@ -49,10 +47,7 @@ public class ConnectionHandler extends Thread {
                 Message message = null;
                 try {
                     message = (Message) in.readObject();
-
-                    if (message instanceof PlayerNameMessage) {
-                        handlePlayerNameMessage((PlayerNameMessage) message);
-                    }
+                    message.accept(new MessageHandler(this, writers, out, game));
 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
@@ -78,49 +73,6 @@ public class ConnectionHandler extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    /**
-     * Allocates the player to a bot, or add a new bot if all initial bots are already allocated.
-     */
-    private void allocatePlayerToBot(){
-        boolean playerAllocated = false;
-        for (Player player : game.getPlayers()) {
-            if (!player.isOwnedByPlayer()) {
-                player.setName(name);
-                player.setOwnedByPlayer(true);
-                playerAllocated = true;
-                break;
-            }
-        }
-
-        if (!playerAllocated) {
-            game.addPlayer(name);
-        }
-    }
-
-    /**
-     * When the server receives a PlayerNameMessage, this player will be allocated to a bot
-     * and all players receive a NewPlayerMessage containing all updated player info.
-     *
-     * @param message containing the name of the new player
-     * @throws IOException if the NewPlayerMessage could not be sent
-     */
-    private void handlePlayerNameMessage(PlayerNameMessage message) throws IOException {
-        name = "NoNameSet";
-        if (message.getPayload().isPresent()) {
-            name = message.getPayload().get();
-        }
-
-        // send the game board to the player
-        out.writeObject(new GameDataMessage(dtoUtil.convertGameBoard(game.getGameBoard())));
-
-        // allocate the player to a bot and send the updated player list to all players
-        allocatePlayerToBot();
-        NewPlayerMessage newPlayerMessage = new NewPlayerMessage(dtoUtil.convertPlayers(game.getPlayers()));
-        for (ObjectOutputStream writer : writers) {
-            writer.writeObject(newPlayerMessage);
         }
     }
 }

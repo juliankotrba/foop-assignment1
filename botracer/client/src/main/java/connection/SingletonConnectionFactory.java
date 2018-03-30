@@ -1,5 +1,7 @@
 package connection;
 
+import gui.MainController;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.URLDecoder;
@@ -29,12 +31,18 @@ public class SingletonConnectionFactory {
         return connection;
     }
 
-    public static synchronized Connection getDummyInstance() {
+    public static synchronized void init(MainController mainController){
+        if (connection != null) {
+            connection.setMainController(mainController);
+        }
+    }
+
+    /*public static synchronized Connection getDummyInstance() {
         if (connection == null) {
             connection = new DummyConnection();
         }
         return connection;
-    }
+    }*/
 
     private static Properties getProperties() {
         try {

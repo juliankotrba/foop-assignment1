@@ -1,13 +1,13 @@
 package gui.GameMap.receivers;
 
-import connection.OnMessageReceivedListener;
+import dto.messages.OnMessageReceivedListener;
 import debug.Log;
 import dto.messages.s2c.PlayersChangedMessage;
 import gui.GameMap.GameMap;
 
 import java.util.Objects;
 
-public class PlayersChangedReceiver implements OnMessageReceivedListener<PlayersChangedMessage> {
+/*public class PlayersChangedReceiver implements OnMessageReceivedListener<PlayersChangedMessage> {
 
 	private GameMap gameMap;
 
@@ -26,4 +26,4 @@ public class PlayersChangedReceiver implements OnMessageReceivedListener<Players
 	public void setGameMap(GameMap gameMap) {
 		this.gameMap = gameMap;
 	}
-}
+}*/

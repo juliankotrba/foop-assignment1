@@ -1,11 +1,11 @@
 package gui.GameMap.receivers;
 
-import connection.OnMessageReceivedListener;
+import dto.messages.OnMessageReceivedListener;
 import debug.Log;
 import dto.messages.s2c.MarkPlacementMessage;
 import gui.GameMap.GameMap;
 
-public class MarkPlacementReceiver implements OnMessageReceivedListener<MarkPlacementMessage> {
+/*public class MarkPlacementReceiver implements OnMessageReceivedListener<MarkPlacementMessage> {
 	private GameMap gameMap;
 
 	@Override
@@ -20,4 +20,4 @@ public class MarkPlacementReceiver implements OnMessageReceivedListener<MarkPlac
 	public void setGameMap(GameMap gameMap) {
 		this.gameMap = gameMap;
 	}
-}
+}*/

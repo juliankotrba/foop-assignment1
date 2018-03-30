@@ -4,6 +4,7 @@ import debug.Log;
 import dto.*;
 import dto.algorithms.DfsStrategy;
 import dto.algorithms.MazeSolverStrategy;
+import dto.messages.OnMessageReceivedListener;
 import dto.messages.s2c.GameDataMessage;
 import dto.messages.s2c.GameStartMessage;
 import dto.messages.Message;
@@ -22,9 +23,9 @@ import java.util.List;
  * @author Julian Kotrba
  */
 // TODO: REFACTOR!
-public class DummyConnection implements Connection {
+//public class DummyConnection implements Connection {
 
-    private OnMessageReceivedListener<Message> onMessageReceivedListener;
+    /*private OnMessageReceivedListener<Message> onMessageReceivedListener;
     private boolean isConnected = false;
     private int playerCount = 0;
     private Grid<Tile> grid;
@@ -113,6 +114,6 @@ public class DummyConnection implements Connection {
         Player player = new Player(0, position);
 
         return new GameData(grid, player);
-    }
+    }*/
 
-}
+//}

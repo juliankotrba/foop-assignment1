@@ -2,6 +2,7 @@ package dto.messages.s2c;
 
 import dto.Player;
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,6 +19,11 @@ public class NewPlayerMessage implements Message<List<Player>>, Serializable {
 
     public NewPlayerMessage(List<Player> players) {
         this.players = players;
+    }
+
+    @Override
+    public void accept(OnMessageReceivedListener onMessageReceivedListener) {
+        onMessageReceivedListener.onMessageReceived(this);
     }
 
     @Override
