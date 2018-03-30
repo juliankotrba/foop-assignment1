@@ -1,7 +1,7 @@
 package dto.messages.c2s;
 
 import dto.messages.Message;
-import dto.messages.s2c.OnMessageReceivedListener;
+import dto.messages.OnMessageReceivedListener;
 
 import java.io.Serializable;
 import java.util.Optional;

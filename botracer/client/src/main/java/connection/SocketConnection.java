@@ -2,6 +2,7 @@ package connection;
 
 import debug.Log;
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 import exception.connection.ConnectionException;
 import exception.connection.MessageException;
 import exception.connection.WriterException;
