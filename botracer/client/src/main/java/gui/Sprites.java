@@ -1,6 +1,6 @@
 package gui;
 
-import gui.GameMap.GameTile;
+import gui.gamemap.GameTile;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 

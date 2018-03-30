@@ -2,7 +2,7 @@ package debug;
 
 import dto.Player;
 import dto.Position;
-import gui.GameMap.GameMap;
+import gui.gamemap.GameMap;
 import gui.Sprites;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;

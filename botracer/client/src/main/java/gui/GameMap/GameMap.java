@@ -1,4 +1,4 @@
-package gui.GameMap;
+package gui.gamemap;
 
 import debug.Log;
 import dto.Grid;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * GameMap.java
+ * gamemap.java
  * Renders the map of the game
  * @author David Walter
  */

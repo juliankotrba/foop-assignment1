@@ -1,4 +1,4 @@
-package gui.GameMap;
+package gui.gamemap;
 
 import dto.Player;
 import dto.Position;

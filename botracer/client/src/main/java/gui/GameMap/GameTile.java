@@ -1,6 +1,5 @@
-package gui.GameMap;
+package gui.gamemap;
 
-import connection.Connection;
 import connection.SingletonConnectionFactory;
 import dto.Mark;
 import dto.MarkType;

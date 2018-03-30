@@ -1,19 +1,19 @@
 package gui;
 
 import connection.Connection;
+import connection.OnMessageReceivedListener;
 import connection.SingletonConnectionFactory;
 import debug.Debug;
 import debug.Log;
 import debug.MazeLoader;
-import dto.GameData;
 import dto.Grid;
 import dto.Player;
 import dto.Tile;
+import dto.messages.s2c.NewPlayerMessage;
 import exception.service.ServiceException;
-import gui.GameMap.GameMap;
-import gui.GameMap.receivers.MarkPlacementReceiver;
-import gui.GameMap.receivers.NewPlayerReceiver;
-import gui.GameMap.receivers.PlayersChangedReceiver;
+import gui.gamemap.GameMap;
+import gui.receivers.MarkPlacementReceiver;
+import gui.receivers.PlayersChangedReceiver;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -21,7 +21,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Window;
-import service.*;
+import service.GameService;
+import service.GameServiceImpl;
+import service.PlayerService;
+import service.PlayerServiceImpl;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,7 +37,7 @@ import java.util.Optional;
  *
  * @author David Walter
  */
-public class MainController {
+public class MainController implements OnMessageReceivedListener<NewPlayerMessage> {
 
 	// Services
 	private GameService gameService;
@@ -42,10 +45,7 @@ public class MainController {
 	// Message receivers
 	private PlayersChangedReceiver playersChangedReceiver = new PlayersChangedReceiver();
 	private MarkPlacementReceiver markPlacementReceiver = new MarkPlacementReceiver();
-	private NewPlayerReceiver newPlayerReceiver = new NewPlayerReceiver();
 
-	// Player and map info
-	private Player player;
 	private GameMap gameMap;
 
 	private final Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
@@ -64,6 +64,7 @@ public class MainController {
 
 	/**
 	 * Starting dialog
+	 *
 	 * @param window Dialog owner
 	 */
 	public void start(Window window) {
@@ -78,7 +79,7 @@ public class MainController {
 
 		Optional<String> result = dialog.showAndWait();
 
-		result.ifPresent(this::connect); // needed for the server to get the name of the player
+		result.ifPresent(this::connect);
 	}
 
 	/**
@@ -86,17 +87,16 @@ public class MainController {
 	 */
 	private void connect(String playerName) {
 		try {
-			Connection connection = SingletonConnectionFactory.getInstance(); // dummy connection removed
+			Connection connection = SingletonConnectionFactory.getInstance();
 			gameService = new GameServiceImpl(connection);
-			gameService.connect(message -> message.getPayload().ifPresent(this::loadMap)); // explanation on line 168
-			gameService.setPlayerName(playerName); // needed for the server to get the name of the player
+			// Connect and load the received map
+			gameService.connect(message -> message.getPayload().ifPresent(this::loadMap));
+			// Send the chosen player name to the server
+			gameService.setPlayerName(playerName);
 
 			PlayerService playerService = new PlayerServiceImpl(connection);
-            playerService.registerForPlayerUpdates(playersChangedReceiver);
-            playerService.registerForNewPlayerUpdates(newPlayerReceiver); // needed because players list should not be updated in the ui every time the bots move, therefore: separate listeners for NewPlayerConnected and PlayersMove
-
-			MarkService markService = new MarkServiceImpl(connection);
-            // markService.registerForMarkUpdates(markPlacementReceiver);
+			playerService.registerForPlayerUpdates(playersChangedReceiver);
+			playerService.registerForNewPlayerUpdates(this);
 		} catch (ServiceException e) {
 			Log.error(e.getMessage());
 
@@ -115,7 +115,7 @@ public class MainController {
 			Optional<ButtonType> result = alert.showAndWait();
 
 			if (result.isPresent() && result.get() == retry) {
-				connect(""); // needed because of method change
+				connect(playerName);
 			} else {
 				close();
 			}
@@ -129,12 +129,7 @@ public class MainController {
 		}
 
 		try {
-			PlayerInfo playerInfo = playerInfoMap.get(player);
-			if (playerInfo == null) {
-				throw new NullPointerException("Player info not loaded");
-			}
-			playerInfo.setReady(true);
-			gameService.setPlayerReady(message -> Log.debug("Game started"));
+			gameService.setPlayerReady(message -> Log.debug("Set player ready"));
 		} catch (ServiceException | NullPointerException e) {
 			Log.error(e.getMessage());
 			Error.show(e.getMessage());
@@ -164,21 +159,9 @@ public class MainController {
 
 	}
 
-	// no longer needed, because the map and the player list needed to be send in separate messages (NewPlayerMessage and GameDataMessage (holds ony map))
-	/**
-	 * Loads the game board received from the GameService
-	 * @param gameBoard game board map
-	 */
-	/*private void loadGameData(Grid<Tile> gameBoard) {
-		loadMap(gameBoard);
-		//player = gameData.getPlayer();
-		//Sprites.setHighlight(player.getNumber());
-		//loadPlayer(player);
-		//gameMap.set(player);
-	}*/
-
 	/**
 	 * Loads the map from the Grid to the window
+	 *
 	 * @param grid Grid of Tiles
 	 */
 	private void loadMap(Grid<Tile> grid) {
@@ -189,13 +172,14 @@ public class MainController {
 
 		playersChangedReceiver.setGameMap(gameMap);
 		markPlacementReceiver.setGameMap(gameMap);
-		newPlayerReceiver.setGameMap(gameMap); // needed because players list should not be updated in the ui every time the bots move, therefore: separate listeners for NewPlayerConnected and PlayersMove
 
-		Platform.runLater(() -> mainWindow.setCenter(gameMap)); // needed because of thrown exception
+		// Load the game map into the window on the FX Thread
+		Platform.runLater(() -> mainWindow.setCenter(gameMap));
 	}
 
 	/**
 	 * Loads the player info
+	 *
 	 * @param player Player to load
 	 */
 	private void loadPlayer(Player player) {
@@ -204,9 +188,7 @@ public class MainController {
 			if (playerInfo == null) {
 				playerInfo = PlayerInfo.load();
 				playerInfoMap.put(player, playerInfo);
-				// needed because of thrown exception
-				PlayerInfo finalPlayerInfo = playerInfo;
-				Platform.runLater(() -> playerList.getChildren().add(finalPlayerInfo.getNode()));
+				playerList.getChildren().add(playerInfo.getNode());
 			}
 
 			playerInfo.setPlayer(player);
@@ -214,6 +196,15 @@ public class MainController {
 			Log.error(e.getMessage());
 			Error.show(e.getMessage());
 		}
+	}
+
+	@Override
+	public void onMessageReceived(NewPlayerMessage message) {
+		message.getPayload().ifPresent(players ->
+				players.forEach(player -> {
+					gameMap.set(player);
+					Platform.runLater(() -> loadPlayer(player));
+				}));
 	}
 
 	// MARK: - DEBUG
