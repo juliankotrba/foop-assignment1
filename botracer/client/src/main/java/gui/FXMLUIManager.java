@@ -1,7 +1,6 @@
 package gui;
 
 import connection.Connection;
-import connection.MessageReceiver;
 import connection.SingletonConnectionFactory;
 import debug.Debug;
 import debug.Log;
@@ -11,9 +10,10 @@ import dto.Mark;
 import dto.Player;
 import dto.Tile;
 import exception.service.ServiceException;
-import gui.gamemap.FXMLGameMap;
+import gui.gamemap.GameMap;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -35,7 +35,7 @@ import java.util.Optional;
  */
 public class FXMLUIManager implements UIManager {
 
-	private FXMLGameMap gameMap;
+	private GameMap gameMap;
 	private final Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
 
 	// Services
@@ -156,7 +156,7 @@ public class FXMLUIManager implements UIManager {
 	 * @param grid Grid of Tiles
 	 */
 	public void loadMap(Grid<Tile> grid) {
-		gameMap = new FXMLGameMap(grid);
+		gameMap = new GameMap(grid);
 		Platform.runLater(() -> mainWindow.setCenter(gameMap)); // needed because of thrown exception
 	}
 
@@ -171,7 +171,8 @@ public class FXMLUIManager implements UIManager {
 			if (playerInfo == null) {
 				playerInfo = PlayerInfo.load();
 				playerInfoMap.put(player, playerInfo);
-				playerList.getChildren().add(playerInfo.getNode());
+				Node node = playerInfo.getNode();
+				Platform.runLater(() -> playerList.getChildren().add(node));
 			}
 
 			playerInfo.setPlayer(player);

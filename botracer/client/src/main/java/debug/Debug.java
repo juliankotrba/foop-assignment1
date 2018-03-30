@@ -2,7 +2,7 @@ package debug;
 
 import dto.Player;
 import dto.Position;
-import gui.gamemap.FXMLGameMap;
+import gui.gamemap.GameMap;
 import gui.Sprites;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -18,7 +18,7 @@ public class Debug {
 	public static final boolean DEBUG = true;
 	public static final boolean VERBOSE = false;
 
-	public static void player(FXMLGameMap gameMap) {
+	public static void player(GameMap gameMap) {
 		Dialog<Pair<Integer, Position>> dialog = new Dialog<>();
 		dialog.setTitle("Move Player");
 		dialog.setHeaderText("Move Player to position");
@@ -62,7 +62,7 @@ public class Debug {
 	private Timer timer;
 	private DebugMoves debugMoves = new DebugMoves(0);
 
-	public Debug(FXMLGameMap gameMap) {
+	public Debug(GameMap gameMap) {
 		if (timer == null) {
 			timer = new Timer();
 			timer.scheduleAtFixedRate(new TimerTask() {

@@ -30,6 +30,7 @@ public class Sprites {
 
 	// Players
 	public static Image getPlayer(int number) {
+		number -= 1;
 		if (number >= 0 && number < player.length) {
 			return player[number];
 		}

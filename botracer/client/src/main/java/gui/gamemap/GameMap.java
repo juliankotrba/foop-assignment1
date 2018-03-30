@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * FXMLGameMap.java
+ * GameMap.java
  * Renders the map of the game
  * @author David Walter
  */
-public class FXMLGameMap extends Pane {
+public class GameMap extends Pane {
 
 	private final Grid<GameTile> gameTiles;
 	private final Map<Player, PlayerTile> players = new HashMap<>();
@@ -25,7 +25,7 @@ public class FXMLGameMap extends Pane {
 	private double offsetX = 0;
 	private double offsetY = 0;
 
-	public FXMLGameMap(Grid<Tile> maze) {
+	public GameMap(Grid<Tile> maze) {
 		gameTiles = new Grid<>(maze.getWidth(), maze.getHeight());
 
 		Log.debug("Loading map");
