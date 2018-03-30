@@ -24,6 +24,7 @@ import service.GameServiceImpl;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -86,6 +87,10 @@ public class FXMLUIManager implements UIManager {
             // Send the chosen player name to the server
 			gameService.setPlayerName(playerName);
 
+			Label loadingLabel = new Label("Loading...");
+			loadingLabel.setStyle("-fx-text-fill: #E7E8EB; " +
+					"-fx-font-size: 24pt;");
+			mainWindow.setCenter(loadingLabel);
 		} catch (ServiceException e) {
 			Log.error(e.getMessage());
 
@@ -160,6 +165,10 @@ public class FXMLUIManager implements UIManager {
 		Platform.runLater(() -> mainWindow.setCenter(gameMap)); // needed because of thrown exception
 	}
 
+	public void loadPlayers(List<Player> players) {
+		players.forEach(this::loadPlayer);
+	}
+
 	/**
 	 * Loads the player info
 	 *
@@ -176,6 +185,7 @@ public class FXMLUIManager implements UIManager {
 			}
 
 			playerInfo.setPlayer(player);
+			gameMap.set(player);
 		} catch (IOException e) {
 			Log.error(e.getMessage());
 			Error.show(e.getMessage());
@@ -183,25 +193,27 @@ public class FXMLUIManager implements UIManager {
 	}
 
 	/**
-	 * Starts the game
+	 * The game has started
 	 */
 	public void startGame() {
-
+		if (gameMap == null) { return; }
+		gameMap.enableContextMenu();
 	}
 
-	@Override
+	public void set(List<Player> players) {
+		players.forEach(this::set);
+	}
+
 	public void set(Player player) {
 		if (gameMap == null) { return; }
 		gameMap.set(player);
 	}
 
-	@Override
 	public void set(Mark mark) {
 		if (gameMap == null) { return; }
 		gameMap.set(mark);
 	}
 
-	@Override
 	public void remove(Mark mark) {
 		if (gameMap == null) { return; }
 		gameMap.remove(mark);

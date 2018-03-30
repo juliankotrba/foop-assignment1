@@ -22,7 +22,7 @@ public class MessageReceiver implements OnMessageReceivedListener {
 
 	@Override
 	public void onMessageReceived(GameDataMessage message) {
-		message.getPayload().ifPresent(grid -> uiManager.loadMap(grid));
+		message.getPayload().ifPresent(uiManager::loadMap);
 	}
 
 	@Override
@@ -33,26 +33,19 @@ public class MessageReceiver implements OnMessageReceivedListener {
 	@Override
 	public void onMessageReceived(dto.messages.s2c.MarkPlacementMessage message) {
 		Log.verbose("MarkPlacement message received");
-		message.getPayload().ifPresent(mark -> uiManager.set(mark));
+		message.getPayload().ifPresent(uiManager::set);
 	}
 
 	@Override
 	public void onMessageReceived(NewPlayerMessage message) {
 		Log.debug("NewPlayer message received");
-		message.getPayload().ifPresent(players ->
-				players.forEach(player -> {
-					uiManager.set(player);
-					uiManager.loadPlayer(player);
-				}));
+		message.getPayload().ifPresent(uiManager::loadPlayers);
 	}
 
 	@Override
 	public void onMessageReceived(PlayersChangedMessage message) {
 		Log.verbose("PlayersChanged message received");
-		message.getPayload().ifPresent(players ->
-				players.forEach(player -> {
-					uiManager.set(player);
-				}));
+		message.getPayload().ifPresent(uiManager::set);
 	}
 
 	/*

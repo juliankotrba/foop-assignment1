@@ -187,6 +187,9 @@ public class GameMap extends Pane {
 		gameTiles.get(mark.getPosition()).drawMark(null);
 	}
 
+	public void enableContextMenu() {
+		gameTiles.forEach(GameTile::enableContextMenu);
+	}
 }
 
 enum Direction {
