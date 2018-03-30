@@ -21,11 +21,15 @@ public class Sprites {
 		}
 	}
 
+	// Player tile selection color; unused
 	private static final String[] highlights = {
-			"-fx-background-color: rgba(0, 152, 211, 0.5)",
-			"-fx-background-color: rgba(0, 152, 211, 0.5)",
-			"-fx-background-color: rgba(0, 152, 211, 0.5)",
-			"-fx-background-color: rgba(0, 152, 211, 0.5)"
+			"-fx-background-color: rgba(44, 182, 177, 0.5)", // cyan
+			"-fx-background-color: rgba(222, 58, 59, 0.5)", // red
+			"-fx-background-color: rgba(254, 249, 53, 0.5)", // yellow
+			"-fx-background-color: rgba(81, 195, 79, 0.5)", // green
+			"-fx-background-color: rgba(225, 45, 160, 0.5)", // pink
+			"-fx-background-color: rgba(231, 232, 235, 0.5)", // white
+			"-fx-background-color: rgba(211, 141, 94, 0.5)" // brown
 	};
 
 	// Players
