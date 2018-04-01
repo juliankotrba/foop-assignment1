@@ -4,6 +4,8 @@ import algorithms.Algorithm;
 import algorithms.Memory;
 import algorithms.Step;
 
+import java.util.Objects;
+
 public class Player {
     private Memory memory;
     private Algorithm algorithm;
@@ -12,6 +14,7 @@ public class Player {
     private int id;
     private String name;
     private boolean ownedByPlayer;
+    private boolean isReady;
 
     public Player(){ }
 
@@ -23,7 +26,8 @@ public class Player {
         this.width = width;
         this.algorithm = algorithm;
         this.ownedByPlayer = false;
-        memory=new Memory();
+        this.memory = new Memory();
+        this.isReady = false;
     }
 
     public Player(int id, String name, int height, int width, Algorithm algorithm, boolean ownedByPlayer){
@@ -46,7 +50,6 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
-
     }
 
     public Memory getMemory() {
@@ -109,6 +112,14 @@ public class Player {
         this.ownedByPlayer = ownedByPlayer;
     }
 
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public void setReady(boolean ready) {
+        isReady = ready;
+    }
+
     @Override
     public String toString() {
         return "Player{" +
@@ -118,5 +129,18 @@ public class Player {
                 ", height=" + height +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return id == player.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

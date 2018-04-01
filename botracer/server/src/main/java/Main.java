@@ -20,9 +20,8 @@ public class Main {
             game.addPlayer();
         }
 
-
         for (Player player : game.getPlayers()) {
-            System.out.println(player.getName() + ", height: " + player.getHeight() + ", width: " + player.getWidth());
+            player.setReady(true);
         }
 
         ServerSocket listener = new ServerSocket(9001);

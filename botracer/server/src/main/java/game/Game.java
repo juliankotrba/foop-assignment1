@@ -1,6 +1,5 @@
 package game;
 
-import algorithms.LeftWallAlgorithm;
 import algorithms.RandomAlgorithm;
 import dto.Position;
 import marks.Mark;
@@ -90,20 +89,24 @@ public class Game implements Runnable{
 
     /**
      * Adds a new Player with a generated name.
+     *
+     * @return the added player
      */
-    public void addPlayer() {
-        addPlayer("Player" + (players.size() + 1));
+    public Player addPlayer() {
+        return addPlayer("Bot" + (players.size() + 1));
     }
 
     /**
      * Adds a new Player with {name}.
      *
      * @param name of the player
+     * @return the added player
      */
-    public void addPlayer(String name){
+    public Player addPlayer(String name){
         Position position = mazeLoader.getNewStartingPosition(players, gameBoard);
         Player player = new Player(players.size() + 1, name, position.getHeight(), position.getWidth(), new RandomAlgorithm());
         this.players.add(player);
+        return player;
     }
 
     public void drawBoard(){

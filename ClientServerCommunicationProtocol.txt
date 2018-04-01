@@ -1,4 +1,4 @@
-Server-Client / Client-Server Kommunikation
+﻿Server-Client / Client-Server Kommunikation
 
 ---
 Server startet
@@ -44,5 +44,10 @@ Client startet
 
   !! TODO !!
   -> Client schickt PlayerReady Message
-    -> Server teil den Clients diesen mit / kA
-    -> Game startet sobald alle Player ready sind
+    -> Server schickt allen Clients "PlayerReadyServerMessage" mit besagtem Player
+    -> Client aktualisiert die Playerliste (sollte angezeigt werden, wer ready ist und wer nicht)
+        -> ev. dto.Player und DTOUtil.convertPlayer (Server) anpassen?
+    -> Bots haben immer den Status "Ready"
+
+    -> Wenn alle Player "Ready" sind, schickt Server "GameStartMessage" an alle Clients
+        -> Anzeige, dass das Spiel startet wäre nice :)

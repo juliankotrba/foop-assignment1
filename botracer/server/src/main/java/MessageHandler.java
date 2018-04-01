@@ -1,34 +1,25 @@
+import dto.messages.Message;
 import dto.messages.OnMessageReceivedListener;
 import dto.messages.c2s.ChangeStrategyMessage;
 import dto.messages.c2s.MarkPlacementMessage;
 import dto.messages.c2s.PlayerNameMessage;
 import dto.messages.c2s.PlayerReadyMessage;
-import dto.messages.s2c.GameDataMessage;
-import dto.messages.s2c.GameStartMessage;
-import dto.messages.s2c.NewPlayerMessage;
-import dto.messages.s2c.PlayersChangedMessage;
+import dto.messages.s2c.*;
 import game.Game;
 import game.Player;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.Set;
 
 public class MessageHandler implements OnMessageReceivedListener {
 
     private DTOUtil dtoUtil;
     private ConnectionHandler connectionHandler;
-    private Set<ObjectOutputStream> writers;
-    private ObjectOutputStream out;
-    private Game game;
 
 
-    public MessageHandler(ConnectionHandler connectionHandler, Set<ObjectOutputStream> writers, ObjectOutputStream out, Game game) {
+    public MessageHandler(ConnectionHandler connectionHandler) {
         this.dtoUtil = new DTOUtil();
         this.connectionHandler = connectionHandler;
-        this.writers = writers;
-        this.out = out;
-        this.game = game;
     }
 
 
@@ -49,7 +40,7 @@ public class MessageHandler implements OnMessageReceivedListener {
      */
     @Override
     public void onMessageReceived(PlayerNameMessage message) {
-        System.out.println("PlayerNameMessageReceived");
+        System.out.println("PlayerNameMessage received");
 
         String name = "NoNameSet";
         if (message.getPayload().isPresent()) {
@@ -57,16 +48,15 @@ public class MessageHandler implements OnMessageReceivedListener {
         }
 
         try {
+            Game game = connectionHandler.getGame();
+
             // send the game board to the player
-            System.out.println(game.getGameBoard());
-            out.writeObject(new GameDataMessage(dtoUtil.convertGameBoard(game.getGameBoard())));
+            connectionHandler.getOut().writeObject(new GameDataMessage(dtoUtil.convertGameBoard(game.getGameBoard())));
 
             // allocate the player to a bot and send the updated player list to all players
             allocatePlayerToBot(name);
             NewPlayerMessage newPlayerMessage = new NewPlayerMessage(dtoUtil.convertPlayers(game.getPlayers()));
-            for (ObjectOutputStream writer : writers) {
-                writer.writeObject(newPlayerMessage);
-            }
+            writeAllPlayers(newPlayerMessage);
         } catch (IOException e) {
             // TODO: error handling
             e.printStackTrace();
@@ -75,9 +65,35 @@ public class MessageHandler implements OnMessageReceivedListener {
         connectionHandler.setName(name);
     }
 
+    /**
+     * When the server receives a PlayerReadyMessage, all players receive a PlayerReadyServerMessage containing the
+     * information, which player set his/her status to ready.
+     *
+     * If all players are ready, a GameStartMessage will be sent to all players.
+     *
+     * @param message indicating the ready status of this player
+     */
     @Override
     public void onMessageReceived(PlayerReadyMessage message) {
+        System.out.println("PlayerreadyMessage received");
 
+        writeAllPlayers(new PlayerReadyServerMessage(dtoUtil.convertPlayer(connectionHandler.getPlayer())));
+
+        boolean allPlayersReady = true;
+        for (Player player : connectionHandler.getGame().getPlayers()) {
+            if (player.equals(connectionHandler.getPlayer())) {
+                player.setReady(true);
+                break;
+            }
+
+            if (!player.isReady()) {
+                allPlayersReady = false;
+            }
+        }
+
+        if (allPlayersReady) {
+            writeAllPlayers(new GameStartMessage());
+        }
     }
 
     @Override
@@ -95,6 +111,11 @@ public class MessageHandler implements OnMessageReceivedListener {
     @Override
     public void onMessageReceived(PlayersChangedMessage message) { }
 
+    @Override
+    public void onMessageReceived(PlayerReadyServerMessage message) {
+
+    }
+
 
     /**
      * Allocates the player to a bot, or add a new bot if all initial bots are already allocated.
@@ -103,17 +124,36 @@ public class MessageHandler implements OnMessageReceivedListener {
      */
     private void allocatePlayerToBot(String name){
         boolean playerAllocated = false;
-        for (Player player : game.getPlayers()) {
+        for (Player player : connectionHandler.getGame().getPlayers()) {
             if (!player.isOwnedByPlayer()) {
                 player.setName(name);
                 player.setOwnedByPlayer(true);
                 playerAllocated = true;
+
+                connectionHandler.setPlayer(player);
                 break;
             }
         }
 
         if (!playerAllocated) {
-            game.addPlayer(name);
+            Player player = connectionHandler.getGame().addPlayer(name);
+            connectionHandler.setPlayer(player);
+        }
+    }
+
+    /**
+     * Writes {message} to all registered players.
+     *
+     * @param message which should be send to all registered players
+     */
+    private void writeAllPlayers(Message message) {
+        try {
+            for (ObjectOutputStream writer : ConnectionHandler.getWriters()) {
+                writer.writeObject(message);
+            }
+        } catch (IOException e) {
+            // TODO: exception handling
+            e.printStackTrace();
         }
     }
 }

@@ -41,10 +41,14 @@ public class DTOUtil {
         List<dto.Player> playerList = new ArrayList<>();
 
         for (Player player : players) {
-            Position position = new Position(player.getWidth(), player.getHeight());
-            playerList.add(new dto.Player(player.getId(), player.getName(), position));
+            playerList.add(convertPlayer(player));
         }
 
         return playerList;
+    }
+
+    public dto.Player convertPlayer(Player player) {
+        Position position = new Position(player.getWidth(), player.getHeight());
+        return new dto.Player(player.getId(), player.getName(), position);
     }
 }

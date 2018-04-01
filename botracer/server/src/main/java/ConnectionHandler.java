@@ -1,8 +1,5 @@
 import dto.messages.Message;
-import dto.messages.c2s.PlayerNameMessage;
-import dto.messages.s2c.GameDataMessage;
 import dto.messages.s2c.GameStartMessage;
-import dto.messages.s2c.NewPlayerMessage;
 import game.Game;
 import game.Player;
 
@@ -20,9 +17,8 @@ public class ConnectionHandler extends Thread {
      */
     private static HashSet<ObjectOutputStream> writers = new HashSet<>();
 
-    private String name;
+    private Player player;
     private Socket socket;
-    private ObjectInputStream in;
     private ObjectOutputStream out;
     private Game game;
 
@@ -32,11 +28,32 @@ public class ConnectionHandler extends Thread {
         this.game = game;
     }
 
+
+    public static HashSet<ObjectOutputStream> getWriters() {
+        return writers;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public ObjectOutputStream getOut() {
+        return out;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
     public void run() {
         try {
             // Create character streams for the socket.
             out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
             writers.add(out);
 
@@ -47,7 +64,7 @@ public class ConnectionHandler extends Thread {
                 Message message = null;
                 try {
                     message = (Message) in.readObject();
-                    message.accept(new MessageHandler(this, writers, out, game));
+                    message.accept(new MessageHandler(this));
 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();

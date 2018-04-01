@@ -6,10 +6,7 @@ import dto.messages.c2s.ChangeStrategyMessage;
 import dto.messages.c2s.MarkPlacementMessage;
 import dto.messages.c2s.PlayerNameMessage;
 import dto.messages.c2s.PlayerReadyMessage;
-import dto.messages.s2c.GameDataMessage;
-import dto.messages.s2c.GameStartMessage;
-import dto.messages.s2c.NewPlayerMessage;
-import dto.messages.s2c.PlayersChangedMessage;
+import dto.messages.s2c.*;
 import gui.UIManager;
 
 public class MessageReceiver implements OnMessageReceivedListener {
@@ -46,6 +43,11 @@ public class MessageReceiver implements OnMessageReceivedListener {
 	public void onMessageReceived(PlayersChangedMessage message) {
 		Log.verbose("PlayersChanged message received");
 		message.getPayload().ifPresent(uiManager::set);
+	}
+
+	@Override
+	public void onMessageReceived(PlayerReadyServerMessage message) {
+		// TODO: new player (or myself) set the status to ready
 	}
 
 	/*
