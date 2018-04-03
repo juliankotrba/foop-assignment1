@@ -1,6 +1,7 @@
 package gui;
 
 import dto.Player;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -47,8 +48,11 @@ public class PlayerInfo {
 	}
 
 	public void setPlayer(Player player) {
-		name.setText(player.getName());
-		image.setImage(Sprites.getPlayer(player.getNumber()));
+		Platform.runLater(
+				() -> {
+					name.setText(player.getName());
+					image.setImage(Sprites.getPlayer(player.getNumber()));
+				});
 	}
 
 	public void setReady(boolean ready) {
