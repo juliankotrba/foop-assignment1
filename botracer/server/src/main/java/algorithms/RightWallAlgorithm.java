@@ -5,6 +5,72 @@ import game.GameBoard;
 public class RightWallAlgorithm extends Algorithm {
     @Override
     public Step nextStep(Memory memory, GameBoard gameBoard, int x, int y) {
-        return null;
+
+        if(memory.getSpecial()!=null) {
+            Step step = memory.getSpecial().move(memory,gameBoard,x,y);
+            if(step!=Step.NONE){
+                return step;
+            }
+        }
+
+        Step step = Step.NONE;
+        switch(memory.getLastStep()){
+            case RIGHT:
+                if(gameBoard.getTile(y+1,x).isWalkable()){
+                    step=Step.DOWN;
+                }else if(gameBoard.getTile(y,x+1).isWalkable()) {
+                    step = Step.RIGHT;
+                }else if(gameBoard.getTile(y-1,x).isWalkable()){
+                    step=Step.UP;
+                }else{
+                    step=Step.LEFT;
+                }
+                break;
+            case LEFT:
+                if(gameBoard.getTile(y-1,x).isWalkable()){
+                    step=Step.UP;
+                }else if(gameBoard.getTile(y,x-1).isWalkable()){
+                    step=Step.LEFT;
+                }else if(gameBoard.getTile(y+1,x).isWalkable()){
+                    step=Step.DOWN;
+                }else{
+                    step=Step.RIGHT;
+                }
+                break;
+            case UP:
+                if(gameBoard.getTile(y,x+1).isWalkable()) {
+                    step=Step.RIGHT;
+                }else if(gameBoard.getTile(y-1,x).isWalkable()) {
+                    step=Step.UP;
+                }else if(gameBoard.getTile(y,x-1).isWalkable()) {
+                    step=Step.LEFT;
+                }else{
+                    step=Step.DOWN;
+                }
+                break;
+            case DOWN:
+                if(gameBoard.getTile(y,x-1).isWalkable()) {
+                    step = Step.LEFT;
+                }else if(gameBoard.getTile(y+1,x).isWalkable()){
+                    step=Step.DOWN;
+                }else if(gameBoard.getTile(y,x+1).isWalkable()) {
+                    step=Step.RIGHT;
+                }else{
+                    step=Step.UP;
+                }
+                break;
+            case NONE:
+                if(gameBoard.getTile(y,x+1).isWalkable()) {
+                    step=Step.RIGHT;
+                }else if(gameBoard.getTile(y-1,x).isWalkable()) {
+                    step=Step.UP;
+                }else if(gameBoard.getTile(y,x-1).isWalkable()) {
+                    step=Step.LEFT;
+                }else{
+                    step=Step.DOWN;
+                }
+                break;
+        }
+        return step;
     }
 }

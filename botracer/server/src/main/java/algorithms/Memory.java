@@ -1,6 +1,7 @@
 package algorithms;
 
 
+import algorithms.special.Special;
 import tiles.Tile;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ public class Memory {
 
     private Step lastStep;
     private List<Tile> visited;
+    private Special special;
     public Memory(){
         reset();
     }
@@ -29,5 +31,13 @@ public class Memory {
 
     public boolean wasAlreadyVisited(Tile tile){
         return visited.contains(tile);
+    }
+
+    public Special getSpecial() {
+        return special;
+    }
+
+    public void setSpecial(Special special) {
+        this.special = special;
     }
 }

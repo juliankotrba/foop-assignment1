@@ -2,6 +2,7 @@ package game;
 
 import algorithms.LeftWallAlgorithm;
 import algorithms.RandomAlgorithm;
+import algorithms.RightWallAlgorithm;
 import dto.Position;
 import marks.Mark;
 
@@ -27,7 +28,7 @@ public class Game implements Runnable{
     public void runGame(){
 
         players= new ArrayList<>();
-        players.add(new Player(0,"player1",1,1,new RandomAlgorithm()));
+        players.add(new Player(0,"player1",1,1,new RightWallAlgorithm()));
         while(gameRunning){
             drawBoard();
             System.out.print(players);

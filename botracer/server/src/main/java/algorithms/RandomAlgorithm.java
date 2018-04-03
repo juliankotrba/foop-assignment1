@@ -11,7 +11,12 @@ public class RandomAlgorithm extends Algorithm {
     public Step nextStep(Memory memory, GameBoard gameBoard, int x, int y) {
         List<Step> possiblesteps = new ArrayList<>();
 
-
+        if(memory.getSpecial()!=null) {
+            Step step = memory.getSpecial().move(memory,gameBoard,x,y);
+            if(step!=Step.NONE){
+                return step;
+            }
+        }
         if(gameBoard.getTile(y-1,x).isWalkable()){
             possiblesteps.add(Step.UP);
         }
