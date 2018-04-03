@@ -2,20 +2,26 @@ package game;
 
 import algorithms.RandomAlgorithm;
 import dto.Position;
+import dto.messages.s2c.PlayersChangedMessage;
 import marks.Mark;
+import util.DTOUtil;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Game implements Runnable{
 
+    private final GameBoard gameBoard;
+    private final int movementDelayMillis = 500;
 
     private Boolean gameRunning = true;
     private List<Player> players;
-    private final GameBoard gameBoard;
     private MazeLoader mazeLoader;
+    private Set<ObjectOutputStream> writers;
 
     public Game(String path) throws IOException, URISyntaxException {
         mazeLoader = new MazeLoader();
@@ -23,37 +29,37 @@ public class Game implements Runnable{
         players = new ArrayList<>();
     }
 
-    public void runGame(){
+    public void setWriters(Set<ObjectOutputStream> writers){
+        this.writers = writers;
+    }
 
-        players= new ArrayList<>();
-        players.add(new Player(0,"player1",1,1,new RandomAlgorithm()));
+    /**
+     *
+     */
+    public void runGame() {
+        DTOUtil dtoUtil = new DTOUtil();
         while(gameRunning){
-            drawBoard();
-            System.out.print(players);
+            //drawBoard();
+            //System.out.print(players);
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                Thread.sleep(movementDelayMillis);
 
-            synchronized (gameBoard) {
-                for (Player player : players) {
-                    player.nextStep(gameBoard);
+                synchronized (gameBoard) {
+                    for (Player player : players) {
+                        player.nextStep(gameBoard);
+                    }
+
+                    for (ObjectOutputStream writer : writers) {
+                        writer.writeObject(new PlayersChangedMessage(dtoUtil.convertPlayers(players)));
+                    }
                 }
-            }
-            /*try{
-            for(ObjectOutputStream objectOutputStream:writers){
-                objectOutputStream.writeObject(new GameDataMessage(null));
-            }
-                Thread.sleep(5000);
             } catch (InterruptedException e) {
+                this.gameRunning = false;
+            } catch (IOException e) {
+                // TODO
                 e.printStackTrace();
-            } catch (IOException io){
-
-            }*/
-
+            }
         }
-
     }
 
     public GameBoard getGameBoard() {
@@ -69,6 +75,10 @@ public class Game implements Runnable{
     @Override
     public void run() {
         runGame();
+    }
+
+    public void stop() {
+        this.gameRunning = false;
     }
 
     public Boolean getGameRunning() {

@@ -1,3 +1,5 @@
+package communication;
+
 import dto.messages.Message;
 import dto.messages.s2c.GameStartMessage;
 import game.Game;
@@ -64,7 +66,7 @@ public class ConnectionHandler extends Thread {
                 Message message = null;
                 try {
                     message = (Message) in.readObject();
-                    message.accept(new MessageHandler(this));
+                    message.accept(new MessageHandler(this, game));
 
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();

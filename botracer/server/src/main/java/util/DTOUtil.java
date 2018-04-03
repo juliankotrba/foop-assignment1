@@ -1,3 +1,5 @@
+package util;
+
 import dto.Grid;
 import dto.Position;
 import dto.TileType;

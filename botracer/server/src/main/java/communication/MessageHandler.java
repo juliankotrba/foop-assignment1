@@ -1,3 +1,5 @@
+package communication;
+
 import dto.messages.Message;
 import dto.messages.OnMessageReceivedListener;
 import dto.messages.c2s.ChangeStrategyMessage;
@@ -7,6 +9,7 @@ import dto.messages.c2s.PlayerReadyMessage;
 import dto.messages.s2c.*;
 import game.Game;
 import game.Player;
+import util.DTOUtil;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -15,11 +18,13 @@ public class MessageHandler implements OnMessageReceivedListener {
 
     private DTOUtil dtoUtil;
     private ConnectionHandler connectionHandler;
+    private Game game;
 
 
-    public MessageHandler(ConnectionHandler connectionHandler) {
+    public MessageHandler(ConnectionHandler connectionHandler, Game game) {
         this.dtoUtil = new DTOUtil();
         this.connectionHandler = connectionHandler;
+        this.game = game;
     }
 
 
@@ -69,7 +74,7 @@ public class MessageHandler implements OnMessageReceivedListener {
      * When the server receives a PlayerReadyMessage, all players receive a PlayerReadyServerMessage containing the
      * information, which player set his/her status to ready.
      *
-     * If all players are ready, a GameStartMessage will be sent to all players.
+     * If all players are ready, a GameStartMessage will be sent to all players and the game will start.
      *
      * @param message indicating the ready status of this player
      */
@@ -93,6 +98,9 @@ public class MessageHandler implements OnMessageReceivedListener {
 
         if (allPlayersReady) {
             writeAllPlayers(new GameStartMessage());
+            game.setWriters(ConnectionHandler.getWriters());
+            Thread thread = new Thread(game);
+            thread.start();
         }
     }
 
@@ -128,6 +136,7 @@ public class MessageHandler implements OnMessageReceivedListener {
             if (!player.isOwnedByPlayer()) {
                 player.setName(name);
                 player.setOwnedByPlayer(true);
+                player.setReady(false);
                 playerAllocated = true;
 
                 connectionHandler.setPlayer(player);
