@@ -75,7 +75,9 @@ public class Sprites {
 	}
 	private static final Image[] algorithm = {
 			loadImage("marks/algorithms/a1.png"),
-			loadImage("marks/algorithms/a2.png")
+			loadImage("marks/algorithms/a2.png"),
+			loadImage("marks/algorithms/a3.png"),
+			loadImage("marks/algorithms/a4.png")
 	};
 	public static final Image left = loadImage("marks/left.png");
 	public static final Image right = loadImage("marks/right.png");

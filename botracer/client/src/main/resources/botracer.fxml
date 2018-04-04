@@ -48,54 +48,6 @@
 				  <padding>
 					  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 				  </padding>
-				  <!--<HBox alignment="CENTER_LEFT" spacing="10.0">
-					  <opaqueInsets>
-						  <Insets />
-					  </opaqueInsets>
-					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-					  </padding>
-					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/playerList/bot_cyan.png" />
-					  </ImageView>
-					  <Label text="Player 1" wrapText="true" />
-				  </HBox>
-				  <HBox alignment="CENTER_LEFT" spacing="10.0">
-					  <opaqueInsets>
-						  <Insets />
-					  </opaqueInsets>
-					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-					  </padding>
-					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/playerList/bot_red.png" />
-					  </ImageView>
-					  <Label text="Player 2" wrapText="true" />
-				  </HBox>
-				  <HBox alignment="CENTER_LEFT" spacing="10.0">
-					  <opaqueInsets>
-						  <Insets />
-					  </opaqueInsets>
-					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-					  </padding>
-					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/playerList/bot_yellow.png" />
-					  </ImageView>
-					  <Label text="Player 3" wrapText="true" />
-				  </HBox>
-				  <HBox alignment="CENTER_LEFT" spacing="10.0">
-					  <opaqueInsets>
-						  <Insets />
-					  </opaqueInsets>
-					  <padding>
-						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-					  </padding>
-					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-						  <Image url="@assets/playerList/bot_green.png" />
-					  </ImageView>
-					  <Label text="Player 4" wrapText="true" />
-				  </HBox>-->
 			  </VBox>
 			  <BorderPane style="-fx-background-color: white;" VBox.vgrow="NEVER">
 				  <center>
@@ -171,7 +123,7 @@
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
 						  <Image url="@assets/marks/algorithms/a1.png" />
 					  </ImageView>
-					  <Label text="Left hand rule" wrapText="true" />
+					  <Label text="Random movements" wrapText="true" />
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>
@@ -183,7 +135,31 @@
 					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
 						  <Image url="@assets/marks/algorithms/a2.png" />
 					  </ImageView>
+					  <Label text="Left hand rule" wrapText="true" />
+				  </HBox>
+				  <HBox alignment="CENTER_LEFT" spacing="10.0">
+					  <opaqueInsets>
+						  <Insets />
+					  </opaqueInsets>
+					  <padding>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					  </padding>
+					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+						  <Image url="@assets/marks/algorithms/a3.png" />
+					  </ImageView>
 					  <Label text="Right hand rule" wrapText="true" />
+				  </HBox>
+				  <HBox alignment="CENTER_LEFT" spacing="10.0">
+					  <opaqueInsets>
+						  <Insets />
+					  </opaqueInsets>
+					  <padding>
+						  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					  </padding>
+					  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+						  <Image url="@assets/marks/algorithms/a4.png" />
+					  </ImageView>
+					  <Label text="Smart movements" wrapText="true" />
 				  </HBox>
 				  <HBox alignment="CENTER_LEFT" spacing="10.0">
 					  <opaqueInsets>

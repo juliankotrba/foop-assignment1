@@ -141,7 +141,7 @@ public class GameTile extends StackPane {
 
 		Menu changeAlgorithm = new Menu("Change algorithm");
 
-		String[] algorithms = {"Left hand rule", "Right hand rule"};
+		String[] algorithms = {"Random movements", "Left hand rule", "Right hand rule", "Smart movements"};
 		for (int i = 0; i < algorithms.length; i++) {
 			MenuItem menuItem = new MenuItem(algorithms[i]);
 			menuItem.setGraphic(Sprites.asImageView(Sprites.getAlgorithm(i), 16.0));
