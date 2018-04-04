@@ -12,11 +12,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * gamemap.java
+ * GameMap.java
  * Renders the map of the game
  * @author David Walter
  */
 public class GameMap extends Pane {
+
+	private enum Direction {
+		UP, DOWN, LEFT, RIGHT
+	}
 
 	private final Grid<GameTile> gameTiles;
 	private final Map<Player, PlayerTile> players = new HashMap<>();
@@ -187,8 +191,7 @@ public class GameMap extends Pane {
 		gameTiles.get(mark.getPosition()).drawMark(null);
 	}
 
-}
-
-enum Direction {
-	UP, DOWN, LEFT, RIGHT
+	public void enableContextMenu() {
+		gameTiles.forEach(GameTile::enableContextMenu);
+	}
 }

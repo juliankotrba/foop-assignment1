@@ -1,9 +1,9 @@
 package dto.messages.s2c;
 
-import dto.GameData;
 import dto.Grid;
 import dto.Tile;
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -23,6 +23,11 @@ public class GameDataMessage implements Message<Grid<Tile>>, Serializable {
 
     public GameDataMessage(Grid<Tile> gameBoard) {
         this.gameBoard = gameBoard;
+    }
+
+    @Override
+    public void accept(OnMessageReceivedListener onMessageReceivedListener) {
+        onMessageReceivedListener.onMessageReceived(this);
     }
 
     @Override

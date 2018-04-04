@@ -1,8 +1,11 @@
 package connection;
 
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 import exception.connection.ConnectionException;
 import exception.connection.MessageException;
+import gui.FXMLUIManager;
+import gui.UIManager;
 
 /**
  * Connection
@@ -11,11 +14,10 @@ import exception.connection.MessageException;
  */
 public interface Connection {
     void connect() throws ConnectionException;
-
-    void connectAndListen(OnMessageReceivedListener<Message> onMessageReceivedListener) throws ConnectionException;
+    void setUIManager(UIManager uiManager);
     void disconnect();
     void send(Message message) throws MessageException, ConnectionException;
 
-    void setMessageListener(OnMessageReceivedListener<Message> onMessageReceivedListener);
     boolean isConnected();
+
 }

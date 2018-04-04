@@ -2,14 +2,16 @@ package connection;
 
 import debug.Log;
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 import exception.connection.ConnectionException;
 import exception.connection.MessageException;
 import exception.connection.WriterException;
+import gui.UIManager;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.*;
+import java.util.Properties;
 
 /**
  * Socket connection
@@ -19,9 +21,9 @@ import java.util.*;
 public class SocketConnection implements Connection {
 
     private Socket socket;
+    private MessageReceiver messageReceiver = new MessageReceiver();
     private StreamWriter streamWriter;
     private StreamReader streamReader;
-    private List<OnMessageReceivedListener<Message>> onMessageReceivedListeners;
     private Properties properties;
     private boolean isConnected;
 
@@ -40,7 +42,11 @@ public class SocketConnection implements Connection {
         this.properties = properties;
         this.streamReader = streamReader;
         this.isConnected = false;
-        this.onMessageReceivedListeners = Collections.synchronizedList(new ArrayList<>());
+    }
+
+    @Override
+    public void setUIManager(UIManager uiManager) {
+        messageReceiver.setUIManager(uiManager);
     }
 
     @Override
@@ -63,18 +69,11 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void connectAndListen(OnMessageReceivedListener<Message> onMessageReceivedListener) throws ConnectionException {
-        this.connect();
-        this.setMessageListener(onMessageReceivedListener);
-    }
-
-    @Override
     public void disconnect() {
         this.closeStreamWriter();
         this.closeStreamReader();
         this.closeSocket();
 
-        this.onMessageReceivedListeners.clear();
         this.isConnected = false;
     }
 
@@ -94,13 +93,6 @@ public class SocketConnection implements Connection {
     }
 
     @Override
-    public void setMessageListener(OnMessageReceivedListener<Message> onMessageReceivedListener) {
-        if (this.onMessageReceivedListeners != null) {
-            this.onMessageReceivedListeners.add(onMessageReceivedListener);
-        }
-    }
-
-    @Override
     public boolean isConnected() {
         return this.isConnected;
     }
@@ -114,7 +106,7 @@ public class SocketConnection implements Connection {
 
     private void startListenerThread() {
         Thread messageListenerThread = new Thread(
-                new MessageListener(this.streamReader, this.onMessageReceivedListeners)
+                new MessageListener(this.streamReader, messageReceiver)
         );
 
         messageListenerThread.start();

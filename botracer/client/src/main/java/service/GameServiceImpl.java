@@ -1,38 +1,32 @@
 package service;
 
 import connection.Connection;
-import connection.OnMessageReceivedListener;
 import dto.messages.c2s.PlayerNameMessage;
-import dto.messages.s2c.GameStartMessage;
-import dto.messages.s2c.GameDataMessage;
-import dto.messages.Message;
 import dto.messages.c2s.PlayerReadyMessage;
 import exception.connection.ConnectionException;
 import exception.connection.MessageException;
 import exception.service.ServiceException;
+import gui.UIManager;
 
 /**
  * Implementation of the game service
  *
  * @author Julian Kotrba
  */
-public class GameServiceImpl implements GameService, OnMessageReceivedListener<Message> {
+public class GameServiceImpl implements GameService {
 
     private Connection connection;
 
-    private OnMessageReceivedListener<GameDataMessage> onGameMapReceivedCallback;
-    private OnMessageReceivedListener<GameStartMessage> onGameStartReceivedCallback;
 
     public GameServiceImpl(Connection connection) {
         this.connection = connection;
     }
 
     @Override
-    public void connect(OnMessageReceivedListener<GameDataMessage> callback) throws ServiceException {
-        this.onGameMapReceivedCallback = callback;
-        this.connection.setMessageListener(this);
+    public void connect(UIManager uiManager) throws ServiceException {
 
         try {
+            this.connection.setUIManager(uiManager);
             this.connection.connect();
 
         } catch (ConnectionException e) {
@@ -41,8 +35,7 @@ public class GameServiceImpl implements GameService, OnMessageReceivedListener<M
     }
 
     @Override
-    public void setPlayerReady(OnMessageReceivedListener<GameStartMessage> callback) throws ServiceException {
-        this.onGameStartReceivedCallback = callback;
+    public void setPlayerReady() throws ServiceException {
 
         try {
             this.connection.send(new PlayerReadyMessage());
@@ -62,23 +55,6 @@ public class GameServiceImpl implements GameService, OnMessageReceivedListener<M
             connection.send(new PlayerNameMessage(playerName));
         } catch (MessageException | ConnectionException e) {
             throw new ServiceException("setPlayerName failed", e);
-        }
-    }
-
-    @Override
-    public void onMessageReceived(Message message) {
-        // TODO: Try to avoid instanceof (visitor patter ?) ..
-
-        if (message instanceof GameDataMessage) {
-            if (this.onGameMapReceivedCallback != null) {
-                this.onGameMapReceivedCallback.onMessageReceived((GameDataMessage) message);
-            }
-        }
-
-        if (message instanceof GameStartMessage) {
-            if (this.onGameStartReceivedCallback != null) {
-                this.onGameStartReceivedCallback.onMessageReceived((GameStartMessage) message);
-            }
         }
     }
 }

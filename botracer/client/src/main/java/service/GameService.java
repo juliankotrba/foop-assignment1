@@ -1,9 +1,7 @@
 package service;
 
-import connection.OnMessageReceivedListener;
-import dto.messages.s2c.GameStartMessage;
-import dto.messages.s2c.GameDataMessage;
 import exception.service.ServiceException;
+import gui.UIManager;
 
 /**
  * Game service
@@ -11,8 +9,8 @@ import exception.service.ServiceException;
  * @author  Julian Kotrba
  */
 public interface GameService {
-    void connect(OnMessageReceivedListener<GameDataMessage> listener) throws ServiceException;
-    void setPlayerReady(OnMessageReceivedListener<GameStartMessage> callback) throws ServiceException;
+    void connect(UIManager uiManager) throws ServiceException;
+    void setPlayerReady() throws ServiceException;
     void disconnect();
 
     /**

@@ -1,22 +1,31 @@
 package game;
 
-import algorithms.LeftWallAlgorithm;
 import algorithms.RandomAlgorithm;
+<<<<<<< HEAD
 import algorithms.RightWallAlgorithm;
+=======
+import communication.MessageHandler;
+>>>>>>> dc64f416d95a324d30fa670bc3ad145afee05f72
 import dto.Position;
+import dto.messages.s2c.PlayersChangedMessage;
+import dto.messages.s2c.RemoveMarksMessage;
 import marks.Mark;
+import util.DTOUtil;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Game implements Runnable{
 
+    private final GameBoard gameBoard;
+    private final int movementDelayMillis = 500;
 
     private Boolean gameRunning = true;
     private List<Player> players;
-    private final GameBoard gameBoard;
     private MazeLoader mazeLoader;
 
     public Game(String path) throws IOException, URISyntaxException {
@@ -25,43 +34,58 @@ public class Game implements Runnable{
         players = new ArrayList<>();
     }
 
-    public void runGame(){
 
-        players= new ArrayList<>();
-        players.add(new Player(0,"player1",1,1,new RightWallAlgorithm()));
+    /**
+     * Starts the game.
+     * All players move every {movementsDelayMillis}.
+     * If a player moves on a mark, its effect will affect the player.
+     * If multiple player step on a mark in one round, all these players will gain the effect of the mark.
+     */
+    public void runGame() {
+        DTOUtil dtoUtil = new DTOUtil();
         while(gameRunning){
-            drawBoard();
-            System.out.print(players);
+            //drawBoard();
+            //System.out.print(players);
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                Thread.sleep(movementDelayMillis);
 
-            synchronized (gameBoard) {
-                for (Player player : players) {
-                    player.nextStep(gameBoard);
+                List<dto.Mark> marksToRemove = new ArrayList<>();
+                synchronized (gameBoard) {
+                    for (Player player : players) {
+                        player.nextStep(gameBoard);
+
+                        Mark mark = gameBoard.getTile(player.getHeight(), player.getWidth()).getMark();
+                        if (mark != null) {
+                            mark.enter(player);
+                            marksToRemove.add(new dto.Mark(new Position(player.getWidth(), player.getHeight()), null));
+                        }
+                    }
+
+                    MessageHandler.writeAllPlayers(new PlayersChangedMessage(dtoUtil.convertPlayers(players)));
+                    if (!marksToRemove.isEmpty()) {
+                        MessageHandler.writeAllPlayers(new RemoveMarksMessage(marksToRemove));
+                    }
                 }
-            }
-            /*try{
-            for(ObjectOutputStream objectOutputStream:writers){
-                objectOutputStream.writeObject(new GameDataMessage(null));
-            }
-                Thread.sleep(5000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (IOException io){
-
-            }*/
-
+                this.gameRunning = false;
+            }
         }
-
     }
 
+    /**
+     * @return the current game board
+     */
     public GameBoard getGameBoard() {
         return gameBoard;
     }
 
+    /**
+     * Adds a new mark to the game.
+     *
+     * @param mark which should be added
+     * @param height of the mark
+     * @param width of the mark
+     */
     public void newMark(Mark mark, int height, int width){
         synchronized (gameBoard){
             gameBoard.newMark(mark, height, width);
@@ -73,6 +97,13 @@ public class Game implements Runnable{
         runGame();
     }
 
+    /**
+     * Stops the game.
+     */
+    public void stop() {
+        this.gameRunning = false;
+    }
+
     public Boolean getGameRunning() {
         return gameRunning;
     }
@@ -81,6 +112,9 @@ public class Game implements Runnable{
         this.gameRunning = gameRunning;
     }
 
+    /**
+     * @return all players (and bots) in this game.
+     */
     public List<Player> getPlayers() {
         return players;
     }
@@ -91,20 +125,24 @@ public class Game implements Runnable{
 
     /**
      * Adds a new Player with a generated name.
+     *
+     * @return the added player
      */
-    public void addPlayer() {
-        addPlayer("Player" + (players.size() + 1));
+    public Player addPlayer() {
+        return addPlayer("Bot" + (players.size() + 1));
     }
 
     /**
      * Adds a new Player with {name}.
      *
      * @param name of the player
+     * @return the added player
      */
-    public void addPlayer(String name){
+    public Player addPlayer(String name){
         Position position = mazeLoader.getNewStartingPosition(players, gameBoard);
         Player player = new Player(players.size() + 1, name, position.getHeight(), position.getWidth(), new RandomAlgorithm());
         this.players.add(player);
+        return player;
     }
 
     public void drawBoard(){

@@ -1,6 +1,6 @@
 package dto.messages.s2c;
 
-import dto.Mark;
+import dto.Player;
 import dto.messages.Message;
 import dto.messages.OnMessageReceivedListener;
 
@@ -8,16 +8,14 @@ import java.io.Serializable;
 import java.util.Optional;
 
 /**
- * Message which indicates a mark placement
- *
- * @author David Walter
+ * Message which indicates that {player} is ready.
  */
-public class MarkPlacementMessage implements Message<Mark>, Serializable {
+public class PlayerReadyServerMessage implements Message<Player>, Serializable {
 
-	private Mark mark;
+	private Player player;
 
-	public MarkPlacementMessage(Mark mark) {
-		this.mark = mark;
+	public PlayerReadyServerMessage(Player player) {
+		this.player = player;
 	}
 
 	@Override
@@ -26,7 +24,7 @@ public class MarkPlacementMessage implements Message<Mark>, Serializable {
 	}
 
 	@Override
-	public Optional<Mark> getPayload() {
-		return Optional.of(this.mark);
+	public Optional<Player> getPayload() {
+		return Optional.of(this.player);
 	}
 }

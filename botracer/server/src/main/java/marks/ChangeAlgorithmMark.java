@@ -5,7 +5,11 @@ import game.Player;
 
 public class ChangeAlgorithmMark implements Mark {
 
-    Algorithm algorithm;
+    private Algorithm algorithm;
+
+    public ChangeAlgorithmMark(Algorithm algorithm) {
+        this.algorithm = algorithm;
+    }
 
     @Override
     public void enter(Player player) {

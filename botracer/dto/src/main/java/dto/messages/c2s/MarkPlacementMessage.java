@@ -2,6 +2,7 @@ package dto.messages.c2s;
 
 import dto.Mark;
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -17,6 +18,11 @@ public class MarkPlacementMessage implements Message<Mark>, Serializable {
 
     public MarkPlacementMessage(Mark mark) {
         this.mark = mark;
+    }
+
+    @Override
+    public void accept(OnMessageReceivedListener onMessageReceivedListener) {
+        onMessageReceivedListener.onMessageReceived(this);
     }
 
     @Override

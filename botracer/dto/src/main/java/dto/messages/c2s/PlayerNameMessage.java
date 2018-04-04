@@ -1,6 +1,7 @@
 package dto.messages.c2s;
 
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -18,6 +19,11 @@ public class PlayerNameMessage implements Message<String>, Serializable {
 
     public PlayerNameMessage(String playerName) {
         this.playerName = playerName;
+    }
+
+    @Override
+    public void accept(OnMessageReceivedListener onMessageReceivedListener) {
+        onMessageReceivedListener.onMessageReceived(this);
     }
 
     @Override

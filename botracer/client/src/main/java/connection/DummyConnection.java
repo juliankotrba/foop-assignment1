@@ -1,30 +1,14 @@
 package connection;
 
-import debug.Log;
-import dto.*;
-import dto.algorithms.DfsStrategy;
-import dto.algorithms.MazeSolverStrategy;
-import dto.messages.s2c.GameDataMessage;
-import dto.messages.s2c.GameStartMessage;
-import dto.messages.Message;
-import dto.messages.c2s.PlayerReadyMessage;
-import dto.messages.s2c.PlayersChangedMessage;
-import exception.connection.ConnectionException;
-import gui.MainController;
-import debug.MazeLoader;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Dummy connection for testing purpose
  *
  * @author Julian Kotrba
  */
 // TODO: REFACTOR!
-public class DummyConnection implements Connection {
+//public class DummyConnection implements Connection {
 
-    private OnMessageReceivedListener<Message> onMessageReceivedListener;
+    /*private OnMessageReceivedListener<Message> onMessageReceivedListener;
     private boolean isConnected = false;
     private int playerCount = 0;
     private Grid<Tile> grid;
@@ -33,7 +17,7 @@ public class DummyConnection implements Connection {
     private Player player;
 
     public DummyConnection() {
-        this.grid = MazeLoader.shared.load(MainController.class.getResource("../maze.txt"));
+        this.grid = MazeLoader.shared.load(FXMLUIManager.class.getResource("../maze.txt"));
         this.mazeSolverStrategy = new DfsStrategy(this.grid);
         this.player = new Player(0, new Position(1, 1));
     }
@@ -113,6 +97,6 @@ public class DummyConnection implements Connection {
         Player player = new Player(0, position);
 
         return new GameData(grid, player);
-    }
+    }*/
 
-}
+//}

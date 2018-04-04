@@ -8,6 +8,9 @@ import java.util.Optional;
  * @author Julian Kotrba
  */
 public interface Message<T> {
+
+    void accept(OnMessageReceivedListener onMessageReceivedListener);
+
     Optional<T> getPayload();
 }
 

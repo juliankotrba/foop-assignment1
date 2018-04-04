@@ -1,10 +1,8 @@
 package connection;
 
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 import exception.connection.ReaderException;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Listener for incoming socket messages
@@ -14,11 +12,11 @@ import java.util.Objects;
 public class MessageListener implements Runnable {
 
     private StreamReader streamReader;
-    private List<OnMessageReceivedListener<Message>> onMessageReceivedListeners;
+    private OnMessageReceivedListener onMessageReceivedListener;
 
-    public MessageListener(StreamReader streamReader, List<OnMessageReceivedListener<Message>> onMessageReceivedListeners) {
+    public MessageListener(StreamReader streamReader, OnMessageReceivedListener onMessageReceivedListener) {
         this.streamReader = streamReader;
-        this.onMessageReceivedListeners = onMessageReceivedListeners;
+        this.onMessageReceivedListener = onMessageReceivedListener;
     }
 
     @Override
@@ -27,7 +25,8 @@ public class MessageListener implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 Message message = this.streamReader.read();
-                this.notifyListeners(message);
+                message.accept(onMessageReceivedListener);
+
             } catch (ReaderException e) {
                 // TODO: Proper thread killing
                 Thread.currentThread().interrupt();
@@ -36,12 +35,5 @@ public class MessageListener implements Runnable {
                 System.out.println("Shutting down message listener thread: \n" + e.getLocalizedMessage());
             }
         }
-    }
-
-    private void notifyListeners(Message message) {
-        this.onMessageReceivedListeners
-                .stream()
-                .filter(Objects::nonNull)
-                .forEach(listener -> listener.onMessageReceived(message));
     }
 }

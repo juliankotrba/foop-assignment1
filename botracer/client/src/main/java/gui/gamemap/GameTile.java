@@ -26,7 +26,7 @@ import service.MarkServiceImpl;
  */
 public class GameTile extends StackPane {
 
-	private final MarkService markService = new MarkServiceImpl(SingletonConnectionFactory.getInstance());
+	private static final MarkService markService = new MarkServiceImpl(SingletonConnectionFactory.getInstance());
 
 	private final Tile tile;
 
@@ -51,58 +51,6 @@ public class GameTile extends StackPane {
 
 		if (tile.getType() == TileType.DEFAULT) {
 			background.setImage(Sprites.floor);
-
-			final ContextMenu contextMenu = new ContextMenu();
-
-			MenuItem title = new MenuItem("Place mark on: (" + tile.getX() + ", " + tile.getY() + ")");
-			title.setDisable(true);
-			title.getStyleClass().add("context-menu-title");
-
-			Menu changeAlgorithm = new Menu("Change algorithm");
-
-			String[] algorithms = {"Left hand rule", "Right hand rule"};
-			for (int i = 0; i < algorithms.length; i++) {
-				MenuItem menuItem = new MenuItem(algorithms[i]);
-				menuItem.setGraphic(Sprites.asImageView(Sprites.getAlgorithm(i), 16.0));
-				final int algorithm = i;
-				menuItem.setOnAction(event -> setMark(new Mark(algorithm, tile.getPosition())));
-				changeAlgorithm.getItems().add(menuItem);
-			}
-
-			MenuItem stay = new MenuItem("Stay in area");
-			stay.setGraphic(Sprites.asImageView(Sprites.stay, 16.0));
-			stay.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.STAY_IN_AREA)));
-			MenuItem moveAway = new MenuItem("Move away");
-			moveAway.setGraphic(Sprites.asImageView(Sprites.move_away, 16.0));
-			moveAway.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.MOVE_AWAY_FROM_AREA)));
-
-			Menu turn = new Menu("Turn");
-			MenuItem turnLeft = new MenuItem("Left");
-			turnLeft.setGraphic(Sprites.asImageView(Sprites.left, 16.0));
-			turnLeft.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.TURN_LEFT)));
-			MenuItem turnRight = new MenuItem("Right");
-			turnRight.setGraphic(Sprites.asImageView(Sprites.right, 16.0));
-			turnRight.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.TURN_RIGHT)));
-			turn.getItems().addAll(turnLeft, turnRight);
-
-			MenuItem clear = new MenuItem("Clear memory");
-			clear.setGraphic(Sprites.asImageView(Sprites.clear, 16.0));
-			clear.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.CLEAR_MEMORY)));
-
-			MenuItem remove = new MenuItem("Remove Mark");
-			remove.setOnAction(event -> {
-				Log.debug("Remove Mark");
-				setMark(null);
-			});
-
-			contextMenu.getItems().addAll(title, new SeparatorMenuItem(), stay, moveAway, turn, changeAlgorithm, clear, new SeparatorMenuItem(), remove);
-
-			// Mouse actions
-			setOnMousePressed(event -> contextMenu.show(this, Side.BOTTOM, 0, 0));
-
-			// TODO: find better way to highlight tile
-			setOnMouseEntered(event -> highlight.setStyle(Sprites.highlight));
-			setOnMouseExited(event -> highlight.setStyle(null));
 		} else if (tile.getType() == TileType.EXIT) {
 			background.setImage(Sprites.exit);
 		}
@@ -128,7 +76,6 @@ public class GameTile extends StackPane {
 		background.setFitWidth(tileSize);
 		object.setFitWidth(tileSize);
 		mark.setFitWidth(tileSize);
-		// player.setFitWidth(tileSize);
 
 		highlight.setPrefSize(tileSize, tileSize);
 	}
@@ -181,6 +128,59 @@ public class GameTile extends StackPane {
 				this.mark.setImage(Sprites.clear);
 				break;
 		}
+	}
+
+	public void enableContextMenu() {
+		if (tile.getType() != TileType.DEFAULT) { return; }
+
+		final ContextMenu contextMenu = new ContextMenu();
+
+		MenuItem title = new MenuItem("Place mark on: (" + tile.getX() + ", " + tile.getY() + ")");
+		title.setDisable(true);
+		title.getStyleClass().add("context-menu-title");
+
+		Menu changeAlgorithm = new Menu("Change algorithm");
+
+		String[] algorithms = {"Left hand rule", "Right hand rule"};
+		for (int i = 0; i < algorithms.length; i++) {
+			MenuItem menuItem = new MenuItem(algorithms[i]);
+			menuItem.setGraphic(Sprites.asImageView(Sprites.getAlgorithm(i), 16.0));
+			final int algorithm = i;
+			menuItem.setOnAction(event -> setMark(new Mark(algorithm, tile.getPosition())));
+			changeAlgorithm.getItems().add(menuItem);
+		}
+
+		MenuItem stay = new MenuItem("Stay in area");
+		stay.setGraphic(Sprites.asImageView(Sprites.stay, 16.0));
+		stay.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.STAY_IN_AREA)));
+		MenuItem moveAway = new MenuItem("Move away");
+		moveAway.setGraphic(Sprites.asImageView(Sprites.move_away, 16.0));
+		moveAway.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.MOVE_AWAY_FROM_AREA)));
+
+		Menu turn = new Menu("Turn");
+		MenuItem turnLeft = new MenuItem("Left");
+		turnLeft.setGraphic(Sprites.asImageView(Sprites.left, 16.0));
+		turnLeft.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.TURN_LEFT)));
+		MenuItem turnRight = new MenuItem("Right");
+		turnRight.setGraphic(Sprites.asImageView(Sprites.right, 16.0));
+		turnRight.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.TURN_RIGHT)));
+		turn.getItems().addAll(turnLeft, turnRight);
+
+		MenuItem clear = new MenuItem("Clear memory");
+		clear.setGraphic(Sprites.asImageView(Sprites.clear, 16.0));
+		clear.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.CLEAR_MEMORY)));
+
+		MenuItem remove = new MenuItem("Remove Mark");
+		remove.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.REMOVE)));
+
+		contextMenu.getItems().addAll(title, new SeparatorMenuItem(), stay, moveAway, turn, changeAlgorithm, clear, new SeparatorMenuItem(), remove);
+
+		// Mouse actions
+		setOnMousePressed(event -> contextMenu.show(this, Side.BOTTOM, 0, 0));
+
+		setOnMouseEntered(event -> highlight.setStyle(Sprites.highlight));
+		setOnMouseExited(event -> highlight.setStyle(null));
+		setOnMousePressed(event -> contextMenu.show(this, Side.BOTTOM, 0, 0));
 	}
 
 }

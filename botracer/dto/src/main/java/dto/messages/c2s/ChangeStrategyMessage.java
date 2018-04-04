@@ -2,6 +2,7 @@ package dto.messages.c2s;
 
 import dto.algorithms.MazeSolverStrategy;
 import dto.messages.Message;
+import dto.messages.OnMessageReceivedListener;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -19,6 +20,11 @@ public class ChangeStrategyMessage implements Message<MazeSolverStrategy>, Seria
 
     public ChangeStrategyMessage(MazeSolverStrategy strategy) {
         this.strategy = strategy;
+    }
+
+    @Override
+    public void accept(OnMessageReceivedListener onMessageReceivedListener) {
+        onMessageReceivedListener.onMessageReceived(this);
     }
 
     @Override

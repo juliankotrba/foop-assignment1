@@ -6,14 +6,14 @@ import debug.Debug;
 import debug.Log;
 import debug.MazeLoader;
 import dto.Grid;
+import dto.Mark;
+import dto.Player;
 import dto.Tile;
 import exception.service.ServiceException;
 import gui.gamemap.GameMap;
-import gui.receivers.MarkPlacementReceiver;
-import gui.receivers.NewPlayerReceiver;
-import gui.receivers.PlayersChangedReceiver;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -21,28 +21,26 @@ import javafx.stage.Modality;
 import javafx.stage.Window;
 import service.GameService;
 import service.GameServiceImpl;
-import service.PlayerService;
-import service.PlayerServiceImpl;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
- * MainController.java
+ * FXMLUIManager.java
  * BotRacer controller of the JavaFX window
  *
  * @author David Walter
  */
-public class MainController {
+public class FXMLUIManager implements UIManager {
+
+	private GameMap gameMap;
+	private final Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
 
 	// Services
 	private GameService gameService;
-
-	// Message receivers
-	private PlayersChangedReceiver playersChangedReceiver = new PlayersChangedReceiver();
-	private MarkPlacementReceiver markPlacementReceiver = new MarkPlacementReceiver();
-	private NewPlayerReceiver newPlayerReceiver = new NewPlayerReceiver();
-
-	private GameMap gameMap;
 
 	@FXML
 	private BorderPane mainWindow;
@@ -53,7 +51,6 @@ public class MainController {
 	@FXML
 	private void initialize() {
 		debugMenu.setVisible(Debug.DEBUG);
-		newPlayerReceiver.setPlayerInfo(playerList);
 		Log.debug("initialized");
 	}
 
@@ -83,15 +80,16 @@ public class MainController {
 	private void connect(String playerName) {
 		try {
 			Connection connection = SingletonConnectionFactory.getInstance();
+
 			gameService = new GameServiceImpl(connection);
-			// Connect and load the received map
-			gameService.connect(message -> message.getPayload().ifPresent(this::loadMap));
-			// Send the chosen player name to the server
+            // Connect and load the received map
+			gameService.connect(this);
+            // Send the chosen player name to the server
 			gameService.setPlayerName(playerName);
 
-			PlayerService playerService = new PlayerServiceImpl(connection);
-			playerService.registerForPlayerUpdates(playersChangedReceiver);
-			playerService.registerForNewPlayerUpdates(newPlayerReceiver);
+			Label loadingLabel = new Label("Loading...");
+			loadingLabel.setStyle("-fx-text-fill: #E7E8EB; -fx-font-size: 24pt;");
+			mainWindow.setCenter(loadingLabel);
 		} catch (ServiceException e) {
 			Log.error(e.getMessage());
 
@@ -118,18 +116,18 @@ public class MainController {
 	}
 
 	@FXML
-	private void ready() {
-		if (gameService == null) {
-			return;
-		}
+    private void ready() {
+        if (gameService == null) {
+            return;
+        }
 
-		try {
-			gameService.setPlayerReady(message -> Log.debug("Set player ready"));
-		} catch (ServiceException | NullPointerException e) {
-			Log.error(e.getMessage());
-			Error.show(e.getMessage());
-		}
-	}
+        try {
+            gameService.setPlayerReady();
+        } catch (ServiceException | NullPointerException e) {
+            Log.error(e.getMessage());
+            Error.show(e.getMessage());
+        }
+    }
 
 	@FXML
 	private void close() {
@@ -154,25 +152,79 @@ public class MainController {
 
 	}
 
+	// MARK: - UIManager
+
 	/**
 	 * Loads the map from the Grid to the window
 	 *
 	 * @param grid Grid of Tiles
 	 */
-	private void loadMap(Grid<Tile> grid) {
-		if (grid == null) {
-			return;
-		}
+	public void loadMap(Grid<Tile> grid) {
 		gameMap = new GameMap(grid);
-
-		playersChangedReceiver.setGameMap(gameMap);
-		markPlacementReceiver.setGameMap(gameMap);
-		newPlayerReceiver.setGameMap(gameMap);
-
-		// Load the game map into the window on the FX Thread
-		Platform.runLater(() -> mainWindow.setCenter(gameMap));
+		Platform.runLater(() -> mainWindow.setCenter(gameMap)); // needed because of thrown exception
 	}
 
+	public void loadPlayers(List<Player> players) {
+		players.forEach(this::loadPlayer);
+	}
+
+	/**
+	 * Loads the player info
+	 *
+	 * @param player Player to load
+	 */
+	public void loadPlayer(Player player) {
+		try {
+			PlayerInfo playerInfo = playerInfoMap.get(player);
+			if (playerInfo == null) {
+				playerInfo = PlayerInfo.load();
+				playerInfoMap.put(player, playerInfo);
+				Node node = playerInfo.getNode();
+				Platform.runLater(() -> playerList.getChildren().add(node));
+			}
+
+			playerInfo.setPlayer(player);
+			gameMap.set(player);
+		} catch (IOException e) {
+			Log.error(e.getMessage());
+			Error.show(e.getMessage());
+		}
+	}
+
+	@Override
+	public void setReady(Player player) {
+		PlayerInfo playerInfo = playerInfoMap.get(player);
+		if (playerInfo != null) {
+			playerInfo.setReady(true);
+		}
+	}
+
+	/**
+	 * The game has started
+	 */
+	public void startGame() {
+		if (gameMap == null) { return; }
+		gameMap.enableContextMenu();
+	}
+
+	public void set(List<Player> players) {
+		players.forEach(this::set);
+	}
+
+	public void set(Player player) {
+		if (gameMap == null) { return; }
+		gameMap.set(player);
+	}
+
+	public void set(Mark mark) {
+		if (gameMap == null) { return; }
+		gameMap.set(mark);
+	}
+
+	public void remove(Mark mark) {
+		if (gameMap == null) { return; }
+		gameMap.remove(mark);
+	}
 
 	// MARK: - DEBUG
 
@@ -188,7 +240,7 @@ public class MainController {
 
 	@FXML
 	private void debugLoadMap() {
-		Grid<Tile> grid = MazeLoader.shared.load(MainController.class.getResource("../maze.txt"));
+		Grid<Tile> grid = MazeLoader.shared.load(FXMLUIManager.class.getResource("../maze.txt"));
 		loadMap(grid);
 	}
 
