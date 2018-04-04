@@ -15,7 +15,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Window;
@@ -43,7 +43,7 @@ public class FXMLUIManager implements UIManager {
 	private GameService gameService;
 
 	@FXML
-	private BorderPane mainWindow;
+	private StackPane mainView;
 
 	@FXML
 	private VBox playerList;
@@ -82,14 +82,14 @@ public class FXMLUIManager implements UIManager {
 			Connection connection = SingletonConnectionFactory.getInstance();
 
 			gameService = new GameServiceImpl(connection);
-            // Connect and load the received map
+			// Connect and load the received map
 			gameService.connect(this);
-            // Send the chosen player name to the server
+			// Send the chosen player name to the server
 			gameService.setPlayerName(playerName);
 
 			Label loadingLabel = new Label("Loading...");
 			loadingLabel.setStyle("-fx-text-fill: #E7E8EB; -fx-font-size: 24pt;");
-			mainWindow.setCenter(loadingLabel);
+			mainView.getChildren().add(loadingLabel);
 		} catch (ServiceException e) {
 			Log.error(e.getMessage());
 
@@ -116,18 +116,18 @@ public class FXMLUIManager implements UIManager {
 	}
 
 	@FXML
-    private void ready() {
-        if (gameService == null) {
-            return;
-        }
+	private void ready() {
+		if (gameService == null) {
+			return;
+		}
 
-        try {
-            gameService.setPlayerReady();
-        } catch (ServiceException | NullPointerException e) {
-            Log.error(e.getMessage());
-            Error.show(e.getMessage());
-        }
-    }
+		try {
+			gameService.setPlayerReady();
+		} catch (ServiceException | NullPointerException e) {
+			Log.error(e.getMessage());
+			Error.show(e.getMessage());
+		}
+	}
 
 	@FXML
 	private void close() {
@@ -161,7 +161,14 @@ public class FXMLUIManager implements UIManager {
 	 */
 	public void loadMap(Grid<Tile> grid) {
 		gameMap = new GameMap(grid);
-		Platform.runLater(() -> mainWindow.setCenter(gameMap)); // needed because of thrown exception
+		Platform.runLater(() -> {
+			mainView.getChildren().clear();
+			mainView.getChildren().add(gameMap);
+
+			Label info = new Label("Waiting for everyone to be ready...");
+			info.setStyle("-fx-text-fill: #E7E8EB; -fx-font-size: 24pt;");
+			mainView.getChildren().add(info);
+		});
 	}
 
 	public void loadPlayers(List<Player> players) {
@@ -203,12 +210,30 @@ public class FXMLUIManager implements UIManager {
 	 * The game has started
 	 */
 	public void startGame() {
-		if (gameMap == null) { return; }
+		if (gameMap == null) {
+			return;
+		}
+		Platform.runLater(() -> mainView.getChildren().remove(mainView.getChildren().size() - 1));
 		gameMap.enableContextMenu();
 	}
 
 	public void endGame(List<Player> winners) {
+		gameMap.effects(false);
+		gameMap.setMouseTransparent(true);
+		Platform.runLater(() -> {
+			Label winnersLabel = new Label();
 
+			if (winners.size() == 1) {
+				winnersLabel.setText("'" + winners.get(0).getName() + "'\nhas won the game");
+			} else {
+				StringBuilder builder = new StringBuilder();
+				winners.forEach(player -> builder.append(player.getName()).append("\n"));
+				builder.append("have won the game");
+				winnersLabel.setText(builder.toString());
+			}
+
+			mainView.getChildren().add(winnersLabel);
+		});
 	}
 
 	public void set(List<Player> players) {
@@ -216,17 +241,23 @@ public class FXMLUIManager implements UIManager {
 	}
 
 	public void set(Player player) {
-		if (gameMap == null) { return; }
+		if (gameMap == null) {
+			return;
+		}
 		gameMap.set(player);
 	}
 
 	public void set(Mark mark) {
-		if (gameMap == null) { return; }
+		if (gameMap == null) {
+			return;
+		}
 		gameMap.set(mark);
 	}
 
 	public void remove(Mark mark) {
-		if (gameMap == null) { return; }
+		if (gameMap == null) {
+			return;
+		}
 		gameMap.remove(mark);
 	}
 

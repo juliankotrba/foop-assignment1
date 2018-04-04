@@ -6,6 +6,7 @@ import dto.Mark;
 import dto.Player;
 import dto.Tile;
 import javafx.application.Platform;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.Pane;
 
 import java.util.HashMap;
@@ -39,6 +40,8 @@ public class GameMap extends Pane {
 
 		this.widthProperty().addListener((observable, oldValue, newValue) -> draw());
 		this.heightProperty().addListener((observable, oldValue, newValue) -> draw());
+
+		this.effects(false);
 	}
 
 	/**
@@ -192,6 +195,22 @@ public class GameMap extends Pane {
 	}
 
 	public void enableContextMenu() {
+		this.effects(true);
 		gameTiles.forEach(GameTile::enableContextMenu);
+	}
+
+	public void effects(boolean enabled) {
+		if (enabled) {
+			this.setEffect(null);
+			this.setOpacity(1.0);
+		} else {
+			BoxBlur bb = new BoxBlur();
+			bb.setWidth(11);
+			bb.setHeight(11);
+			bb.setIterations(7);
+			this.setEffect(bb);
+			this.setOpacity(0.5);
+		}
+
 	}
 }

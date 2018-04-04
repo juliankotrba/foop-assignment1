@@ -13,6 +13,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.StackPane?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="800" prefHeight="600.0" prefWidth="800.0" stylesheets="botracer.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.FXMLUIManager">
 	<MenuBar useSystemMenuBar="true">
 		<Menu mnemonicParsing="false" text="Game">
@@ -29,8 +30,12 @@
 			<MenuItem mnemonicParsing="false" onAction="#about" text="About" />
 		</Menu>
 	</MenuBar>
-	<BorderPane fx:id="mainWindow" style="-fx-background-color: #40414B#40414B;" VBox.vgrow="ALWAYS">
-      <right>
+	<BorderPane style="-fx-background-color: #40414B#40414B;" VBox.vgrow="ALWAYS">
+      <center>
+		  <StackPane fx:id="mainView">
+		  </StackPane>
+	  </center>
+		<right>
 		  <VBox minWidth="220.0" prefWidth="220.0" style="-fx-background-color: #E7E8EB#E7E8EB;" BorderPane.alignment="CENTER">
 			  <BorderPane style="-fx-background-color: white;" VBox.vgrow="NEVER">
 				  <center>

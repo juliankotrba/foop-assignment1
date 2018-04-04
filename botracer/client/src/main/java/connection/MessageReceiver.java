@@ -24,11 +24,13 @@ public class MessageReceiver implements OnMessageReceivedListener {
 
 	@Override
 	public void onMessageReceived(GameStartMessage message) {
+		Log.debug("Game has started");
 		uiManager.startGame();
 	}
 
 	@Override
 	public void onMessageReceived(GameEndMessage message) {
+		Log.debug("Game has ended");
 		message.getPayload().ifPresent(uiManager::endGame);
 	}
 
