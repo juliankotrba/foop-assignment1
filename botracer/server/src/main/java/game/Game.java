@@ -9,7 +9,7 @@ import marks.Mark;
 import util.DTOUtil;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,7 @@ public class Game implements Runnable{
         gameBoard = mazeLoader.createGameBoard(path);
         players = new ArrayList<>();
     }
+
 
     /**
      * Starts the game.
