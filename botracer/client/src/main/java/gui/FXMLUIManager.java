@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 import service.GameService;
@@ -35,6 +36,8 @@ import java.util.Optional;
  * @author David Walter
  */
 public class FXMLUIManager implements UIManager {
+
+	private static final String textStyle = "-fx-text-fill: #E7E8EB; -fx-font-size: 24pt;";
 
 	private GameMap gameMap;
 	private final Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
@@ -88,7 +91,7 @@ public class FXMLUIManager implements UIManager {
 			gameService.setPlayerName(playerName);
 
 			Label loadingLabel = new Label("Loading...");
-			loadingLabel.setStyle("-fx-text-fill: #E7E8EB; -fx-font-size: 24pt;");
+			loadingLabel.setStyle(textStyle);
 			mainView.getChildren().add(loadingLabel);
 		} catch (ServiceException e) {
 			Log.error(e.getMessage());
@@ -166,7 +169,7 @@ public class FXMLUIManager implements UIManager {
 			mainView.getChildren().add(gameMap);
 
 			Label info = new Label("Waiting for everyone to be ready...");
-			info.setStyle("-fx-text-fill: #E7E8EB; -fx-font-size: 24pt;");
+			info.setStyle(textStyle);
 			mainView.getChildren().add(info);
 		});
 	}
@@ -222,13 +225,15 @@ public class FXMLUIManager implements UIManager {
 		gameMap.setMouseTransparent(true);
 		Platform.runLater(() -> {
 			Label winnersLabel = new Label();
+			winnersLabel.setTextAlignment(TextAlignment.CENTER);
+			winnersLabel.setStyle(textStyle);
 
 			if (winners.size() == 1) {
-				winnersLabel.setText("'" + winners.get(0).getName() + "'\nhas won the game");
+				winnersLabel.setText("Game Over\n\n'" + winners.get(0).getName() + "'\n\nhas won the game");
 			} else {
-				StringBuilder builder = new StringBuilder();
+				StringBuilder builder = new StringBuilder("Game Over\n\n");
 				winners.forEach(player -> builder.append(player.getName()).append("\n"));
-				builder.append("have won the game");
+				builder.append("\nhave won the game");
 				winnersLabel.setText(builder.toString());
 			}
 
