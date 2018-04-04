@@ -47,12 +47,16 @@ public class MessageReceiver implements OnMessageReceivedListener {
 
 	@Override
 	public void onMessageReceived(PlayerReadyServerMessage message) {
-		// TODO: new player (or myself) set the status to ready
+		Log.debug("Player is now ready");
+		message.getPayload().ifPresent(player -> {
+			uiManager.setReady(player);
+		});
 	}
 
 	@Override
 	public void onMessageReceived(RemoveMarksMessage message) {
-		// TODO: remove mark from game board
+		Log.debug("Remove marks");
+		message.getPayload().ifPresent(marks -> marks.forEach(uiManager::remove));
 	}
 
 	/*

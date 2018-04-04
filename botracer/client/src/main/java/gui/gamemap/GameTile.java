@@ -76,7 +76,6 @@ public class GameTile extends StackPane {
 		background.setFitWidth(tileSize);
 		object.setFitWidth(tileSize);
 		mark.setFitWidth(tileSize);
-		// player.setFitWidth(tileSize);
 
 		highlight.setPrefSize(tileSize, tileSize);
 	}
@@ -172,10 +171,7 @@ public class GameTile extends StackPane {
 		clear.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.CLEAR_MEMORY)));
 
 		MenuItem remove = new MenuItem("Remove Mark");
-		remove.setOnAction(event -> {
-			Log.debug("Remove Mark");
-			setMark(null);
-		});
+		remove.setOnAction(event -> setMark(new Mark(tile.getPosition(), MarkType.REMOVE)));
 
 		contextMenu.getItems().addAll(title, new SeparatorMenuItem(), stay, moveAway, turn, changeAlgorithm, clear, new SeparatorMenuItem(), remove);
 

@@ -11,6 +11,7 @@ public interface UIManager {
 	void loadMap(Grid<Tile> grid);
 	void loadPlayers(List<Player> players);
 	void loadPlayer(Player player);
+	void setReady(Player player);
 
 	void startGame();
 

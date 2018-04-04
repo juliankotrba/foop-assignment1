@@ -18,6 +18,10 @@ import java.util.Map;
  */
 public class GameMap extends Pane {
 
+	private enum Direction {
+		UP, DOWN, LEFT, RIGHT
+	}
+
 	private final Grid<GameTile> gameTiles;
 	private final Map<Player, PlayerTile> players = new HashMap<>();
 
@@ -190,8 +194,4 @@ public class GameMap extends Pane {
 	public void enableContextMenu() {
 		gameTiles.forEach(GameTile::enableContextMenu);
 	}
-}
-
-enum Direction {
-	UP, DOWN, LEFT, RIGHT
 }

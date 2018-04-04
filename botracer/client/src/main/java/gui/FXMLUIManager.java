@@ -88,8 +88,7 @@ public class FXMLUIManager implements UIManager {
 			gameService.setPlayerName(playerName);
 
 			Label loadingLabel = new Label("Loading...");
-			loadingLabel.setStyle("-fx-text-fill: #E7E8EB; " +
-					"-fx-font-size: 24pt;");
+			loadingLabel.setStyle("-fx-text-fill: #E7E8EB; -fx-font-size: 24pt;");
 			mainWindow.setCenter(loadingLabel);
 		} catch (ServiceException e) {
 			Log.error(e.getMessage());
@@ -189,6 +188,14 @@ public class FXMLUIManager implements UIManager {
 		} catch (IOException e) {
 			Log.error(e.getMessage());
 			Error.show(e.getMessage());
+		}
+	}
+
+	@Override
+	public void setReady(Player player) {
+		PlayerInfo playerInfo = playerInfoMap.get(player);
+		if (playerInfo != null) {
+			playerInfo.setReady(true);
 		}
 	}
 
