@@ -1,11 +1,7 @@
 package game;
 
 import algorithms.RandomAlgorithm;
-<<<<<<< HEAD
-import algorithms.RightWallAlgorithm;
-=======
 import communication.MessageHandler;
->>>>>>> dc64f416d95a324d30fa670bc3ad145afee05f72
 import dto.Position;
 import dto.messages.s2c.PlayersChangedMessage;
 import dto.messages.s2c.RemoveMarksMessage;
@@ -13,7 +9,7 @@ import marks.Mark;
 import util.DTOUtil;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
