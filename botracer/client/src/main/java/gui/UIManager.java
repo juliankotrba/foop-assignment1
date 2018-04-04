@@ -14,6 +14,7 @@ public interface UIManager {
 	void setReady(Player player);
 
 	void startGame();
+	void endGame(List<Player> winners);
 
 	void set(List<Player> players);
 	void set(Player player);

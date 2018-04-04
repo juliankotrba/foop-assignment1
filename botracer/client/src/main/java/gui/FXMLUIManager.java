@@ -207,6 +207,10 @@ public class FXMLUIManager implements UIManager {
 		gameMap.enableContextMenu();
 	}
 
+	public void endGame(List<Player> winners) {
+
+	}
+
 	public void set(List<Player> players) {
 		players.forEach(this::set);
 	}

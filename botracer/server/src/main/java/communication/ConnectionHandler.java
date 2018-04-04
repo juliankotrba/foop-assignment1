@@ -74,9 +74,6 @@ public class ConnectionHandler extends Thread {
                 if (message == null) {
                     return;
                 }
-                for (ObjectOutputStream writer : writers) {
-                    writer.writeObject(new GameStartMessage());
-                }
             }
 
         } catch (IOException e) {

@@ -28,6 +28,11 @@ public class MessageReceiver implements OnMessageReceivedListener {
 	}
 
 	@Override
+	public void onMessageReceived(GameEndMessage message) {
+		message.getPayload().ifPresent(uiManager::endGame);
+	}
+
+	@Override
 	public void onMessageReceived(dto.messages.s2c.MarkPlacementMessage message) {
 		Log.verbose("MarkPlacement message received");
 		message.getPayload().ifPresent(uiManager::set);

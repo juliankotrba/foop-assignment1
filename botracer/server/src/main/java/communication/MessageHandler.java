@@ -115,6 +115,11 @@ public class MessageHandler implements OnMessageReceivedListener {
     }
 
     @Override
+    public void onMessageReceived(GameEndMessage message) {
+        // TODO: Send winners to the client
+    }
+
+    @Override
     public void onMessageReceived(GameDataMessage message) { }
 
     @Override

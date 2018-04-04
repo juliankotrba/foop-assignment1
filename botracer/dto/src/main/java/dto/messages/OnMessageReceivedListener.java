@@ -18,6 +18,7 @@ public interface OnMessageReceivedListener {
     void onMessageReceived(PlayerReadyMessage message);
     void onMessageReceived(GameDataMessage message);
     void onMessageReceived(GameStartMessage message);
+    void onMessageReceived(GameEndMessage message);
     void onMessageReceived(dto.messages.s2c.MarkPlacementMessage message);
     void onMessageReceived(NewPlayerMessage message);
     void onMessageReceived(PlayersChangedMessage message);
