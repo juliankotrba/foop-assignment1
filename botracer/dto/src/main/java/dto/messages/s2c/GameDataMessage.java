@@ -1,6 +1,5 @@
 package dto.messages.s2c;
 
-import dto.GameData;
 import dto.Grid;
 import dto.Tile;
 import dto.messages.Message;

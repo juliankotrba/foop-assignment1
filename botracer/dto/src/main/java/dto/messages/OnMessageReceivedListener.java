@@ -6,8 +6,6 @@ import dto.messages.c2s.PlayerNameMessage;
 import dto.messages.c2s.PlayerReadyMessage;
 import dto.messages.s2c.*;
 
-import java.io.IOException;
-
 /**
  * Callback for received message
  *
@@ -24,4 +22,5 @@ public interface OnMessageReceivedListener {
     void onMessageReceived(NewPlayerMessage message);
     void onMessageReceived(PlayersChangedMessage message);
     void onMessageReceived(PlayerReadyServerMessage message);
+    void onMessageReceived(RemoveMarksMessage message);
 }

@@ -1,8 +1,10 @@
 package game;
 
 import algorithms.RandomAlgorithm;
+import communication.MessageHandler;
 import dto.Position;
 import dto.messages.s2c.PlayersChangedMessage;
+import dto.messages.s2c.RemoveMarksMessage;
 import marks.Mark;
 import util.DTOUtil;
 
@@ -21,7 +23,6 @@ public class Game implements Runnable{
     private Boolean gameRunning = true;
     private List<Player> players;
     private MazeLoader mazeLoader;
-    private Set<ObjectOutputStream> writers;
 
     public Game(String path) throws IOException, URISyntaxException {
         mazeLoader = new MazeLoader();
@@ -29,12 +30,11 @@ public class Game implements Runnable{
         players = new ArrayList<>();
     }
 
-    public void setWriters(Set<ObjectOutputStream> writers){
-        this.writers = writers;
-    }
-
     /**
-     *
+     * Starts the game.
+     * All players move every {movementsDelayMillis}.
+     * If a player moves on a mark, its effect will affect the player.
+     * If multiple player step on a mark in one round, all these players will gain the effect of the mark.
      */
     public void runGame() {
         DTOUtil dtoUtil = new DTOUtil();
@@ -44,28 +44,43 @@ public class Game implements Runnable{
             try {
                 Thread.sleep(movementDelayMillis);
 
+                List<dto.Mark> marksToRemove = new ArrayList<>();
                 synchronized (gameBoard) {
                     for (Player player : players) {
                         player.nextStep(gameBoard);
+
+                        Mark mark = gameBoard.getTile(player.getHeight(), player.getWidth()).getMark();
+                        if (mark != null) {
+                            mark.enter(player);
+                            marksToRemove.add(new dto.Mark(new Position(player.getWidth(), player.getHeight()), null));
+                        }
                     }
 
-                    for (ObjectOutputStream writer : writers) {
-                        writer.writeObject(new PlayersChangedMessage(dtoUtil.convertPlayers(players)));
+                    MessageHandler.writeAllPlayers(new PlayersChangedMessage(dtoUtil.convertPlayers(players)));
+                    if (!marksToRemove.isEmpty()) {
+                        MessageHandler.writeAllPlayers(new RemoveMarksMessage(marksToRemove));
                     }
                 }
             } catch (InterruptedException e) {
                 this.gameRunning = false;
-            } catch (IOException e) {
-                // TODO
-                e.printStackTrace();
             }
         }
     }
 
+    /**
+     * @return the current game board
+     */
     public GameBoard getGameBoard() {
         return gameBoard;
     }
 
+    /**
+     * Adds a new mark to the game.
+     *
+     * @param mark which should be added
+     * @param height of the mark
+     * @param width of the mark
+     */
     public void newMark(Mark mark, int height, int width){
         synchronized (gameBoard){
             gameBoard.newMark(mark, height, width);
@@ -77,6 +92,9 @@ public class Game implements Runnable{
         runGame();
     }
 
+    /**
+     * Stops the game.
+     */
     public void stop() {
         this.gameRunning = false;
     }
@@ -89,6 +107,9 @@ public class Game implements Runnable{
         this.gameRunning = gameRunning;
     }
 
+    /**
+     * @return all players (and bots) in this game.
+     */
     public List<Player> getPlayers() {
         return players;
     }

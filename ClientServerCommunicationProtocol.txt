@@ -36,11 +36,9 @@ Client startet
 
         -> Client setzt alle Bots aufs Spielfeld
             (Client: NewPlayerReceiver.onMessageReceived)
-            !! BUG: höchstens 3 Bots werden gesetzt !!
 
         -> Client setzt Namen aller Bots/Spieler in "Players" Lister der UI
             (Client: NewPlayerReceiver.onMessageReceived)
-            !! TODO !!
 
   !! TODO !!
   -> Client schickt PlayerReady Message
@@ -51,3 +49,14 @@ Client startet
 
     -> Wenn alle Player "Ready" sind, schickt Server "GameStartMessage" an alle Clients
         -> Anzeige, dass das Spiel startet wäre nice :)
+
+
+Client setzt ein Mark, sendet c2s.MarkPlacementMessage an Server
+  -> Server sendet s2c.MarkPlacementMessage an alle Clients
+    -> Client zeichnet Mark
+
+!! TODO !!
+Spieler lauft über ein Mark
+  -> Server schickt eine RemoveMarksMessage an alle Clients
+  -> Client entfernt die ensprechenden Marks (TODO)
+  (wenn 2 Spieler in einer Runde auf ein Mark treten, bekommen beide den Effekt)

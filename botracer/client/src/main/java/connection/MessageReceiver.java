@@ -50,6 +50,11 @@ public class MessageReceiver implements OnMessageReceivedListener {
 		// TODO: new player (or myself) set the status to ready
 	}
 
+	@Override
+	public void onMessageReceived(RemoveMarksMessage message) {
+		// TODO: remove mark from game board
+	}
+
 	/*
 	 * Following methods can be left out, because only the server handles these messages.
 	 */

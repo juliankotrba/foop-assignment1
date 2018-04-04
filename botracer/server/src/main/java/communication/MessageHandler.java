@@ -32,9 +32,20 @@ public class MessageHandler implements OnMessageReceivedListener {
     public void onMessageReceived(ChangeStrategyMessage message) {
     }
 
+    /**
+     * Adds a new Mark to the game and sends a s2c.MarkPlacementMessage to all players with the new mark.
+     *
+     * @param message containing the new mark
+     */
     @Override
     public void onMessageReceived(MarkPlacementMessage message) {
+        System.out.println("MarkPlacementMessage received");
 
+        if (message.getPayload().isPresent()) {
+            dto.Mark mark = message.getPayload().get();
+            game.newMark(dtoUtil.convertMarkDto(mark), mark.getPosition().getHeight(), mark.getPosition().getWidth());
+            writeAllPlayers(new dto.messages.s2c.MarkPlacementMessage(mark));
+        }
     }
 
     /**
@@ -98,7 +109,6 @@ public class MessageHandler implements OnMessageReceivedListener {
 
         if (allPlayersReady) {
             writeAllPlayers(new GameStartMessage());
-            game.setWriters(ConnectionHandler.getWriters());
             Thread thread = new Thread(game);
             thread.start();
         }
@@ -121,6 +131,11 @@ public class MessageHandler implements OnMessageReceivedListener {
 
     @Override
     public void onMessageReceived(PlayerReadyServerMessage message) {
+
+    }
+
+    @Override
+    public void onMessageReceived(RemoveMarksMessage message) {
 
     }
 
@@ -155,7 +170,7 @@ public class MessageHandler implements OnMessageReceivedListener {
      *
      * @param message which should be send to all registered players
      */
-    private void writeAllPlayers(Message message) {
+    public static void writeAllPlayers(Message message) {
         try {
             for (ObjectOutputStream writer : ConnectionHandler.getWriters()) {
                 writer.writeObject(message);
