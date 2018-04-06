@@ -38,6 +38,7 @@ public class FXMLUIManager implements UIManager {
 
 	private GameMap gameMap;
 	private final Map<Player, PlayerInfo> playerInfoMap = new HashMap<>();
+	private Player player;
 
 	// Services
 	private GameService gameService;
@@ -165,8 +166,9 @@ public class FXMLUIManager implements UIManager {
 	 */
 	public void load(GameData gameData) {
 		gameMap = new GameMap(gameData.getGameMap());
-		Sprites.setHighlight(gameData.getPlayer().getNumber());
-		loadPlayer(gameData.getPlayer(), true);
+		player = gameData.getPlayer();
+		Sprites.setHighlight(player.getNumber());
+		loadPlayer(player, true);
 
 		Platform.runLater(() -> {
 			mainView.getChildren().clear();
@@ -231,22 +233,28 @@ public class FXMLUIManager implements UIManager {
 	public void endGame(List<Player> winners) {
 		gameMap.effects(false);
 		gameMap.setMouseTransparent(true);
-		Platform.runLater(() -> {
-			Label winnersLabel = new Label();
-			winnersLabel.setTextAlignment(TextAlignment.CENTER);
-			winnersLabel.setStyle(textStyle);
 
-			if (winners.size() == 1) {
-				winnersLabel.setText("'" + winners.get(0).getName() + "'\n\nhas won the game");
+		Label winnersLabel = new Label();
+		winnersLabel.setTextAlignment(TextAlignment.CENTER);
+		winnersLabel.setStyle(textStyle);
+
+		boolean playerIsWinner = winners.contains(player);
+		String gameOver = playerIsWinner ? "You win!" : "Game Over";
+
+		if (winners.size() == 1) {
+			if (playerIsWinner) {
+				winnersLabel.setText(gameOver);
 			} else {
-				StringBuilder builder = new StringBuilder();
-				winners.forEach(player -> builder.append("'").append(player.getName()).append("'\n"));
-				builder.append("\nhave won the game");
-				winnersLabel.setText(builder.toString());
+				winnersLabel.setText(gameOver + "\n\n'" + winners.get(0).getName() + "'\n\nhas won the game");
 			}
+		} else {
+			StringBuilder builder = new StringBuilder(gameOver);
+			winners.forEach(player -> builder.append("\n\n'").append(player.getName()).append("'\n"));
+			builder.append("\nhave won the game");
+			winnersLabel.setText(builder.toString());
+		}
 
-			mainView.getChildren().add(winnersLabel);
-		});
+		Platform.runLater(() -> mainView.getChildren().add(winnersLabel));
 	}
 
 	public void set(List<Player> players) {
@@ -289,7 +297,7 @@ public class FXMLUIManager implements UIManager {
 	@FXML
 	private void debugLoadMap() {
 		Grid<Tile> grid = MazeLoader.shared.load(FXMLUIManager.class.getResource("../maze.txt"));
-		GameData data = new GameData(grid, new Player(0, "Test", new Position(1,1)));
+		GameData data = new GameData(grid, new Player(0, "Test", new Position(1, 1)));
 		load(data);
 	}
 
