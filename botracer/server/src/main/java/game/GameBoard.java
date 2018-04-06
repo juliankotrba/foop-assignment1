@@ -1,5 +1,6 @@
 package game;
 
+import dto.Position;
 import marks.Mark;
 import tiles.Tile;
 
@@ -8,7 +9,7 @@ public class GameBoard {
     private static GameBoard gameBoard;
 
     private Tile[][] tiles;
-    private Integer[] goalLocation;
+    private Position goalLocation;
 
 
 
@@ -37,11 +38,11 @@ public class GameBoard {
         this.tiles = tiles;
     }
 
-    public Integer[] getGoalLocation() {
+    public Position getGoalLocation() {
         return goalLocation;
     }
 
-    public void setGoalLocation(Integer[] goalLocation) {
+    public void setGoalLocation(Position goalLocation) {
         this.goalLocation = goalLocation;
     }
 

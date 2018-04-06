@@ -56,6 +56,12 @@ public class DTOUtil {
         return new dto.Player(player.getId(), player.getName(), position);
     }
 
+    /**
+     * Converts a dto.Mark to a server.Mark.
+     *
+     * @param mark which should be converted
+     * @return the converted mark or null, if the mark has the type REMOVE
+     */
     public Mark convertMarkDto(dto.Mark mark) {
         Mark markNew = null;
 
@@ -83,6 +89,9 @@ public class DTOUtil {
             case CHANGE_ALGORITHM:
                 // TODO: changeAlgorithmMark needs to know which algorithm should be used
                 markNew = new ChangeAlgorithmMark(new RandomAlgorithm());
+                break;
+
+            case REMOVE:
                 break;
         }
         return  markNew;

@@ -108,8 +108,10 @@ public class GameMap extends Pane {
 	private void draw() {
 		if (calculateTileSizes()) {
 			Log.debug("Draw map [tileSize: " + tileSize + ", offset: (x: " + offsetX + ", y: " + offsetY + ")]");
-			players.values().forEach(playerTile -> playerTile.draw(tileSize, offsetX, offsetY));
-			gameTiles.forEach(gameTile -> gameTile.draw(tileSize, offsetX, offsetY));
+			Platform.runLater(() -> {
+				players.values().forEach(playerTile -> playerTile.draw(tileSize, offsetX, offsetY));
+				gameTiles.forEach(gameTile -> gameTile.draw(tileSize, offsetX, offsetY));
+			});
 		}
 	}
 

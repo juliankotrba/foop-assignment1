@@ -15,8 +15,8 @@ import java.util.TimerTask;
 
 public class Debug {
 
-	public static final boolean DEBUG = true;
-	public static final boolean VERBOSE = false;
+	//public static final boolean DEBUG = true;
+	//public static final boolean VERBOSE = false;
 
 	public static void player(GameMap gameMap) {
 		Dialog<Pair<Integer, Position>> dialog = new Dialog<>();

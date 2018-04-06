@@ -105,7 +105,7 @@ public class MazeLoader {
 
                     case 'E':
                         tiles[i][j] = new GoalTile();
-                        gameBoard.setGoalLocation(new Integer[]{i, j});
+                        gameBoard.setGoalLocation(new Position(j, i));
                         break;
                 }
             }
@@ -126,10 +126,10 @@ public class MazeLoader {
      * @param gameBoardWidth widht of the game board (y-axis)
      * @return a map containting the boundaries of the placeable area (incl). (containing keys: 'bottom', 'top', 'left', 'right')
      */
-    private Map<String, Integer> calculatePlaceableArea (Integer[] goal, int gameBoardHeight, int gameBoardWidth) {
+    private Map<String, Integer> calculatePlaceableArea (Position goal, int gameBoardHeight, int gameBoardWidth) {
         Map<String, Integer> placeableArea = new HashMap<>();
-        int goalX = goal[1];
-        int goalY = goal[0];
+        int goalWidth = goal.getWidth();
+        int goalHeight = goal.getHeight();
 
         int boundaryLeft = 1;
         int boundaryRight = gameBoardWidth - 2;
@@ -140,19 +140,19 @@ public class MazeLoader {
         int widthOfOneThirdOfGameBoard = Math.round(gameBoardWidth / 3);
 
         // goal is on top of the game board
-        if (goalY == 0) {
+        if (goalHeight == 0) {
             boundaryTop = heightOfOneThirdOfGameBoard;
         }
         // goal is at bottom of the game board
-        else if (goalY == gameBoardHeight - 1) {
+        else if (goalHeight == gameBoardHeight - 1) {
             boundaryBottom = gameBoardHeight - heightOfOneThirdOfGameBoard;
         }
         // goal is on the left side of the game board
-        else if (goalX == 0) {
+        else if (goalWidth == 0) {
             boundaryLeft = widthOfOneThirdOfGameBoard;
         }
         // goal is on the right side of the game board
-        else if (goalX == gameBoardWidth - 1) {
+        else if (goalWidth == gameBoardWidth - 1) {
             boundaryRight = gameBoardWidth - widthOfOneThirdOfGameBoard;
         }
 

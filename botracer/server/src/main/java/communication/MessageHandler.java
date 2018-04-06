@@ -1,5 +1,8 @@
 package communication;
 
+import debug.Log;
+import dto.Mark;
+import dto.MarkType;
 import dto.messages.Message;
 import dto.messages.OnMessageReceivedListener;
 import dto.messages.c2s.ChangeStrategyMessage;
@@ -13,6 +16,8 @@ import util.DTOUtil;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Collection;
+import java.util.Collections;
 
 public class MessageHandler implements OnMessageReceivedListener {
 
@@ -34,17 +39,24 @@ public class MessageHandler implements OnMessageReceivedListener {
 
     /**
      * Adds a new Mark to the game and sends a s2c.MarkPlacementMessage to all players with the new mark.
+     * If the sent mark is from type REMOVE, a RemoveMarksMessage will be send to all players.
      *
      * @param message containing the new mark
      */
     @Override
     public void onMessageReceived(MarkPlacementMessage message) {
-        System.out.println("MarkPlacementMessage received");
+        Log.debug(String.format("MarkPlacementMessage received from player '%s'", connectionHandler.getPlayer().getName()));
 
         if (message.getPayload().isPresent()) {
             dto.Mark mark = message.getPayload().get();
-            game.newMark(dtoUtil.convertMarkDto(mark), mark.getPosition().getHeight(), mark.getPosition().getWidth());
-            writeAllPlayers(new dto.messages.s2c.MarkPlacementMessage(mark));
+
+            if (mark.getMarkType() == MarkType.REMOVE) {
+                game.getGameBoard().getTile(mark.getPosition().getHeight(), mark.getPosition().getWidth()).setMark(null);
+                writeAllPlayers(new RemoveMarksMessage(Collections.singletonList(mark)));
+            } else {
+                game.newMark(dtoUtil.convertMarkDto(mark), mark.getPosition().getHeight(), mark.getPosition().getWidth());
+                writeAllPlayers(new dto.messages.s2c.MarkPlacementMessage(mark));
+            }
         }
     }
 
@@ -56,8 +68,6 @@ public class MessageHandler implements OnMessageReceivedListener {
      */
     @Override
     public void onMessageReceived(PlayerNameMessage message) {
-        System.out.println("PlayerNameMessage received");
-
         String name = "NoNameSet";
         if (message.getPayload().isPresent()) {
             name = message.getPayload().get();
@@ -70,9 +80,12 @@ public class MessageHandler implements OnMessageReceivedListener {
             connectionHandler.getOut().writeObject(new GameDataMessage(dtoUtil.convertGameBoard(game.getGameBoard())));
 
             // allocate the player to a bot and send the updated player list to all players
-            allocatePlayerToBot(name);
-            NewPlayerMessage newPlayerMessage = new NewPlayerMessage(dtoUtil.convertPlayers(game.getPlayers()));
-            writeAllPlayers(newPlayerMessage);
+            Player player = allocatePlayerToBot(name);
+            connectionHandler.setPlayer(player);
+
+            writeAllPlayers(new NewPlayerMessage(dtoUtil.convertPlayers(game.getPlayers())));
+
+            Log.debug(String.format("PlayerNameMessage received from player '%s'", name));
         } catch (IOException e) {
             // TODO: error handling
             e.printStackTrace();
@@ -91,13 +104,13 @@ public class MessageHandler implements OnMessageReceivedListener {
      */
     @Override
     public void onMessageReceived(PlayerReadyMessage message) {
-        System.out.println("PlayerreadyMessage received");
+        Log.debug(String.format("PlayerReadyMessage received from player '%s'", connectionHandler.getPlayer().getName()));
 
         writeAllPlayers(new PlayerReadyServerMessage(dtoUtil.convertPlayer(connectionHandler.getPlayer())));
 
         boolean allPlayersReady = true;
         for (Player player : connectionHandler.getGame().getPlayers()) {
-            if (player.equals(connectionHandler.getPlayer())) {
+            if (player.getId() == connectionHandler.getPlayer().getId()) {
                 player.setReady(true);
                 break;
             }
@@ -108,6 +121,7 @@ public class MessageHandler implements OnMessageReceivedListener {
         }
 
         if (allPlayersReady) {
+            Log.debug("All Players ready, game starts.");
             writeAllPlayers(new GameStartMessage());
             Thread thread = new Thread(game);
             thread.start();
@@ -116,7 +130,7 @@ public class MessageHandler implements OnMessageReceivedListener {
 
     @Override
     public void onMessageReceived(GameEndMessage message) {
-        // TODO: Send winners to the client
+
     }
 
     @Override
@@ -149,25 +163,19 @@ public class MessageHandler implements OnMessageReceivedListener {
      * Allocates the player to a bot, or add a new bot if all initial bots are already allocated.
      *
      * @param name of the player
+     * @return allocated player
      */
-    private void allocatePlayerToBot(String name){
-        boolean playerAllocated = false;
+    private Player allocatePlayerToBot(String name){
         for (Player player : connectionHandler.getGame().getPlayers()) {
             if (!player.isOwnedByPlayer()) {
                 player.setName(name);
                 player.setOwnedByPlayer(true);
                 player.setReady(false);
-                playerAllocated = true;
 
-                connectionHandler.setPlayer(player);
-                break;
+                return player;
             }
         }
-
-        if (!playerAllocated) {
-            Player player = connectionHandler.getGame().addPlayer(name);
-            connectionHandler.setPlayer(player);
-        }
+        return connectionHandler.getGame().addPlayer(name);
     }
 
     /**

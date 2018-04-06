@@ -53,14 +53,15 @@ Client startet
 Client setzt ein Mark, sendet c2s.MarkPlacementMessage an Server
   -> Server sendet s2c.MarkPlacementMessage an alle Clients
     -> Client zeichnet Mark
+  -> MarkType = REMOVE: Server sendet RemoveMarksMessage an alle Clients
 
-!! TODO !!
+
 Spieler lauft über ein Mark
   -> Server schickt eine RemoveMarksMessage an alle Clients
   -> Client entfernt die ensprechenden Marks
   (wenn 2 Spieler in einer Runde auf ein Mark treten, bekommen beide den Effekt)
   
-!! TODO !!
+
 Ein oder mehrere Spieler sind im Ziel
   -> Server schickt eine GameEndMessage an alle Clients
   -> Client zeigt die Game Over Message an

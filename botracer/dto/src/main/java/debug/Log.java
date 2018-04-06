@@ -8,14 +8,17 @@ package debug;
  */
 public class Log {
 
+	public static final boolean DEBUG = true;
+	public static final boolean VERBOSE = false;
+
 	public static void verbose(String message) {
-		if (Debug.VERBOSE) {
+		if (VERBOSE) {
 			System.out.println(message(message));
 		}
 	}
 
 	public static void debug(String message) {
-		if (Debug.DEBUG) {
+		if (DEBUG) {
 			System.out.println(message(message));
 		}
 	}

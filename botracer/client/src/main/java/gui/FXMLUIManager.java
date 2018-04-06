@@ -53,7 +53,7 @@ public class FXMLUIManager implements UIManager {
 
 	@FXML
 	private void initialize() {
-		debugMenu.setVisible(Debug.DEBUG);
+		debugMenu.setVisible(Log.DEBUG);
 		Log.debug("initialized");
 	}
 

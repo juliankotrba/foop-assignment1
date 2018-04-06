@@ -2,7 +2,9 @@ package game;
 
 import algorithms.RandomAlgorithm;
 import communication.MessageHandler;
+import debug.Log;
 import dto.Position;
+import dto.messages.s2c.GameEndMessage;
 import dto.messages.s2c.PlayersChangedMessage;
 import dto.messages.s2c.RemoveMarksMessage;
 import marks.Mark;
@@ -18,7 +20,7 @@ import java.util.Set;
 public class Game implements Runnable{
 
     private final GameBoard gameBoard;
-    private final int movementDelayMillis = 500;
+    private static final int movementDelayMillis = 500;
 
     private Boolean gameRunning = true;
     private List<Player> players;
@@ -37,19 +39,29 @@ public class Game implements Runnable{
      * If a player moves on a mark, its effect will affect the player.
      * If multiple player step on a mark in one round, all these players will gain the effect of the mark.
      */
-    public void runGame() {
+    private void runGame() {
+        Log.debug("Game started.");
         DTOUtil dtoUtil = new DTOUtil();
         while(gameRunning){
-            //drawBoard();
-            //System.out.print(players);
+
             try {
                 Thread.sleep(movementDelayMillis);
 
                 List<dto.Mark> marksToRemove = new ArrayList<>();
+                List<dto.Player> playersInGoal = new ArrayList<>();
                 synchronized (gameBoard) {
                     for (Player player : players) {
                         player.nextStep(gameBoard);
 
+                        // player reached the goal
+                        if (gameBoard.getGoalLocation().getHeight() == player.getHeight() &&
+                                gameBoard.getGoalLocation().getWidth() == player.getWidth()) {
+
+                            playersInGoal.add(dtoUtil.convertPlayer(player));
+                            continue;
+                        }
+
+                        // player stepped on a mark
                         Mark mark = gameBoard.getTile(player.getHeight(), player.getWidth()).getMark();
                         if (mark != null) {
                             mark.enter(player);
@@ -58,7 +70,16 @@ public class Game implements Runnable{
                     }
 
                     MessageHandler.writeAllPlayers(new PlayersChangedMessage(dtoUtil.convertPlayers(players)));
+
+                    if (!playersInGoal.isEmpty()) {
+                        MessageHandler.writeAllPlayers(new GameEndMessage(playersInGoal));
+                        stop();
+                        continue;
+                    }
                     if (!marksToRemove.isEmpty()) {
+                        for (dto.Mark mark : marksToRemove) {
+                            gameBoard.getTile(mark.getPosition().getHeight(), mark.getPosition().getWidth()).setMark(null);
+                        }
                         MessageHandler.writeAllPlayers(new RemoveMarksMessage(marksToRemove));
                     }
                 }
@@ -66,6 +87,7 @@ public class Game implements Runnable{
                 this.gameRunning = false;
             }
         }
+        Log.debug("Game stopped");
     }
 
     /**
