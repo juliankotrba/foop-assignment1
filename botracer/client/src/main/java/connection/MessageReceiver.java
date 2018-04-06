@@ -36,7 +36,7 @@ public class MessageReceiver implements OnMessageReceivedListener {
 
 	@Override
 	public void onMessageReceived(dto.messages.s2c.MarkPlacementMessage message) {
-		Log.debug("MarkPlacement message received");
+		Log.verbose("MarkPlacement message received");
 		message.getPayload().ifPresent(uiManager::set);
 	}
 
@@ -48,7 +48,7 @@ public class MessageReceiver implements OnMessageReceivedListener {
 
 	@Override
 	public void onMessageReceived(PlayersChangedMessage message) {
-		Log.debug("PlayersChanged message received");
+		Log.verbose("PlayersChanged message received");
 		message.getPayload().ifPresent(uiManager::set);
 	}
 
@@ -62,7 +62,7 @@ public class MessageReceiver implements OnMessageReceivedListener {
 
 	@Override
 	public void onMessageReceived(RemoveMarksMessage message) {
-		Log.debug("Remove marks");
+		Log.verbose("Remove marks");
 		message.getPayload().ifPresent(marks -> marks.forEach(uiManager::remove));
 	}
 
