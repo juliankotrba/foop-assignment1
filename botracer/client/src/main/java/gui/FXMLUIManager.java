@@ -74,6 +74,7 @@ public class FXMLUIManager implements UIManager {
 
 		Optional<String> result = dialog.showAndWait();
 
+		result.
 		result.ifPresent(this::connect);
 	}
 
@@ -229,10 +230,10 @@ public class FXMLUIManager implements UIManager {
 			winnersLabel.setStyle(textStyle);
 
 			if (winners.size() == 1) {
-				winnersLabel.setText("Game Over\n\n'" + winners.get(0).getName() + "'\n\nhas won the game");
+				winnersLabel.setText("'" + winners.get(0).getName() + "'\n\nhas won the game");
 			} else {
-				StringBuilder builder = new StringBuilder("Game Over\n\n");
-				winners.forEach(player -> builder.append(player.getName()).append("\n"));
+				StringBuilder builder = new StringBuilder();
+				winners.forEach(player -> builder.append("'").append(player.getName()).append("'\n"));
 				builder.append("\nhave won the game");
 				winnersLabel.setText(builder.toString());
 			}

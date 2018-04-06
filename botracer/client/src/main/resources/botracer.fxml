@@ -30,7 +30,7 @@
 			<MenuItem mnemonicParsing="false" onAction="#about" text="About" />
 		</Menu>
 	</MenuBar>
-	<BorderPane style="-fx-background-color: #40414B#40414B;" VBox.vgrow="ALWAYS">
+	<BorderPane style="-fx-background-color: #40414B;" VBox.vgrow="ALWAYS">
       <center>
 		  <StackPane fx:id="mainView">
 		  </StackPane>
