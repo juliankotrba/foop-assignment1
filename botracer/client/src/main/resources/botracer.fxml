@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600" minWidth="800" prefHeight="600.0" prefWidth="800.0" stylesheets="botracer.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.FXMLUIManager">
-	<MenuBar maxHeight="28.5" minHeight="28.5" prefHeight="28.5" useSystemMenuBar="false" VBox.vgrow="NEVER">
+	<MenuBar useSystemMenuBar="true" VBox.vgrow="NEVER">
 		<Menu mnemonicParsing="false" text="Game">
 			<MenuItem mnemonicParsing="false" onAction="#ready" text="Ready" />
 			<SeparatorMenuItem />

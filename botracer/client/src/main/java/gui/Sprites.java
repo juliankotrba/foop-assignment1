@@ -64,8 +64,6 @@ public class Sprites {
 			loadImage("players/bot_brown.png")
 	};
 
-	public static final Image playerBackground = loadImage("players/you.png");
-
 	// Maze
 	public static final Image floor = loadImage("floor.png");
 	public static final Image exit = loadImage("exit.png");
