@@ -52,7 +52,7 @@ public class PlayerInfo {
 			name.setText(player.getName());
 			image.setImage(Sprites.getPlayer(player.getNumber()));
 			if (isPlayer) {
-				node.setStyle("-fx-border-color: #6543E9; -fx-border-width: 1px");
+				node.setStyle("-fx-border-color: " + Sprites.playerColor);
 			}
 		});
 	}

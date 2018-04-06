@@ -4,8 +4,10 @@ import dto.Player;
 import dto.Position;
 import gui.Sprites;
 import javafx.animation.TranslateTransition;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 /**
@@ -17,7 +19,6 @@ class PlayerTile extends StackPane {
 
 	private final TranslateTransition transition = new TranslateTransition(Duration.seconds(0.25), this);
 
-	private final ImageView background = new ImageView();
 	private final ImageView player = new ImageView();
 	private Position position;
 
@@ -28,11 +29,8 @@ class PlayerTile extends StackPane {
 	PlayerTile(Player player, boolean isPlayer) {
 		this.position = player.getPosition();
 
-		background.setPreserveRatio(true);
-
 		if (isPlayer) {
-			getChildren().add(background);
-			background.setImage(Sprites.playerBackground);
+			this.player.setEffect(new DropShadow(16, Color.valueOf(Sprites.playerColor)));
 		}
 
 		this.player.setPreserveRatio(true);
@@ -58,7 +56,6 @@ class PlayerTile extends StackPane {
 		this.offsetY = offsetY;
 
 		setPrefSize(tileSize, tileSize);
-		background.setFitWidth(tileSize);
 		player.setFitWidth(tileSize);
 
 		double x = getX() * tileSize + offsetX;

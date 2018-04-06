@@ -165,9 +165,8 @@ public class FXMLUIManager implements UIManager {
 	 */
 	public void load(GameData gameData) {
 		gameMap = new GameMap(gameData.getGameMap());
-		loadPlayer(gameData.getPlayer(), true);
-
 		Sprites.setHighlight(gameData.getPlayer().getNumber());
+		loadPlayer(gameData.getPlayer(), true);
 
 		Platform.runLater(() -> {
 			mainView.getChildren().clear();

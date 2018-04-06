@@ -15,10 +15,12 @@ public class Sprites {
 	public static final Image icon = loadImage("botracer.png");
 
 	public static String highlight = "-fx-background-color: rgba(0, 152, 211, 0.5)";
+	public static String playerColor = "rgb(0, 152, 211)";
 
 	public static void setHighlight(int number) {
 		if (number > 0 && number <= highlights.length) {
 			highlight = highlights[number - 1];
+			playerColor = playerColors[number - 1];
 		}
 	}
 
@@ -31,6 +33,16 @@ public class Sprites {
 			"-fx-background-color: rgba(225, 45, 160, 0.5)", // pink
 			"-fx-background-color: rgba(231, 232, 235, 0.5)", // white
 			"-fx-background-color: rgba(211, 141, 94, 0.5)" // brown
+	};
+
+	private static final String[] playerColors = {
+			"rgb(44, 182, 177)", // cyan
+			"rgb(222, 58, 59)", // red
+			"rgb(254, 249, 53)", // yellow
+			"rgb(81, 195, 79)", // green
+			"rgb(225, 45, 160)", // pink
+			"rgb(231, 232, 235)", // white
+			"rgb(211, 141, 94)" // brown
 	};
 
 	// Players
