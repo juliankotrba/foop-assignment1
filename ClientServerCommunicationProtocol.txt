@@ -3,65 +3,45 @@
 ---
 Server startet
     -> erstellt 4 initiale Bots und weißt ihnen Koordinaten auf Map zu
-        (Server: main (muss ev. wieder auskommentiert werden)
-
     -> wartet auf Client-Nachrichten
-        (Server: ConnectionHandler)
 
 ---
 Client startet
     -> verbindet sich mit dem Server
-        (Client: MainController.connect(playerName))
-
     -> Client schickt PlayerNameMessage mit eingegebenen Namen an Server
-        (Client: MainController.connect(pN) -> GameService.setPlayerName(pN))
-
         -> Server setzt Namen
-        (Server: ConnectionHandler.handlePlayerNameMessage)
-
-        -> Server schickt GameDataMessage (= Grid<Tile> map) an Client
-            (Server: ConnectionHandler.handlePlayerNameMessage)
-
+        -> Server schickt GameDataMessage (GameMap und Player) an Client
             -> Client ladet Map
-                (Client:
 
         -> Server weist Spieler einem Bot zu
-            (Server: ConnectionHandler.handlePlayerNameMessage)
-
             -> nächster initialer Bot wenn noch nicht alle bereits zugewiesen
             -> andernfalls, neuer Bot wird erstellt und einem Platz zugewiesen
 
         -> Server schickt NewPlayerMessage an ALLE Clients
-            (Server: ConnectionHandler.handlePlayerNameMessage)
-
         -> Client setzt alle Bots aufs Spielfeld
-            (Client: NewPlayerReceiver.onMessageReceived)
-
         -> Client setzt Namen aller Bots/Spieler in "Players" Lister der UI
-            (Client: NewPlayerReceiver.onMessageReceived)
-
-  -> Client schickt PlayerReady Message
+---
+Client schickt PlayerReady Message
     -> Server schickt allen Clients "PlayerReadyServerMessage" mit besagtem Player
-    -> Client aktualisiert die Playerliste (sollte angezeigt werden, wer ready ist und wer nicht)
-        -> ev. dto.Player und DTOUtil.convertPlayer (Server) anpassen?
+    -> Client aktualisiert die Playerliste
     -> Bots haben immer den Status "Ready"
 
     -> Wenn alle Player "Ready" sind, schickt Server "GameStartMessage" an alle Clients
         -> Anzeige, dass das Spiel startet wäre nice :)
 
-
+---
 Client setzt ein Mark, sendet c2s.MarkPlacementMessage an Server
   -> Server sendet s2c.MarkPlacementMessage an alle Clients
     -> Client zeichnet Mark
   -> MarkType = REMOVE: Server sendet RemoveMarksMessage an alle Clients
 
-
+---
 Spieler lauft über ein Mark
   -> Server schickt eine RemoveMarksMessage an alle Clients
   -> Client entfernt die ensprechenden Marks
   (wenn 2 Spieler in einer Runde auf ein Mark treten, bekommen beide den Effekt)
   
-
+---
 Ein oder mehrere Spieler sind im Ziel
   -> Server schickt eine GameEndMessage an alle Clients
   -> Client zeigt die Game Over Message an

@@ -42,14 +42,6 @@ class PlayerTile extends StackPane {
 		getChildren().add(this.player);
 	}
 
-	PlayerTile(Player player) {
-		this(player, false);
-		if (player.getNumber() == 1) {
-			getChildren().add(0, background);
-			background.setImage(Sprites.playerBackground);
-		}
-	}
-
 	private int getX() {
 		return position.getWidth();
 	}

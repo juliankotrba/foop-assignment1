@@ -47,10 +47,13 @@ public class PlayerInfo {
 		return node;
 	}
 
-	public void setPlayer(Player player) {
+	public void setPlayer(Player player, boolean isPlayer) {
 		Platform.runLater(() -> {
 			name.setText(player.getName());
 			image.setImage(Sprites.getPlayer(player.getNumber()));
+			if (isPlayer) {
+				node.setStyle("-fx-border-color: #6543E9; -fx-border-width: 1px");
+			}
 		});
 	}
 

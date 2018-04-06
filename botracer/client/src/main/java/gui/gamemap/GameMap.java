@@ -157,17 +157,21 @@ public class GameMap extends Pane {
 		return null;
 	}
 
+	public void set(Player player) {
+		set(player, false);
+	}
+
 	/**
 	 * Moves the player to its location
 	 *
 	 * @param player Player to add/move on the map
 	 */
-	public void set(Player player) {
+	public void set(Player player, boolean isPlayer) {
 		PlayerTile playerTile = players.get(player);
 
 		if (playerTile == null) {
 			Log.debug("Add new player '" + player.getName() + "' to map");
-			playerTile = new PlayerTile(player);
+			playerTile = new PlayerTile(player, isPlayer);
 			players.put(player, playerTile);
 			// change was necessary because of an exception
 			PlayerTile finalPlayerTile = playerTile;

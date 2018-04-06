@@ -19,7 +19,8 @@ public class MessageReceiver implements OnMessageReceivedListener {
 
 	@Override
 	public void onMessageReceived(GameDataMessage message) {
-		message.getPayload().ifPresent(uiManager::loadMap);
+		Log.debug("GameData received");
+		message.getPayload().ifPresent(uiManager::load);
 	}
 
 	@Override
@@ -55,9 +56,7 @@ public class MessageReceiver implements OnMessageReceivedListener {
 	@Override
 	public void onMessageReceived(PlayerReadyServerMessage message) {
 		Log.debug("Player is now ready");
-		message.getPayload().ifPresent(player -> {
-			uiManager.setReady(player);
-		});
+		message.getPayload().ifPresent(uiManager::setReady);
 	}
 
 	@Override

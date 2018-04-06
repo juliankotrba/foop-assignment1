@@ -1,16 +1,13 @@
 package gui;
 
-import dto.Grid;
-import dto.Mark;
-import dto.Player;
-import dto.Tile;
+import dto.*;
 
 import java.util.List;
 
 public interface UIManager {
-	void loadMap(Grid<Tile> grid);
+	void load(GameData gameData);
 	void loadPlayers(List<Player> players);
-	void loadPlayer(Player player);
+	void loadPlayer(Player player, boolean isPlayer);
 	void setReady(Player player);
 
 	void startGame();

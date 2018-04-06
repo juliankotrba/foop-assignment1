@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 /**
  * Sprites.java
  * Access the sprites of the game
+ *
  * @author David Walter
  */
 public class Sprites {
@@ -16,8 +17,8 @@ public class Sprites {
 	public static String highlight = "-fx-background-color: rgba(0, 152, 211, 0.5)";
 
 	public static void setHighlight(int number) {
-		if (number >= 0 && number < highlights.length) {
-			highlight = highlights[number];
+		if (number > 0 && number <= highlights.length) {
+			highlight = highlights[number - 1];
 		}
 	}
 
@@ -34,9 +35,8 @@ public class Sprites {
 
 	// Players
 	public static Image getPlayer(int number) {
-		number -= 1;
-		if (number >= 0 && number < player.length) {
-			return player[number];
+		if (number > 0 && number <= player.length) {
+			return player[number - 1];
 		}
 
 		return null;
@@ -68,6 +68,7 @@ public class Sprites {
 	// Marks
 	public static final Image stay = loadImage("marks/stay.png");
 	public static final Image move_away = loadImage("marks/move_away.png");
+
 	public static Image getAlgorithm(int index) {
 		if (index > 0 && index < algorithm.length) {
 			return algorithm[index];
@@ -75,6 +76,7 @@ public class Sprites {
 
 		return algorithm[0];
 	}
+
 	private static final Image[] algorithm = {
 			loadImage("marks/algorithms/a1.png"),
 			loadImage("marks/algorithms/a2.png"),

@@ -5,10 +5,7 @@ import connection.SingletonConnectionFactory;
 import debug.Debug;
 import debug.Log;
 import debug.MazeLoader;
-import dto.Grid;
-import dto.Mark;
-import dto.Player;
-import dto.Tile;
+import dto.*;
 import exception.service.ServiceException;
 import gui.gamemap.GameMap;
 import javafx.application.Platform;
@@ -164,10 +161,14 @@ public class FXMLUIManager implements UIManager {
 	/**
 	 * Loads the map from the Grid to the window
 	 *
-	 * @param grid Grid of Tiles
+	 * @param gameData GameData
 	 */
-	public void loadMap(Grid<Tile> grid) {
-		gameMap = new GameMap(grid);
+	public void load(GameData gameData) {
+		gameMap = new GameMap(gameData.getGameMap());
+		loadPlayer(gameData.getPlayer(), true);
+
+		Sprites.setHighlight(gameData.getPlayer().getNumber());
+
 		Platform.runLater(() -> {
 			mainView.getChildren().clear();
 			mainView.getChildren().add(gameMap);
@@ -182,12 +183,16 @@ public class FXMLUIManager implements UIManager {
 		players.forEach(this::loadPlayer);
 	}
 
+	private void loadPlayer(Player player) {
+		loadPlayer(player, false);
+	}
+
 	/**
 	 * Loads the player info
 	 *
 	 * @param player Player to load
 	 */
-	public void loadPlayer(Player player) {
+	public void loadPlayer(Player player, boolean isPlayer) {
 		try {
 			PlayerInfo playerInfo = playerInfoMap.get(player);
 			if (playerInfo == null) {
@@ -197,8 +202,8 @@ public class FXMLUIManager implements UIManager {
 				Platform.runLater(() -> playerList.getChildren().add(node));
 			}
 
-			playerInfo.setPlayer(player);
-			gameMap.set(player);
+			playerInfo.setPlayer(player, isPlayer);
+			gameMap.set(player, isPlayer);
 		} catch (IOException e) {
 			Log.error(e.getMessage());
 			Error.show(e.getMessage());
@@ -285,7 +290,8 @@ public class FXMLUIManager implements UIManager {
 	@FXML
 	private void debugLoadMap() {
 		Grid<Tile> grid = MazeLoader.shared.load(FXMLUIManager.class.getResource("../maze.txt"));
-		loadMap(grid);
+		GameData data = new GameData(grid, new Player(0, "Test", new Position(1,1)));
+		load(data);
 	}
 
 	@FXML
