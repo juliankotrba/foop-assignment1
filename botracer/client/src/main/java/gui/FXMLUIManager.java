@@ -74,8 +74,11 @@ public class FXMLUIManager implements UIManager {
 
 		Optional<String> result = dialog.showAndWait();
 
-		result.
-		result.ifPresent(this::connect);
+		if (result.isPresent()) {
+			connect(result.get());
+		} else {
+			Platform.exit();
+		}
 	}
 
 	/**

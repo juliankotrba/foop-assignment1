@@ -5,7 +5,7 @@ import dto.Position;
 import gui.Sprites;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 /**
@@ -13,10 +13,11 @@ import javafx.util.Duration;
  * Manages the movement of players on the map
  * @author David Walter
  */
-class PlayerTile extends Pane {
+class PlayerTile extends StackPane {
 
 	private final TranslateTransition transition = new TranslateTransition(Duration.seconds(0.25), this);
 
+	private final ImageView background = new ImageView();
 	private final ImageView player = new ImageView();
 	private Position position;
 
@@ -24,13 +25,29 @@ class PlayerTile extends Pane {
 	private double offsetX;
 	private double offsetY;
 
-	PlayerTile(Player player) {
+	PlayerTile(Player player, boolean isPlayer) {
 		this.position = player.getPosition();
+
+		background.setPreserveRatio(true);
+
+		if (isPlayer) {
+			getChildren().add(background);
+			background.setImage(Sprites.playerBackground);
+		}
+
 		this.player.setPreserveRatio(true);
 		this.player.setImage(Sprites.getPlayer(player.getNumber()));
 
 		setMouseTransparent(true);
 		getChildren().add(this.player);
+	}
+
+	PlayerTile(Player player) {
+		this(player, false);
+		if (player.getNumber() == 1) {
+			getChildren().add(0, background);
+			background.setImage(Sprites.playerBackground);
+		}
 	}
 
 	private int getX() {
@@ -49,6 +66,7 @@ class PlayerTile extends Pane {
 		this.offsetY = offsetY;
 
 		setPrefSize(tileSize, tileSize);
+		background.setFitWidth(tileSize);
 		player.setFitWidth(tileSize);
 
 		double x = getX() * tileSize + offsetX;
