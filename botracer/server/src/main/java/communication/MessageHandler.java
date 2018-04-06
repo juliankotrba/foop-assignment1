@@ -1,7 +1,7 @@
 package communication;
 
 import debug.Log;
-import dto.Mark;
+import dto.GameData;
 import dto.MarkType;
 import dto.messages.Message;
 import dto.messages.OnMessageReceivedListener;
@@ -16,7 +16,6 @@ import util.DTOUtil;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.Collection;
 import java.util.Collections;
 
 public class MessageHandler implements OnMessageReceivedListener {
@@ -76,13 +75,13 @@ public class MessageHandler implements OnMessageReceivedListener {
         try {
             Game game = connectionHandler.getGame();
 
-            // send the game board to the player
-            connectionHandler.getOut().writeObject(new GameDataMessage(dtoUtil.convertGameBoard(game.getGameBoard())));
-
             // allocate the player to a bot and send the updated player list to all players
             Player player = allocatePlayerToBot(name);
             connectionHandler.setPlayer(player);
 
+            // send the game data to the player
+            GameData gameData = new GameData(dtoUtil.convertGameBoard(game.getGameBoard()), dtoUtil.convertPlayer(player));
+            connectionHandler.getOut().writeObject(new GameDataMessage(gameData));
             writeAllPlayers(new NewPlayerMessage(dtoUtil.convertPlayers(game.getPlayers())));
 
             Log.debug(String.format("PlayerNameMessage received from player '%s'", name));
@@ -112,7 +111,6 @@ public class MessageHandler implements OnMessageReceivedListener {
         for (Player player : connectionHandler.getGame().getPlayers()) {
             if (player.getId() == connectionHandler.getPlayer().getId()) {
                 player.setReady(true);
-                break;
             }
 
             if (!player.isReady()) {

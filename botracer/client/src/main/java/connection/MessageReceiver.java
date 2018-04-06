@@ -19,7 +19,7 @@ public class MessageReceiver implements OnMessageReceivedListener {
 
 	@Override
 	public void onMessageReceived(GameDataMessage message) {
-		message.getPayload().ifPresent(uiManager::loadMap);
+		message.getPayload().ifPresent(gameData -> uiManager.loadMap(gameData.getGameMap()));
 	}
 
 	@Override
