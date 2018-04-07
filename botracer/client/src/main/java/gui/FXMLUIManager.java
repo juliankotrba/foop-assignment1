@@ -2,7 +2,6 @@ package gui;
 
 import connection.Connection;
 import connection.SingletonConnectionFactory;
-import debug.Debug;
 import debug.Log;
 import debug.MazeLoader;
 import dto.*;
@@ -51,7 +50,6 @@ public class FXMLUIManager implements UIManager {
 
 	@FXML
 	private void initialize() {
-		debugMenu.setVisible(Log.DEBUG);
 		Log.debug("initialized");
 	}
 
@@ -108,7 +106,7 @@ public class FXMLUIManager implements UIManager {
 			ButtonType retry = new ButtonType("Retry");
 			ButtonType exit = new ButtonType("Exit", ButtonBar.ButtonData.CANCEL_CLOSE);
 			alert.getButtonTypes().clear();
-			alert.getButtonTypes().addAll(retry, exit);
+			alert.getButtonTypes().add(exit);
 
 			Optional<ButtonType> result = alert.showAndWait();
 
@@ -154,7 +152,6 @@ public class FXMLUIManager implements UIManager {
 		alert.getButtonTypes().setAll(close);
 
 		alert.showAndWait();
-
 	}
 
 	// MARK: - UIManager
@@ -180,10 +177,20 @@ public class FXMLUIManager implements UIManager {
 		});
 	}
 
+	/**
+	 * Loads players to display them in the UI
+	 *
+	 * @param players Players to load
+	 */
 	public void loadPlayers(List<Player> players) {
 		players.forEach(this::loadPlayer);
 	}
 
+	/**
+	 * Loads a player to display them in the UI
+	 *
+	 * @param player Player that is not the clients player
+	 */
 	private void loadPlayer(Player player) {
 		loadPlayer(player, false);
 	}
@@ -203,19 +210,26 @@ public class FXMLUIManager implements UIManager {
 				Platform.runLater(() -> playerList.getChildren().add(node));
 			}
 
-			playerInfo.setPlayer(player, isPlayer);
-			gameMap.set(player, isPlayer);
+			final PlayerInfo info = playerInfo;
+			Platform.runLater(() -> {
+				info.setPlayer(player, isPlayer);
+				gameMap.set(player, isPlayer);
+			});
 		} catch (IOException e) {
 			Log.error(e.getMessage());
 			Error.show(e.getMessage());
 		}
 	}
 
-	@Override
+	/**
+	 * Marks the player as ready
+	 *
+	 * @param player Player to be marked as ready
+	 */
 	public void setReady(Player player) {
 		PlayerInfo playerInfo = playerInfoMap.get(player);
 		if (playerInfo != null) {
-			playerInfo.setReady(true);
+			playerInfo.setReady();
 		}
 	}
 
@@ -226,13 +240,18 @@ public class FXMLUIManager implements UIManager {
 		if (gameMap == null) {
 			return;
 		}
+		// Removes the "Waiting for other Players" hint
 		Platform.runLater(() -> mainView.getChildren().remove(mainView.getChildren().size() - 1));
-		gameMap.enableContextMenu();
+		gameMap.start();
 	}
 
+	/**
+	 * The game has ended
+	 *
+	 * @param winners List of winners
+	 */
 	public void endGame(List<Player> winners) {
-		gameMap.effects(false);
-		gameMap.setMouseTransparent(true);
+		gameMap.end();
 
 		Label winnersLabel = new Label();
 		winnersLabel.setTextAlignment(TextAlignment.CENTER);
@@ -257,10 +276,20 @@ public class FXMLUIManager implements UIManager {
 		Platform.runLater(() -> mainView.getChildren().add(winnersLabel));
 	}
 
+	/**
+	 * Adds players to the GameMap
+	 *
+	 * @param players List of Players
+	 */
 	public void set(List<Player> players) {
 		players.forEach(this::set);
 	}
 
+	/**
+	 * Adds a player to the GameMap
+	 *
+	 * @param player Player to add
+	 */
 	public void set(Player player) {
 		if (gameMap == null) {
 			return;
@@ -268,6 +297,11 @@ public class FXMLUIManager implements UIManager {
 		gameMap.set(player);
 	}
 
+	/**
+	 * Adds a Mark to the GameMap
+	 *
+	 * @param mark Mark to add
+	 */
 	public void set(Mark mark) {
 		if (gameMap == null) {
 			return;
@@ -275,38 +309,16 @@ public class FXMLUIManager implements UIManager {
 		gameMap.set(mark);
 	}
 
+	/**
+	 * Removes a Mark to the GameMap
+	 *
+	 * @param mark Mark to remove
+	 */
 	public void remove(Mark mark) {
 		if (gameMap == null) {
 			return;
 		}
 		gameMap.remove(mark);
-	}
-
-	// MARK: - DEBUG
-
-	@FXML
-	private Menu debugMenu;
-
-	private Debug debug;
-
-	@FXML
-	private void debugPlayer() {
-		Debug.player(gameMap);
-	}
-
-	@FXML
-	private void debugLoadMap() {
-		Grid<Tile> grid = MazeLoader.shared.load(FXMLUIManager.class.getResource("../maze.txt"));
-		GameData data = new GameData(grid, new Player(0, "Test", new Position(1, 1)));
-		load(data);
-	}
-
-	@FXML
-	private void debugAnimation() {
-		if (debug == null) {
-			debug = new Debug(gameMap);
-		}
-		debug.addMoves();
 	}
 
 }

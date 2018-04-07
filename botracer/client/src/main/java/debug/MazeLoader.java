@@ -16,20 +16,26 @@ import java.util.List;
 /**
  * MazeLoader.java
  * Loads a Maze from a file
- * @author  David Walter
+ *
+ * @author David Walter
  */
 public class MazeLoader {
 
 	public static final MazeLoader shared = new MazeLoader();
 
-	private MazeLoader() {}
+	private MazeLoader() {
+	}
 
 	/**
+	 * Loads a maze from the URL
+	 *
 	 * @param url location of the maze
 	 * @return Grid<Tile> representation of the maze
 	 */
 	public Grid<Tile> load(URL url) {
-		if (url == null) { return null; }
+		if (url == null) {
+			return null;
+		}
 		try {
 			return load(new File(url.toURI()).getAbsolutePath());
 		} catch (URISyntaxException e) {
@@ -40,6 +46,8 @@ public class MazeLoader {
 	}
 
 	/**
+	 * Loads a maze from the path
+	 *
 	 * @param path location of the maze
 	 * @return Grid<Tile> representation of the maze
 	 */

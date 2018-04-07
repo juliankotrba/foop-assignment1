@@ -15,6 +15,7 @@ import java.util.Map;
 /**
  * GameMap.java
  * Renders the map of the game
+ *
  * @author David Walter
  */
 public class GameMap extends Pane {
@@ -24,14 +25,14 @@ public class GameMap extends Pane {
 	}
 
 	private final Grid<GameTile> gameTiles;
-	private final Map<Player, PlayerTile> players = new HashMap<>();
+	private final Map<Player, PlayerTile> players;
 
-	private double tileSize = 0;
-	private double offsetX = 0;
-	private double offsetY = 0;
+	private final Frame frame;
 
 	public GameMap(Grid<Tile> maze) {
 		gameTiles = new Grid<>(maze.getWidth(), maze.getHeight());
+		players = new HashMap<>();
+		frame = new Frame();
 
 		Log.debug("Loading map");
 		maze.forEach(this::load);
@@ -41,7 +42,7 @@ public class GameMap extends Pane {
 		this.widthProperty().addListener((observable, oldValue, newValue) -> draw());
 		this.heightProperty().addListener((observable, oldValue, newValue) -> draw());
 
-		this.effects(false);
+		effects(false);
 	}
 
 	/**
@@ -61,6 +62,7 @@ public class GameMap extends Pane {
 	 * @param gameTile GameTile to render
 	 */
 	private void render(GameTile gameTile) {
+		// Only render walls
 		if (!gameTile.isWall()) {
 			return;
 		}
@@ -78,10 +80,11 @@ public class GameMap extends Pane {
 
 
 	/**
-	 * Calculates the tile size and their offset based on the view size
-	 * @return true if sizes changed, false if not
+	 * Calculates the frame based on the view size
+	 *
+	 * @return true if layout is needed, false if not
 	 */
-	private boolean calculateTileSizes() {
+	private boolean checkNeedsLayout() {
 		double tileSizeW = this.widthProperty().doubleValue() / gameTiles.getWidth();
 		double tileSizeH = this.heightProperty().doubleValue() / gameTiles.getHeight();
 
@@ -90,13 +93,13 @@ public class GameMap extends Pane {
 		}
 
 		if (tileSizeH < tileSizeW) {
-			tileSize = tileSizeH;
-			offsetX = (this.widthProperty().doubleValue() - tileSize * gameTiles.getWidth()) / 2;
-			offsetY = 0;
+			frame.setSize(tileSizeH);
+			frame.setOffsetX((this.widthProperty().doubleValue() - frame.getSize() * gameTiles.getWidth()) / 2);
+			frame.setOffsetY(0);
 		} else {
-			tileSize = tileSizeW;
-			offsetX = 0;
-			offsetY = (this.heightProperty().doubleValue() - tileSize * gameTiles.getHeight()) / 2;
+			frame.setSize(tileSizeW);
+			frame.setOffsetX(0);
+			frame.setOffsetY((this.heightProperty().doubleValue() - frame.getSize() * gameTiles.getHeight()) / 2);
 		}
 
 		return true;
@@ -106,11 +109,12 @@ public class GameMap extends Pane {
 	 * Resize and center the game map based on container size
 	 */
 	private void draw() {
-		if (calculateTileSizes()) {
-			Log.debug("Draw map [tileSize: " + tileSize + ", offset: (x: " + offsetX + ", y: " + offsetY + ")]");
+		// Checks if the frame has changed
+		if (checkNeedsLayout()) {
+			Log.debug("Draw map [" + frame + "]");
 			Platform.runLater(() -> {
-				players.values().forEach(playerTile -> playerTile.draw(tileSize, offsetX, offsetY));
-				gameTiles.forEach(gameTile -> gameTile.draw(tileSize, offsetX, offsetY));
+				players.values().forEach(playerTile -> playerTile.draw(frame));
+				gameTiles.forEach(gameTile -> gameTile.draw(frame));
 			});
 		}
 	}
@@ -174,9 +178,8 @@ public class GameMap extends Pane {
 			playerTile = new PlayerTile(player, isPlayer);
 			players.put(player, playerTile);
 			// change was necessary because of an exception
-			PlayerTile finalPlayerTile = playerTile;
-			Platform.runLater(() -> getChildren().add(finalPlayerTile));
-			playerTile.draw(tileSize, offsetX, offsetY);
+			getChildren().add(playerTile);
+			playerTile.draw(frame);
 		} else {
 			playerTile.move(player.getPosition());
 		}
@@ -200,12 +203,29 @@ public class GameMap extends Pane {
 		gameTiles.get(mark.getPosition()).drawMark(null);
 	}
 
-	public void enableContextMenu() {
+	/**
+	 * Puts the GameMap into a playable state
+	 */
+	public void start() {
+		this.setMouseTransparent(false);
 		this.effects(true);
 		gameTiles.forEach(GameTile::enableContextMenu);
 	}
 
-	public void effects(boolean enabled) {
+	/**
+	 * Puts the GameMap into a non-playable state
+	 */
+	public void end() {
+		this.setMouseTransparent(true);
+		this.effects(false);
+	}
+
+	/**
+	 * Adds or Removes a blur effect
+	 *
+	 * @param enabled true enables the effect, false disables the effect
+	 */
+	private void effects(boolean enabled) {
 		if (enabled) {
 			this.setEffect(null);
 			this.setOpacity(1.0);

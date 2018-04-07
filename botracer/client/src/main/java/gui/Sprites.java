@@ -17,7 +17,7 @@ public class Sprites {
 	public static String highlight = "-fx-background-color: rgba(0, 152, 211, 0.5)";
 	public static String playerColor = "rgb(0, 152, 211)";
 
-	public static void setHighlight(int number) {
+	static void setHighlight(int number) {
 		if (number > 0 && number <= highlights.length) {
 			highlight = highlights[number - 1];
 			playerColor = playerColors[number - 1];

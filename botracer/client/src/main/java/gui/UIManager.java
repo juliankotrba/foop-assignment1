@@ -4,6 +4,11 @@ import dto.*;
 
 import java.util.List;
 
+/**
+ * UIManager.java
+ *
+ * @author David Walter
+ */
 public interface UIManager {
 	void load(GameData gameData);
 	void loadPlayers(List<Player> players);

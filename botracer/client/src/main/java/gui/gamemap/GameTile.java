@@ -21,19 +21,19 @@ import service.MarkServiceImpl;
 
 /**
  * GameTile.java
- * Tile on the game map
+ * Frame on the game map
  * @author David Walter
  */
 public class GameTile extends StackPane {
 
 	private static final MarkService markService = new MarkServiceImpl(SingletonConnectionFactory.getInstance());
 
-	private final Tile tile;
-
 	private final ImageView background = new ImageView();
 	private final ImageView object = new ImageView();
 	private final ImageView mark = new ImageView();
 	private final Pane highlight = new Pane();
+
+	private final Tile tile;
 
 	GameTile(Tile tile) {
 		this.tile = tile;
@@ -58,51 +58,53 @@ public class GameTile extends StackPane {
 
 	// MARK: - Getter
 
-	public int getX() {
+	int getX() {
 		return tile.getX();
 	}
 
-	public int getY() {
+	int getY() {
 		return tile.getY();
 	}
 
 	// MARK: - draw
 
-	public void draw(double tileSize, double offsetX, double offsetY) {
-		setPrefSize(tileSize, tileSize);
-		this.setTranslateX(getX() * tileSize + offsetX);
-		this.setTranslateY(getY() * tileSize + offsetY);
+	/**
+	 * Draw the Tile with the provided data from Frame
+	 * @param frame Frame where this is drawn
+	 */
+	void draw(Frame frame) {
+		double size = frame.getSize();
 
-		background.setFitWidth(tileSize);
-		object.setFitWidth(tileSize);
-		mark.setFitWidth(tileSize);
+		setPrefSize(size, size);
+		this.setTranslateX(getX() * size + frame.getOffsetX());
+		this.setTranslateY(getY() * size + frame.getOffsetY());
 
-		highlight.setPrefSize(tileSize, tileSize);
+		background.setFitWidth(size);
+		object.setFitWidth(size);
+		mark.setFitWidth(size);
+
+		highlight.setPrefSize(size, size);
 	}
 
-	public void drawBorder(boolean front) {
+	void drawBorder(boolean front) {
 		object.setImage(front ? Sprites.border_front : Sprites.border_top);
 	}
 
-	public void drawShadow(boolean front, boolean last) {
+	void drawShadow(boolean front, boolean last) {
 		object.setImage(front ? Sprites.shadow_front : (last ? Sprites.shadow_last : Sprites.shadow_top));
 	}
 
-	public boolean isWall() {
+	boolean isWall() {
 		return tile.getType() == TileType.WALL;
 	}
 
 	// MARK: - interaction
 
-	private void setMark(Mark mark) {
-		try {
-			markService.placeMark(mark);
-		} catch (ServiceException e) {
-			Log.error(e.getMessage());
-		}
-	}
-
-	public void drawMark(Mark mark) {
+	/**
+	 * Draws a mark on the GameTile
+	 * @param mark Mark to draw, removes the mark if null
+	 */
+	void drawMark(Mark mark) {
 		if (mark == null) {
 			this.mark.setImage(null);
 			return;
@@ -130,7 +132,10 @@ public class GameTile extends StackPane {
 		}
 	}
 
-	public void enableContextMenu() {
+	/**
+	 * Adds a context menu to the GameTile to enable player interaction
+	 */
+	void enableContextMenu() {
 		if (tile.getType() != TileType.DEFAULT) { return; }
 
 		final ContextMenu contextMenu = new ContextMenu();
@@ -183,4 +188,15 @@ public class GameTile extends StackPane {
 		setOnMousePressed(event -> contextMenu.show(this, Side.BOTTOM, 0, 0));
 	}
 
+	/**
+	 * Sends an add request for a mark on the GameTile's position
+	 * @param mark Mark to send to the server
+	 */
+	private void setMark(Mark mark) {
+		try {
+			markService.placeMark(mark);
+		} catch (ServiceException e) {
+			Log.error(e.getMessage());
+		}
+	}
 }

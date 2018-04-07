@@ -22,9 +22,7 @@ class PlayerTile extends StackPane {
 	private final ImageView player = new ImageView();
 	private Position position;
 
-	private double tileSize;
-	private double offsetX;
-	private double offsetY;
+	private Frame frame = new Frame();
 
 	PlayerTile(Player player, boolean isPlayer) {
 		this.position = player.getPosition();
@@ -50,16 +48,20 @@ class PlayerTile extends StackPane {
 
 	// MARK: - draw
 
-	public void draw(double tileSize, double offsetX, double offsetY) {
-		this.tileSize = tileSize;
-		this.offsetX = offsetX;
-		this.offsetY = offsetY;
+	/**
+	 * Draw the Tile with the provided data from Frame
+	 * @param frame Frame where this is drawn
+	 */
+	void draw(Frame frame) {
+		this.frame = frame;
 
-		setPrefSize(tileSize, tileSize);
-		player.setFitWidth(tileSize);
+		double size = frame.getSize();
 
-		double x = getX() * tileSize + offsetX;
-		double y = getY() * tileSize + offsetY;
+		setPrefSize(size, size);
+		player.setFitWidth(size);
+
+		double x = getX() * size + frame.getOffsetX();
+		double y = getY() * size + frame.getOffsetY();
 
 		transition.stop();
 
@@ -69,11 +71,15 @@ class PlayerTile extends StackPane {
 
 	// MARK: - interaction
 
-	public void move(Position position) {
+	/**
+	 * Moves the Player to the specified position
+	 * @param position Position to move to
+	 */
+	void move(Position position) {
 		this.position = position;
 
-		transition.setToX(getX() * tileSize + offsetX);
-		transition.setToY(getY() * tileSize + offsetY);
+		transition.setToX(getX() * frame.getSize() + frame.getOffsetX());
+		transition.setToY(getY() * frame.getSize() + frame.getOffsetY());
 
 		transition.play();
 	}

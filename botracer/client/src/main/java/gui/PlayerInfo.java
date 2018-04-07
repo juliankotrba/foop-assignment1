@@ -14,6 +14,7 @@ import java.io.IOException;
 /**
  * PlayerInfo.java
  * Manages the player info view
+ *
  * @author David Walter
  */
 public class PlayerInfo {
@@ -43,22 +44,20 @@ public class PlayerInfo {
 		this.node = node;
 	}
 
-	public Node getNode() {
+	Node getNode() {
 		return node;
 	}
 
-	public void setPlayer(Player player, boolean isPlayer) {
-		Platform.runLater(() -> {
-			name.setText(player.getName());
-			image.setImage(Sprites.getPlayer(player.getNumber()));
-			if (isPlayer) {
-				node.setStyle("-fx-border-color: " + Sprites.playerColor);
-			}
-		});
+	void setPlayer(Player player, boolean isPlayer) {
+		name.setText(player.getName());
+		image.setImage(Sprites.getPlayer(player.getNumber()));
+		if (isPlayer) {
+			node.setStyle("-fx-border-color: " + Sprites.playerColor);
+		}
 	}
 
-	public void setReady(boolean ready) {
-		this.ready.setSelected(ready);
+	void setReady() {
+		this.ready.setSelected(true);
 	}
 
 	public boolean isReady() {
