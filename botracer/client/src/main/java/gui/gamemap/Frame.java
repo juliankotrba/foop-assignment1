@@ -1,6 +1,6 @@
 package gui.gamemap;
 
-public class Frame {
+class Frame {
 
 	private double size = 0;
 	private double offsetX = 0;
