@@ -31,4 +31,9 @@ public class TurnLeftSpecial extends Special {
         }
         return Step.NONE;
     }
+
+    @Override
+    public Boolean finished() {
+        return true;
+    }
 }

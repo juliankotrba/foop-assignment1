@@ -10,8 +10,10 @@ public class DepthFirstSearchAlgorithm extends Algorithm {
             if(step!=Step.NONE){
                 return step;
             }
+            if(memory.getSpecial().finished()){
+                memory.setSpecial(null);
+            }
         }
-
         return null;
     }
 }

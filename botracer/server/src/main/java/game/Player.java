@@ -85,6 +85,7 @@ public class Player {
                 break;
         }
         memory.setLastStep(step);
+        memory.addVisited(gameBoard.getTile(height,width));
         gameBoard.getTile(height,width).enters(this);
     }
 

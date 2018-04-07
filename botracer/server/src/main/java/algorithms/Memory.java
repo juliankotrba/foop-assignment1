@@ -40,4 +40,8 @@ public class Memory {
     public void setSpecial(Special special) {
         this.special = special;
     }
+
+    public void addVisited(Tile tile){
+        visited.add(tile);
+    }
 }

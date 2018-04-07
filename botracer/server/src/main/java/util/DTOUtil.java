@@ -1,6 +1,9 @@
 package util;
 
+import algorithms.DepthFirstSearchAlgorithm;
+import algorithms.LeftWallAlgorithm;
 import algorithms.RandomAlgorithm;
+import algorithms.RightWallAlgorithm;
 import dto.Grid;
 import dto.Position;
 import dto.TileType;
@@ -87,8 +90,20 @@ public class DTOUtil {
                 break;
 
             case CHANGE_ALGORITHM:
-                // TODO: changeAlgorithmMark needs to know which algorithm should be used
-                markNew = new ChangeAlgorithmMark(new RandomAlgorithm());
+                switch (mark.getAlgorithm()){
+                    case 0:
+                        markNew = new ChangeAlgorithmMark(new RandomAlgorithm());
+                        break;
+                    case 1:
+                        markNew = new ChangeAlgorithmMark(new LeftWallAlgorithm());
+                        break;
+                    case 2:
+                        markNew = new ChangeAlgorithmMark(new RightWallAlgorithm());
+                        break;
+                    case 3:
+                        markNew = new ChangeAlgorithmMark(new DepthFirstSearchAlgorithm());
+                        break;
+                }
                 break;
 
             case REMOVE:

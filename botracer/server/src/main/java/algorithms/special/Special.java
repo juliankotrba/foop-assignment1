@@ -6,5 +6,6 @@ import game.GameBoard;
 
 public abstract class Special {
     public abstract Step move(Memory memory,GameBoard gameBoard, int x, int y);
+    public abstract Boolean finished();
 
 }

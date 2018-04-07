@@ -20,7 +20,7 @@ import java.util.Set;
 public class Game implements Runnable{
 
     private final GameBoard gameBoard;
-    private static final int movementDelayMillis = 500;
+    private static final int movementDelayMillis =1500;
 
     private Boolean gameRunning = true;
     private List<Player> players;

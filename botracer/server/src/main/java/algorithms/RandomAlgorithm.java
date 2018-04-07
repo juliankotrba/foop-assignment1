@@ -16,6 +16,9 @@ public class RandomAlgorithm extends Algorithm {
             if(step!=Step.NONE){
                 return step;
             }
+            if(memory.getSpecial().finished()){
+                memory.setSpecial(null);
+            }
         }
         if(gameBoard.getTile(y-1,x).isWalkable()){
             possiblesteps.add(Step.UP);

@@ -11,65 +11,122 @@ public class RightWallAlgorithm extends Algorithm {
             if(step!=Step.NONE){
                 return step;
             }
+            if(memory.getSpecial().finished()){
+                memory.setSpecial(null);
+            }
         }
 
         Step step = Step.NONE;
+        Step stepWithMemory = Step.NONE;
         switch(memory.getLastStep()){
+            case NONE:
             case RIGHT:
-                if(gameBoard.getTile(y+1,x).isWalkable()){
-                    step=Step.DOWN;
-                }else if(gameBoard.getTile(y,x+1).isWalkable()) {
-                    step = Step.RIGHT;
-                }else if(gameBoard.getTile(y-1,x).isWalkable()){
-                    step=Step.UP;
-                }else{
+                if(gameBoard.getTile(y,x-1).isWalkable()){
                     step=Step.LEFT;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y,x-1))){
+                        stepWithMemory = Step.LEFT;
+                    }
+                }
+                if(gameBoard.getTile(y-1,x).isWalkable()){
+                    step = Step.UP;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y-1,x))) {
+                        stepWithMemory = Step.UP;
+                    }
+                }
+                if(gameBoard.getTile(y,x+1).isWalkable()){
+                    step = Step.RIGHT;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y,x+1))){
+                        stepWithMemory = Step.RIGHT;
+                    }
+                }
+                if(gameBoard.getTile(y+1,x).isWalkable()){
+                    step = Step.DOWN;
+                    if (!memory.wasAlreadyVisited(gameBoard.getTile(y + 1, x))) {
+                        stepWithMemory = Step.DOWN;
+                    }
                 }
                 break;
             case LEFT:
-                if(gameBoard.getTile(y-1,x).isWalkable()){
-                    step=Step.UP;
-                }else if(gameBoard.getTile(y,x-1).isWalkable()){
+                if(gameBoard.getTile(y,x+1).isWalkable()){
+                    step = Step.RIGHT;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y,x+1))){
+                        stepWithMemory = Step.RIGHT;
+                    }
+                }
+                if(gameBoard.getTile(y+1,x).isWalkable()) {
+                    step = Step.DOWN;
+                    if (!memory.wasAlreadyVisited(gameBoard.getTile(y + 1, x))) {
+                        stepWithMemory = Step.DOWN;
+                    }
+                }
+                if(gameBoard.getTile(y,x-1).isWalkable()){
                     step=Step.LEFT;
-                }else if(gameBoard.getTile(y+1,x).isWalkable()){
-                    step=Step.DOWN;
-                }else{
-                    step=Step.RIGHT;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y,x-1))){
+                        stepWithMemory = Step.LEFT;
+                    }
+                }
+                if(gameBoard.getTile(y-1,x).isWalkable()){
+                    step = Step.UP;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y-1,x))) {
+                        stepWithMemory = Step.UP;
+                    }
                 }
                 break;
             case UP:
-                if(gameBoard.getTile(y,x+1).isWalkable()) {
-                    step=Step.RIGHT;
-                }else if(gameBoard.getTile(y-1,x).isWalkable()) {
-                    step=Step.UP;
-                }else if(gameBoard.getTile(y,x-1).isWalkable()) {
+                if(gameBoard.getTile(y+1,x).isWalkable()) {
+                    step = Step.DOWN;
+                    if (!memory.wasAlreadyVisited(gameBoard.getTile(y + 1, x))) {
+                        stepWithMemory = Step.DOWN;
+                    }
+                }
+                if(gameBoard.getTile(y,x-1).isWalkable()){
                     step=Step.LEFT;
-                }else{
-                    step=Step.DOWN;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y,x-1))){
+                        stepWithMemory = Step.LEFT;
+                    }
+                }
+                if(gameBoard.getTile(y-1,x).isWalkable()){
+                    step = Step.UP;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y-1,x))) {
+                        stepWithMemory = Step.UP;
+                    }
+                }
+                if(gameBoard.getTile(y,x+1).isWalkable()){
+                    step = Step.RIGHT;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y,x+1))){
+                        stepWithMemory = Step.RIGHT;
+                    }
                 }
                 break;
             case DOWN:
-                if(gameBoard.getTile(y,x-1).isWalkable()) {
-                    step = Step.LEFT;
-                }else if(gameBoard.getTile(y+1,x).isWalkable()){
-                    step=Step.DOWN;
-                }else if(gameBoard.getTile(y,x+1).isWalkable()) {
-                    step=Step.RIGHT;
-                }else{
-                    step=Step.UP;
+                if(gameBoard.getTile(y-1,x).isWalkable()){
+                    step = Step.UP;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y-1,x))) {
+                        stepWithMemory = Step.UP;
+                    }
                 }
-                break;
-            case NONE:
-                if(gameBoard.getTile(y,x+1).isWalkable()) {
-                    step=Step.RIGHT;
-                }else if(gameBoard.getTile(y-1,x).isWalkable()) {
-                    step=Step.UP;
-                }else if(gameBoard.getTile(y,x-1).isWalkable()) {
+                if(gameBoard.getTile(y,x+1).isWalkable()){
+                    step = Step.RIGHT;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y,x+1))){
+                        stepWithMemory = Step.RIGHT;
+                    }
+                }
+                if(gameBoard.getTile(y+1,x).isWalkable()) {
+                    step = Step.DOWN;
+                    if (!memory.wasAlreadyVisited(gameBoard.getTile(y + 1, x))) {
+                        stepWithMemory = Step.DOWN;
+                    }
+                }
+                if(gameBoard.getTile(y,x-1).isWalkable()){
                     step=Step.LEFT;
-                }else{
-                    step=Step.DOWN;
+                    if(!memory.wasAlreadyVisited(gameBoard.getTile(y,x-1))){
+                        stepWithMemory = Step.LEFT;
+                    }
                 }
                 break;
+        }
+        if(stepWithMemory != Step.NONE){
+            return stepWithMemory;
         }
         return step;
     }
