@@ -44,11 +44,17 @@ public class SocketConnection implements Connection {
         this.isConnected = false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setUIManager(UIManager uiManager) {
         messageReceiver.setUIManager(uiManager);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void connect() throws ConnectionException {
         Log.debug("connect()");
@@ -68,6 +74,9 @@ public class SocketConnection implements Connection {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void disconnect() {
         this.closeStreamWriter();
@@ -77,6 +86,9 @@ public class SocketConnection implements Connection {
         this.isConnected = false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void send(Message message) throws MessageException, ConnectionException {
         Log.debug(String.format("send(%s)", message.getClass().getSimpleName()));
@@ -92,6 +104,9 @@ public class SocketConnection implements Connection {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isConnected() {
         return this.isConnected;

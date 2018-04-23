@@ -17,6 +17,11 @@ public class SingletonConnectionFactory {
     private SingletonConnectionFactory() {
     }
 
+    /**
+     * Creates a connection
+     *
+     * @return the created connection instance
+     */
     public static synchronized Connection getInstance() {
         if (connection == null) {
             connection = new SocketConnection(

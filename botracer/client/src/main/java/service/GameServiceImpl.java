@@ -17,7 +17,6 @@ public class GameServiceImpl implements GameService {
 
     private Connection connection;
 
-
     public GameServiceImpl(Connection connection) {
         this.connection = connection;
     }

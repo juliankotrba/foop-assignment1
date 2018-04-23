@@ -9,8 +9,24 @@ import gui.UIManager;
  * @author  Julian Kotrba
  */
 public interface GameService {
+
+    /**
+     * Connects to the game server
+     *
+     * @param uiManager ui callback
+     * @throws ServiceException if connecting to server fails
+     */
     void connect(UIManager uiManager) throws ServiceException;
+
+    /**
+     * Sets player ready
+     * @throws ServiceException if setting player ready fails
+     */
     void setPlayerReady() throws ServiceException;
+
+    /**
+     * Disconnect from game server
+     */
     void disconnect();
 
     /**
