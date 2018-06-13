@@ -1,6 +1,7 @@
 package gui.gamemap;
 
 import connection.SingletonConnectionFactory;
+import debug.Log;
 import dto.Mark;
 import dto.MarkType;
 import dto.Tile;
@@ -15,7 +16,6 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import debug.Log;
 import service.MarkService;
 import service.MarkServiceImpl;
 

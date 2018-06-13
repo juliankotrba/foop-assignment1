@@ -1,7 +1,6 @@
 package communication;
 
 import dto.messages.Message;
-import dto.messages.s2c.GameStartMessage;
 import game.Game;
 import game.Player;
 

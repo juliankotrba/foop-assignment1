@@ -6,11 +6,14 @@ import tiles.PathTile;
 import tiles.Tile;
 import tiles.WallTile;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MazeLoader {
@@ -30,7 +33,6 @@ public class MazeLoader {
 
         List<String> lines = Files.readAllLines(Paths.get(new File(MazeLoader.class.getResource(path).toURI()).getAbsolutePath()));
         int gameBoardHeight = lines.size();
-        // todo: error handling? (e.g. if maze only has <= 2 lines)
         int gameBoardWidth = lines.get(0).length();
 
         buildGameBoard(gameBoard, lines, gameBoardWidth, gameBoardHeight);

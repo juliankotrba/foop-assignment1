@@ -28,7 +28,6 @@ public class MessageListener implements Runnable {
                 message.accept(onMessageReceivedListener);
 
             } catch (ReaderException e) {
-                // TODO: Proper thread killing
                 Thread.currentThread().interrupt();
 
                 //e.printStackTrace();

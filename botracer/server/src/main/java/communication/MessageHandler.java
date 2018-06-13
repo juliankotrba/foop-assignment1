@@ -85,9 +85,8 @@ public class MessageHandler implements OnMessageReceivedListener {
             writeAllPlayers(new NewPlayerMessage(dtoUtil.convertPlayers(game.getPlayers())));
 
             Log.debug(String.format("PlayerNameMessage received from player '%s'", name));
-        } catch (IOException e) {
-            // TODO: error handling
-            e.printStackTrace();
+        } catch (IOException ignored) {
+
         }
 
         connectionHandler.setName(name);
@@ -186,9 +185,8 @@ public class MessageHandler implements OnMessageReceivedListener {
             for (ObjectOutputStream writer : ConnectionHandler.getWriters()) {
                 writer.writeObject(message);
             }
-        } catch (IOException e) {
-            // TODO: exception handling
-            e.printStackTrace();
+        } catch (IOException ignored) {
+
         }
     }
 }

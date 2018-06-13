@@ -1,6 +1,8 @@
 package gui;
 
-import dto.*;
+import dto.GameData;
+import dto.Mark;
+import dto.Player;
 
 import java.util.List;
 

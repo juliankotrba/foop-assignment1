@@ -1,8 +1,6 @@
 package dto.algorithms;
 
-import dto.Grid;
 import dto.Position;
-import dto.Tile;
 
 /**
  * Interface for calculating the next position of a bot
