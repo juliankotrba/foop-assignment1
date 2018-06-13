@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * A deph first search algorihm which will always find the exit of the maze
+ */
 public class DepthFirstSearchAlgorithm extends Algorithm {
 
     public Step nextStep(Memory memory, GameBoard gameBoard, int x, int y) {

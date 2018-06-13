@@ -2,6 +2,11 @@ package algorithms;
 
 import game.GameBoard;
 
+
+/**
+ * Always walks along the most right not already visited wall
+ * If all ways have been visited already the most right wall will be taken
+ */
 public class RightWallAlgorithm extends Algorithm {
     @Override
     public Step nextStep(Memory memory, GameBoard gameBoard, int x, int y) {

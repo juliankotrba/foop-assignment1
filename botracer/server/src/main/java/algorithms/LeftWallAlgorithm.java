@@ -2,6 +2,10 @@ package algorithms;
 
 import game.GameBoard;
 
+/**
+ * Always walks along the most left not already visited wall
+ * If all ways have been visited already the most left wall will be taken
+ */
 public class LeftWallAlgorithm extends Algorithm {
     @Override
     public Step nextStep(Memory memory, GameBoard gameBoard, int x, int y) {

@@ -3,6 +3,9 @@ package marks;
 import algorithms.Algorithm;
 import game.Player;
 
+/**
+ * changes algorithm of the bot when stepping onto the mark
+ */
 public class ChangeAlgorithmMark implements Mark {
 
     private Algorithm algorithm;

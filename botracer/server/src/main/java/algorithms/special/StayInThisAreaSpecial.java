@@ -4,6 +4,11 @@ import algorithms.Memory;
 import algorithms.Step;
 import game.GameBoard;
 
+
+/**
+ * The bot tries to stay as clase as possible, until a new special is assigned or the memory is cleared
+ *
+ */
 public class StayInThisAreaSpecial extends Special {
 
     private int xStart;
@@ -68,6 +73,15 @@ public class StayInThisAreaSpecial extends Special {
         return false;
     }
 
+    /**
+     * Calculates the ManhattenDistance between two tiles
+     *
+     * @param x1 x of the first tile
+     * @param y1 y of the first tile
+     * @param x2 x of the second tile
+     * @param y2 y of the second tile
+     * @return the ManhattenDistance
+     */
     private int calculateManhattenDistance(int x1,int y1, int x2, int y2){
         return Math.abs(x1-x2) + Math.abs(y1-y2);
     }

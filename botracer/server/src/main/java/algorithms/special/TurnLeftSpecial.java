@@ -4,6 +4,9 @@ import algorithms.Memory;
 import algorithms.Step;
 import game.GameBoard;
 
+/**
+ * If it possible to turn left on the certain tile, the bot will do it, otherwise the algorithm will calculaate the next step
+ */
 public class TurnLeftSpecial extends Special {
     @Override
     public Step move(Memory memory, GameBoard gameBoard, int x, int y) {

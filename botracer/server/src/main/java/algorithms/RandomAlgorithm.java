@@ -6,7 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Bot will walk into a random location
+ */
 public class RandomAlgorithm extends Algorithm {
+
+
 
     public Step nextStep(Memory memory, GameBoard gameBoard, int x, int y) {
         List<Step> possiblesteps = new ArrayList<>();
