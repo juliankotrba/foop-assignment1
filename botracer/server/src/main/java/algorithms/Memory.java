@@ -6,11 +6,13 @@ import tiles.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Memory {
 
     private Step lastStep;
     private List<Tile> visited;
+    private Stack<Step> path;
     private Special special;
     public Memory(){
         reset();
@@ -19,6 +21,7 @@ public class Memory {
     public void reset(){
         lastStep=Step.NONE;
         visited= new ArrayList<>();
+        path = new Stack<>();
     }
 
     public Step getLastStep() {
@@ -43,5 +46,14 @@ public class Memory {
 
     public void addVisited(Tile tile){
         visited.add(tile);
+    }
+    public void addLastTileToStack(Step step){
+        path.push(step);
+    }
+    public Step getLastTileFromStack(){
+        if(path.empty()){
+            return null;
+        }
+        return path.pop();
     }
 }
