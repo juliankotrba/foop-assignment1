@@ -21,6 +21,9 @@ public class GameServiceImpl implements GameService {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void connect(UIManager uiManager) throws ServiceException {
 
@@ -33,6 +36,9 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setPlayerReady() throws ServiceException {
 
@@ -43,11 +49,17 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void disconnect() {
         this.connection.disconnect();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setPlayerName(String playerName) throws ServiceException {
         try {

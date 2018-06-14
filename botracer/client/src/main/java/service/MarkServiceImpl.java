@@ -20,6 +20,9 @@ public class MarkServiceImpl implements MarkService {
         this.connection = connection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void placeMark(Mark mark) throws ServiceException {
         try {
