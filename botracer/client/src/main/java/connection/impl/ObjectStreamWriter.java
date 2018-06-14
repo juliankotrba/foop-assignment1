@@ -1,5 +1,6 @@
-package connection;
+package connection.impl;
 
+import connection.StreamWriter;
 import dto.messages.Message;
 import exception.connection.WriterException;
 

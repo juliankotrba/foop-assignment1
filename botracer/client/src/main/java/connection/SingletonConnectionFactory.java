@@ -1,5 +1,9 @@
 package connection;
 
+import connection.impl.ObjectStreamReader;
+import connection.impl.ObjectStreamWriter;
+import connection.impl.SocketConnection;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;

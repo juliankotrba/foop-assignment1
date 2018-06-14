@@ -1,5 +1,8 @@
-package connection;
+package connection.impl;
 
+import connection.Connection;
+import connection.StreamReader;
+import connection.StreamWriter;
 import debug.Log;
 import dto.messages.Message;
 import exception.connection.ConnectionException;
@@ -34,7 +37,7 @@ public class SocketConnection implements Connection {
      * @param streamReader implementation of a {@link StreamReader}. Must not be null.
      * @param properties a properties instance with the loaded client config file. Must not be null.
      */
-    SocketConnection(Socket socket, StreamWriter streamWriter, StreamReader streamReader, Properties properties) {
+    public SocketConnection(Socket socket, StreamWriter streamWriter, StreamReader streamReader, Properties properties) {
 
         this.socket = socket;
         this.streamWriter = streamWriter;

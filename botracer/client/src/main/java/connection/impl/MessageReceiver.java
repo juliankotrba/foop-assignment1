@@ -1,4 +1,4 @@
-package connection;
+package connection.impl;
 
 import debug.Log;
 import dto.messages.OnMessageReceivedListener;
