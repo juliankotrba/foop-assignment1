@@ -1,6 +1,3 @@
-import debug.MazeLoader;
-import dto.Grid;
-import dto.Tile;
 import gui.FXMLUIManager;
 import gui.Sprites;
 import javafx.application.Application;
@@ -13,6 +10,7 @@ import javafx.stage.WindowEvent;
 /**
  * BotRacer.java
  * Starting point of the application
+ *
  * @author David Walter
  */
 public class BotRacer extends Application {

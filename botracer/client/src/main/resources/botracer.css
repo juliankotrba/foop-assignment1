@@ -1,11 +1,11 @@
 .context-menu-title:disabled .label {
 	-fx-text-fill: white;
-    -fx-opacity: 1.0;
+	-fx-opacity: 1.0;
 }
 
 .context-menu-title:disabled {
 	-fx-opacity: 1.0;
-    -fx-background-color: #0097CE;
+	-fx-background-color: #0097CE;
 }
 
 .check-box .box {

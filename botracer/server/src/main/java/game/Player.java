@@ -7,141 +7,142 @@ import algorithms.Step;
 import java.util.Objects;
 
 public class Player {
-    private Memory memory;
-    private Algorithm algorithm;
-    private int height;
-    private int width;
-    private int id;
-    private String name;
-    private boolean ownedByPlayer;
-    private boolean isReady;
+	private Memory memory;
+	private Algorithm algorithm;
+	private int height;
+	private int width;
+	private int id;
+	private String name;
+	private boolean ownedByPlayer;
+	private boolean isReady;
 
-    public Player(){ }
-
-
-    public Player(int id, String name, int height, int width, Algorithm algorithm){
-        this.id = id;
-        this.name = name;
-        this.height = height;
-        this.width = width;
-        this.algorithm = algorithm;
-        this.ownedByPlayer = false;
-        this.memory = new Memory();
-        this.isReady = false;
-    }
-
-    public Player(int id, String name, int height, int width, Algorithm algorithm, boolean ownedByPlayer){
-        this(id, name, height, width, algorithm);
-        this.ownedByPlayer = ownedByPlayer;
-    }
+	public Player() {
+	}
 
 
-    public int getId() {
-        return id;
-    }
+	public Player(int id, String name, int height, int width, Algorithm algorithm) {
+		this.id = id;
+		this.name = name;
+		this.height = height;
+		this.width = width;
+		this.algorithm = algorithm;
+		this.ownedByPlayer = false;
+		this.memory = new Memory();
+		this.isReady = false;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public Player(int id, String name, int height, int width, Algorithm algorithm, boolean ownedByPlayer) {
+		this(id, name, height, width, algorithm);
+		this.ownedByPlayer = ownedByPlayer;
+	}
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public Memory getMemory() {
-        return memory;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setMemory(Memory memory) {
-        this.memory = memory;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public Algorithm getAlgorithm() {
-        return algorithm;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setAlgorithm(Algorithm algorithm) {
-        this.algorithm = algorithm;
-    }
+	public Memory getMemory() {
+		return memory;
+	}
 
-    public void nextStep(GameBoard gameBoard){
-        Step step = algorithm.nextStep(memory, gameBoard, width, height);
-        switch(step){
-            case UP:
-                height--;
-                break;
-            case DOWN:
-                height++;
-                break;
-            case LEFT:
-                width--;
-                break;
-            case RIGHT:
-                width++;
-                break;
-        }
-        memory.setLastStep(step);
-        memory.addVisited(gameBoard.getTile(height,width));
-        gameBoard.getTile(height,width).enters(this);
-    }
+	public void setMemory(Memory memory) {
+		this.memory = memory;
+	}
 
-    public int getWidth() {
-        return width;
-    }
+	public Algorithm getAlgorithm() {
+		return algorithm;
+	}
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
+	public void setAlgorithm(Algorithm algorithm) {
+		this.algorithm = algorithm;
+	}
 
-    public int getHeight() {
-        return height;
-    }
+	public void nextStep(GameBoard gameBoard) {
+		Step step = algorithm.nextStep(memory, gameBoard, width, height);
+		switch (step) {
+			case UP:
+				height--;
+				break;
+			case DOWN:
+				height++;
+				break;
+			case LEFT:
+				width--;
+				break;
+			case RIGHT:
+				width++;
+				break;
+		}
+		memory.setLastStep(step);
+		memory.addVisited(gameBoard.getTile(height, width));
+		gameBoard.getTile(height, width).enters(this);
+	}
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
+	public int getWidth() {
+		return width;
+	}
 
-    public boolean isOwnedByPlayer() {
-        return ownedByPlayer;
-    }
+	public void setWidth(int width) {
+		this.width = width;
+	}
 
-    public void setOwnedByPlayer(boolean ownedByPlayer) {
-        this.ownedByPlayer = ownedByPlayer;
-    }
+	public int getHeight() {
+		return height;
+	}
 
-    public boolean isReady() {
-        return isReady;
-    }
+	public void setHeight(int height) {
+		this.height = height;
+	}
 
-    public void setReady(boolean ready) {
-        isReady = ready;
-    }
+	public boolean isOwnedByPlayer() {
+		return ownedByPlayer;
+	}
 
-    @Override
-    public String toString() {
-        return "Player{" +
-                "memory=" + memory +
-                ", algorithm=" + algorithm +
-                ", width=" + width +
-                ", height=" + height +
-                ", name='" + name + '\'' +
-                '}';
-    }
+	public void setOwnedByPlayer(boolean ownedByPlayer) {
+		this.ownedByPlayer = ownedByPlayer;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Player player = (Player) o;
-        return id == player.id;
-    }
+	public boolean isReady() {
+		return isReady;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+	public void setReady(boolean ready) {
+		isReady = ready;
+	}
+
+	@Override
+	public String toString() {
+		return "Player{" +
+				"memory=" + memory +
+				", algorithm=" + algorithm +
+				", width=" + width +
+				", height=" + height +
+				", name='" + name + '\'' +
+				'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Player player = (Player) o;
+		return id == player.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
 }

@@ -14,21 +14,21 @@ import exception.service.ServiceException;
  */
 public class MarkServiceImpl implements MarkService {
 
-    private Connection connection;
+	private Connection connection;
 
-    public MarkServiceImpl(Connection connection) {
-        this.connection = connection;
-    }
+	public MarkServiceImpl(Connection connection) {
+		this.connection = connection;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void placeMark(Mark mark) throws ServiceException {
-        try {
-            this.connection.send(new MarkPlacementMessage(mark));
-        } catch (MessageException | ConnectionException e) {
-            throw new ServiceException("placeMark failed", e);
-        }
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void placeMark(Mark mark) throws ServiceException {
+		try {
+			this.connection.send(new MarkPlacementMessage(mark));
+		} catch (MessageException | ConnectionException e) {
+			throw new ServiceException("placeMark failed", e);
+		}
+	}
 }

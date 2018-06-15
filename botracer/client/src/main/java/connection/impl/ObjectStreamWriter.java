@@ -15,31 +15,31 @@ import java.io.OutputStream;
  */
 public class ObjectStreamWriter implements StreamWriter {
 
-    private ObjectOutputStream outputStream;
+	private ObjectOutputStream outputStream;
 
-    @Override
-    public void openStream(OutputStream out) throws IOException {
-        this.outputStream = new ObjectOutputStream(out);
-    }
+	@Override
+	public void openStream(OutputStream out) throws IOException {
+		this.outputStream = new ObjectOutputStream(out);
+	}
 
-    @Override
-    public void close() {
-        if (this.outputStream != null) {
-            try {
-                this.outputStream.close();
-            } catch (IOException e) {
-                System.out.println("I don't care.");
-                e.printStackTrace();
-            }
-        }
-    }
+	@Override
+	public void close() {
+		if (this.outputStream != null) {
+			try {
+				this.outputStream.close();
+			} catch (IOException e) {
+				System.out.println("I don't care.");
+				e.printStackTrace();
+			}
+		}
+	}
 
-    @Override
-    public void write(Message message) throws WriterException {
-        try {
-            this.outputStream.writeObject(message);
-        } catch (IOException e) {
-            throw new WriterException("Writing message failed.", e);
-        }
-    }
+	@Override
+	public void write(Message message) throws WriterException {
+		try {
+			this.outputStream.writeObject(message);
+		} catch (IOException e) {
+			throw new WriterException("Writing message failed.", e);
+		}
+	}
 }
