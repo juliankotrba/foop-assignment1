@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         System.out.println("Maze Server is running");
 
-        Game game = new Game("../maze_markus.txt");
+        Game game = new Game("../maze.txt");
         /*Datagenerator datagenerator = new Datagenerator(game);
 
         Thread gameThread = new Thread(game);

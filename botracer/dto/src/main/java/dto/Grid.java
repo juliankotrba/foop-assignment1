@@ -63,4 +63,28 @@ public class Grid<E> extends ArrayList<E> implements Serializable {
 	public int getHeight() {
 		return height;
 	}
+
+	public void smalltalk() {
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				Tile tile  = (Tile) this.get(x, y);
+				TileType type = tile.getType();
+				if (type == TileType.WALL) {
+					int downY = y + 1;
+					if (downY < height) {
+						Tile down = (Tile) this.get(x, downY);
+						if (down.getType() == TileType.WALL) {
+							System.out.println("game addItem: WallTile new at: " + x + "@" + y + ".");
+							continue;
+						}
+					}
+
+					System.out.println("game addItem: FrontWallTile new at: " + x + "@" + y + ".");
+				} else if (type == TileType.EXIT) {
+					System.out.println("game addItem: ExitTile new at: " + x + "@" + y + ".");
+				}
+
+			}
+		}
+	}
 }

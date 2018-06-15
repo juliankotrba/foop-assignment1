@@ -1,3 +1,6 @@
+import debug.MazeLoader;
+import dto.Grid;
+import dto.Tile;
 import gui.FXMLUIManager;
 import gui.Sprites;
 import javafx.application.Application;
@@ -34,6 +37,8 @@ public class BotRacer extends Application {
 
 
 	public static void main(String[] args) {
+		/*Grid<Tile> tiles = MazeLoader.shared.load(BotRacer.class.getResource("maze.txt"));
+		tiles.smalltalk();*/
 		launch(args);
 	}
 }

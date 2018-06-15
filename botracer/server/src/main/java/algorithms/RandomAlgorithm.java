@@ -12,13 +12,12 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RandomAlgorithm extends Algorithm {
 
 
-
     public Step nextStep(Memory memory, GameBoard gameBoard, int x, int y) {
         List<Step> possiblesteps = new ArrayList<>();
 
-        if(memory.getSpecial()!=null) {
-            Step step = memory.getSpecial().move(memory,gameBoard,x,y);
-            if(step!=Step.NONE){
+        if (memory.getSpecial() != null) {
+            Step step = memory.getSpecial().move(memory, gameBoard, x, y);
+            if (step != Step.NONE) {
                 return step;
             }
             if(memory.getSpecial().finished()){
