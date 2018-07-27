@@ -1,6 +1,3 @@
-import debug.MazeLoader;
-import dto.Grid;
-import dto.Tile;
 import gui.FXMLUIManager;
 import gui.Sprites;
 import javafx.application.Application;
