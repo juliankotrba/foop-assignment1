@@ -10,6 +10,7 @@ import javafx.stage.WindowEvent;
 /**
  * BotRacer.java
  * Starting point of the application
+ *
  * @author David Walter
  */
 public class BotRacer extends Application {

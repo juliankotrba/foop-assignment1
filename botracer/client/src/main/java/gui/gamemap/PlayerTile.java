@@ -13,6 +13,7 @@ import javafx.util.Duration;
 /**
  * PlayerTile.java
  * Manages the movement of players on the map
+ *
  * @author David Walter
  */
 class PlayerTile extends StackPane {
@@ -50,6 +51,7 @@ class PlayerTile extends StackPane {
 
 	/**
 	 * Draw the Tile with the provided data from Frame
+	 *
 	 * @param frame Frame where this is drawn
 	 */
 	void draw(Frame frame) {
@@ -73,6 +75,7 @@ class PlayerTile extends StackPane {
 
 	/**
 	 * Moves the Player to the specified position
+	 *
 	 * @param position Position to move to
 	 */
 	void move(Position position) {

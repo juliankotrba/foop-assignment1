@@ -22,6 +22,7 @@ import service.MarkServiceImpl;
 /**
  * GameTile.java
  * Frame on the game map
+ *
  * @author David Walter
  */
 public class GameTile extends StackPane {
@@ -70,6 +71,7 @@ public class GameTile extends StackPane {
 
 	/**
 	 * Draw the Tile with the provided data from Frame
+	 *
 	 * @param frame Frame where this is drawn
 	 */
 	void draw(Frame frame) {
@@ -102,6 +104,7 @@ public class GameTile extends StackPane {
 
 	/**
 	 * Draws a mark on the GameTile
+	 *
 	 * @param mark Mark to draw, removes the mark if null
 	 */
 	void drawMark(Mark mark) {
@@ -136,7 +139,9 @@ public class GameTile extends StackPane {
 	 * Adds a context menu to the GameTile to enable player interaction
 	 */
 	void enableContextMenu() {
-		if (tile.getType() != TileType.DEFAULT) { return; }
+		if (tile.getType() != TileType.DEFAULT) {
+			return;
+		}
 
 		final ContextMenu contextMenu = new ContextMenu();
 
@@ -190,6 +195,7 @@ public class GameTile extends StackPane {
 
 	/**
 	 * Sends an add request for a mark on the GameTile's position
+	 *
 	 * @param mark Mark to send to the server
 	 */
 	private void setMark(Mark mark) {

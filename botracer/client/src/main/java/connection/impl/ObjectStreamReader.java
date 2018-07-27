@@ -15,31 +15,31 @@ import java.io.ObjectInputStream;
  */
 public class ObjectStreamReader implements StreamReader {
 
-    private ObjectInputStream inputStream;
+	private ObjectInputStream inputStream;
 
-    @Override
-    public void openStream(InputStream in) throws IOException {
-        this.inputStream = new ObjectInputStream(in);
-    }
+	@Override
+	public void openStream(InputStream in) throws IOException {
+		this.inputStream = new ObjectInputStream(in);
+	}
 
-    @Override
-    public void close() {
-        if (this.inputStream != null) {
-            try {
-                this.inputStream.close();
-            } catch (IOException e) {
-                System.out.println("I don't care.");
-                e.printStackTrace();
-            }
-        }
-    }
+	@Override
+	public void close() {
+		if (this.inputStream != null) {
+			try {
+				this.inputStream.close();
+			} catch (IOException e) {
+				System.out.println("I don't care.");
+				e.printStackTrace();
+			}
+		}
+	}
 
-    @Override
-    public Message read() throws ReaderException {
-        try {
-            return (Message) this.inputStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new ReaderException("Reading message failed.", e);
-        }
-    }
+	@Override
+	public Message read() throws ReaderException {
+		try {
+			return (Message) this.inputStream.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			throw new ReaderException("Reading message failed.", e);
+		}
+	}
 }

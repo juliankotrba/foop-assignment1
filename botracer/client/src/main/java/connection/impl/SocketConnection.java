@@ -22,129 +22,129 @@ import java.util.Properties;
  */
 public class SocketConnection implements Connection {
 
-    private Socket socket;
-    private MessageReceiver messageReceiver = new MessageReceiver();
-    private StreamWriter streamWriter;
-    private StreamReader streamReader;
-    private Properties properties;
-    private boolean isConnected;
+	private Socket socket;
+	private MessageReceiver messageReceiver = new MessageReceiver();
+	private StreamWriter streamWriter;
+	private StreamReader streamReader;
+	private Properties properties;
+	private boolean isConnected;
 
-    /**
-     * SocketConnection constructor
-     *
-     * @param socket an unconnected socket instance
-     * @param streamWriter implementation of a {@link StreamWriter}. Must not be null.
-     * @param streamReader implementation of a {@link StreamReader}. Must not be null.
-     * @param properties a properties instance with the loaded client config file. Must not be null.
-     */
-    public SocketConnection(Socket socket, StreamWriter streamWriter, StreamReader streamReader, Properties properties) {
+	/**
+	 * SocketConnection constructor
+	 *
+	 * @param socket       an unconnected socket instance
+	 * @param streamWriter implementation of a {@link StreamWriter}. Must not be null.
+	 * @param streamReader implementation of a {@link StreamReader}. Must not be null.
+	 * @param properties   a properties instance with the loaded client config file. Must not be null.
+	 */
+	public SocketConnection(Socket socket, StreamWriter streamWriter, StreamReader streamReader, Properties properties) {
 
-        this.socket = socket;
-        this.streamWriter = streamWriter;
-        this.properties = properties;
-        this.streamReader = streamReader;
-        this.isConnected = false;
-    }
+		this.socket = socket;
+		this.streamWriter = streamWriter;
+		this.properties = properties;
+		this.streamReader = streamReader;
+		this.isConnected = false;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setUIManager(UIManager uiManager) {
-        messageReceiver.setUIManager(uiManager);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setUIManager(UIManager uiManager) {
+		messageReceiver.setUIManager(uiManager);
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void connect() throws ConnectionException {
-        Log.debug("connect()");
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void connect() throws ConnectionException {
+		Log.debug("connect()");
 
-        if (!this.isConnected) {
-            final String host = this.properties.getProperty("host");
-            final int port = Integer.parseInt(this.properties.getProperty("port"));
-            try {
+		if (!this.isConnected) {
+			final String host = this.properties.getProperty("host");
+			final int port = Integer.parseInt(this.properties.getProperty("port"));
+			try {
 
-                this.setupSocket(new InetSocketAddress(host, port));
-                this.startListenerThread();
+				this.setupSocket(new InetSocketAddress(host, port));
+				this.startListenerThread();
 
-                this.isConnected = true;
-            } catch (IOException e) {
-                throw new ConnectionException("Connecting to server failed.", e);
-            }
-        }
-    }
+				this.isConnected = true;
+			} catch (IOException e) {
+				throw new ConnectionException("Connecting to server failed.", e);
+			}
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void disconnect() {
-        this.closeStreamWriter();
-        this.closeStreamReader();
-        this.closeSocket();
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void disconnect() {
+		this.closeStreamWriter();
+		this.closeStreamReader();
+		this.closeSocket();
 
-        this.isConnected = false;
-    }
+		this.isConnected = false;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void send(Message message) throws MessageException, ConnectionException {
-        Log.debug(String.format("send(%s)", message.getClass().getSimpleName()));
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void send(Message message) throws MessageException, ConnectionException {
+		Log.debug(String.format("send(%s)", message.getClass().getSimpleName()));
 
-        if (!this.isConnected) {
-            throw new ConnectionException("Not connected.");
-        }
+		if (!this.isConnected) {
+			throw new ConnectionException("Not connected.");
+		}
 
-        try {
-            this.streamWriter.write(message);
-        } catch (WriterException e) {
-            throw new MessageException("Sending message failed.", e);
-        }
-    }
+		try {
+			this.streamWriter.write(message);
+		} catch (WriterException e) {
+			throw new MessageException("Sending message failed.", e);
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isConnected() {
-        return this.isConnected;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isConnected() {
+		return this.isConnected;
+	}
 
-    private void setupSocket(InetSocketAddress address) throws IOException {
-        this.socket.connect(address);
+	private void setupSocket(InetSocketAddress address) throws IOException {
+		this.socket.connect(address);
 
-        this.streamWriter.openStream(socket.getOutputStream());
-        this.streamReader.openStream(socket.getInputStream());
-    }
+		this.streamWriter.openStream(socket.getOutputStream());
+		this.streamReader.openStream(socket.getInputStream());
+	}
 
-    private void startListenerThread() {
-        Thread messageListenerThread = new Thread(
-                new MessageListener(this.streamReader, messageReceiver)
-        );
+	private void startListenerThread() {
+		Thread messageListenerThread = new Thread(
+				new MessageListener(this.streamReader, messageReceiver)
+		);
 
-        messageListenerThread.start();
-    }
+		messageListenerThread.start();
+	}
 
-    private void closeStreamWriter() {
-        this.streamWriter.close();
-    }
+	private void closeStreamWriter() {
+		this.streamWriter.close();
+	}
 
-    private void closeStreamReader() {
-        this.streamReader.close();
-    }
+	private void closeStreamReader() {
+		this.streamReader.close();
+	}
 
-    private void closeSocket() {
-        if (this.socket != null) {
-            try {
-                this.socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	private void closeSocket() {
+		if (this.socket != null) {
+			try {
+				this.socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 }

@@ -8,14 +8,14 @@ import game.Player;
  */
 public class ChangeAlgorithmMark implements Mark {
 
-    private Algorithm algorithm;
+	private Algorithm algorithm;
 
-    public ChangeAlgorithmMark(Algorithm algorithm) {
-        this.algorithm = algorithm;
-    }
+	public ChangeAlgorithmMark(Algorithm algorithm) {
+		this.algorithm = algorithm;
+	}
 
-    @Override
-    public void enter(Player player) {
-        player.setAlgorithm(algorithm);
-    }
+	@Override
+	public void enter(Player player) {
+		player.setAlgorithm(algorithm);
+	}
 }
