@@ -20,3 +20,5 @@ Such marks can be used to help the own bot and to confuse others. Each player us
 get the same information at about the same time.
 Please select appropriate details of the game by yourselves. Give
 your fancy full scope.
+
+![alt text](screenshot/demo.png)
